@@ -10,53 +10,35 @@ func SetupGameHandlers(r *gin.Engine) {
 
 	gameGroup := apiGroup.Group("/game")
 	gameGroup.POST("/", createNewGame)
+	gameGroup.POST("/:game_id/join", joinGame)
+	gameGroup.GET("/:game_id", getGame)
 }
 
 func createNewGame(c *gin.Context) {
-	playerName := c.Params.ByName("player_name")
-
+	playerName := c.Query("player_name")
 	newGame := service.CreateNewGame(playerName)
-
 	c.JSON(200, newGame)
 }
 
-// func postNewImageJob(c *gin.Context) {
-// 	inputImage := struct {
-// 		File      string `form:"file" binding:"required"`
-// 		FileName  string `form:"qqfilename" binding:"required"`
-// 		TotalSize uint64 `form:"qqtotalfilesize" binding:"required"`
-// 	}{}
+func joinGame(c *gin.Context) {
+	playerName := c.Query("player_name")
+	gameID := c.Params.ByName("game_id")
 
-// 	// Load
-// 	err := c.ShouldBindWith(&inputImage, binding.Form)
-// 	if err != nil {
-// 		c.JSON(500, gin.H{"error": err.Error()})
-// 		return
-// 	}
-// 	fmt.Println("Accepted", inputImage.FileName)
+	newGame, err := service.JoinGame(playerName, gameID)
+	if err != nil {
+		c.JSON(400, err.Error())
+		return
+	}
+	c.JSON(200, newGame)
+}
 
-// 	file, _, err := c.Request.FormFile("qqfile")
-// 	if err != nil {
-// 		c.JSON(500, gin.H{"error": err.Error()})
-// 		return
-// 	}
+func getGame(c *gin.Context) {
+	gameID := c.Params.ByName("game_id")
 
-// 	imgPayload := make([]byte, inputImage.TotalSize)
-// 	_, err = file.Read(imgPayload)
-// 	if err != nil {
-// 		c.JSON(500, gin.H{"error": err.Error()})
-// 		return
-// 	}
-
-// 	job, outputImgs, err := service.ResizeImage(imgPayload)
-// 	if err != nil {
-// 		c.JSON(500, gin.H{"error": err.Error()})
-// 		return
-// 	}
-
-// 	c.JSON(200, gin.H{
-// 		"success": true,
-// 		"output":  outputImgs,
-// 		"job":     *job,
-// 	})
-// }
+	game, err := service.GetGame(gameID)
+	if err != nil {
+		c.JSON(400, err.Error())
+		return
+	}
+	c.JSON(200, game)
+}

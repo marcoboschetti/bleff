@@ -2,8 +2,10 @@ package main
 
 import (
 	"log"
+	"math/rand"
 	"net/http"
 	"os"
+	"time"
 
 	"bitbucket.org/marcoboschetti/bleff/data"
 	"github.com/gin-gonic/gin"
@@ -20,6 +22,8 @@ func runPlottingServer() {
 	if port == "" {
 		log.Fatal("$PORT must be set")
 	}
+
+	rand.Seed(time.Now().UnixNano())
 
 	// Static
 	r := gin.Default()
