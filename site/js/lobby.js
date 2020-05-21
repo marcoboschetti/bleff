@@ -1,8 +1,10 @@
 var gameID;
 var playerName;
+var m;
 
 $(document).ready(function () {
-    var result = atob(getUrlParameter("m")).split("@|@");
+    m = getUrlParameter("m");
+    var result = atob(m).split("@|@");
     gameID = result[0];
     playerName = result[1];
 
@@ -10,17 +12,29 @@ $(document).ready(function () {
 
     refreshGame();
     setInterval(refreshGame, 3000);
+
+    $("#startGame").click(function(e){
+        $.post("/api/game/"+gameID+"/start", function (data) {
+            window.location.replace("/site/page/game.html?m="+m);
+        });
+    });
 });
 
 
 var lastDrawnGame;
 function refreshGame() {
     $.get("/api/game/" + gameID, function (game) {
-        if (lastDrawnGame != null && (lastDrawnGame.players.length == game.players.length)) {
+        if (lastDrawnGame != null && lastDrawnGame.players.length == game.players.length && lastDrawnGame.status == game.status) {
             return;
         }
 
         lastDrawnGame = game;
+
+        if(game.status == "started"){
+            window.location.replace("/site/page/game.html?m="+m);
+            return 
+        }
+
         $("#gamePlayers").html(drawPlayers(game));
 
         var owner = game.players[0];
@@ -41,7 +55,6 @@ function drawPlayers(game) {
     html = `<div class="row">`
 
     game.players.forEach(function (player, index) {
-        console.log(player);
         html += `
         <div class="col m3">
           <div class="card">

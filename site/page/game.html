@@ -8,6 +8,7 @@
 
     <!-- CSS  -->
     <link href="/site/css/style.css" type="text/css" rel="stylesheet" />
+    <link href="/site/css/game.css" type="text/css" rel="stylesheet" />
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <link href="/site/css/materialize.min.css" type="text/css" rel="stylesheet" media="screen,projection" />
 </head>
@@ -18,30 +19,34 @@
         </div>
     </nav>
     <div class="section no-pad-bot">
-        <div class="container">
-            <h2 class="header center orange-text">Lobby - Esperando jugadores...</h2>
-            <div class="row center">
-                <h4 class="header center">Código de la partida: <span style="font-weight: bold;" id="gameID"></span>
-                </h4>
-            </div>
-        </div>
-    </div>
-
-    <div class="container">
         <div class="row">
-            <h2 class="center">Jugadores</h2>
-            <div class="row" id="gamePlayers">
+            <div class="col s1"></div>
+            <div class="col s2">
+                <h5>Players</h5>
+                <div id="gamePlayers"></div>
             </div>
+            <div class="col s8">
+                <!-- MAIN GAME CONTAINER -->
+                <div class="card">
+                    <div class="card-content">
+                        <span class="card-title grey-text text-darken-4" id="mainCardTitle"></span>
+                        <p id="mainCardText"></p>
+                        <div id="mainCardDiv"></div>
+                    </div>
+                   <!--
+                    <div class="card-action">
+                        <a href="#">This is a link</a>
+                    </div>
+                    -->
+                </div>
+
+                <!-- END MAIN GAME CONTAINER -->
+
+            </div>
+            <div class="col s1"></div>
         </div>
     </div>
 
-    <div class="container">
-    <div class="row center-align">
-        <a id="startGame" class="disabled waves-light btn orange">Iniciar partida</a>
-        <h5 id="waitingOwnerMsg" class="header center">Esperando que <span style="font-weight: bold;" id="ownerName"></span> inicie la partida...</h5>
-    </div>
-    </div>
-    
     <footer class="page-footer orange">
         <div class="footer-copyright">
             <div class="container">
@@ -53,7 +58,7 @@
     <!--  Scripts-->
     <script src="https://code.jquery.com/jquery-2.2.4.min.js"></script>
     <script src="/site/js/materialize.min.js"></script>
-    <script src="/site/js/lobby.js"></script>
+    <script src="/site/js/game.js"></script>
 </body>
 
 </html>

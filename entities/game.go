@@ -2,10 +2,14 @@ package entities
 
 type (
 	Game struct {
-		ID          string     `json:"id,omitempty"`
-		Status      string     `json:"status,omitempty"`
-		Players     []Player   `json:"players,omitempty"`
-		PlayedCards []WordCard `json:"played_cards,omitempty"`
+		ID                string                `json:"id,omitempty"`
+		Status            string                `json:"status,omitempty"`
+		Players           []Player              `json:"players,omitempty"`
+		PlayedCards       []WordCard            `json:"-,omitempty"`
+		CurrentCard       PersistedDefinition   `json:"current_card,omitempty"`
+		CurrentDealerIdx  uint64                `json:"dealer_index"`
+		CurrentGameState  GameState             `json:"game_state,omitempty"`
+		DefinitionOptions []PersistedDefinition `json:"definition_options,omitempty"`
 	}
 
 	Player struct {

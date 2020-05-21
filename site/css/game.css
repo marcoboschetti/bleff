@@ -1,0 +1,11 @@
+span.player-name-card.card-title{
+	font-weight: bold;
+}
+
+.avatar-image-normal{
+	background-color: #29b6f6;
+}
+
+.avatar-image-dealer{
+	background-color: #ff9800;
+}

@@ -48,6 +48,39 @@ func JoinGame(playerName, gameID string) (*entities.Game, error) {
 	return game, nil
 }
 
+func StartGame(gameID string) (*entities.Game, error) {
+	gamesMap.Lock()
+	game, ok := gamesMap.internal[gameID]
+	defer gamesMap.Unlock()
+
+	if !ok {
+		return nil, errors.New("game not found: " + gameID)
+	}
+
+	game.Status = "started"
+	game.CurrentGameState = entities.DealerChooseCardGameState
+
+	changeGameForCurrentState(game, "")
+	return game, nil
+}
+
+func SetupSelectedWord(word, gameID, playerName string) (*entities.Game, error) {
+	gamesMap.Lock()
+	game, ok := gamesMap.internal[gameID]
+	defer gamesMap.Unlock()
+
+	if !ok {
+		return nil, errors.New("game not found: " + gameID)
+	}
+	if game.Players[game.CurrentDealerIdx].Name != playerName {
+		return nil, errors.New("not current dealer of game: " + gameID)
+	}
+
+	game.CurrentGameState = entities.GetNextState(game.CurrentGameState)
+	changeGameForCurrentState(game, word)
+	return game, nil
+}
+
 func GetGame(gameID string) (*entities.Game, error) {
 	gamesMap.Lock()
 	game, ok := gamesMap.internal[gameID]
