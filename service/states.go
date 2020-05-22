@@ -2,6 +2,7 @@ package service
 
 import (
 	"fmt"
+	"math/rand"
 
 	"bitbucket.org/marcoboschetti/bleff/entities"
 )
@@ -12,6 +13,8 @@ func changeGameForCurrentState(game *entities.Game, selectedWord string) {
 		setCardsForDealerToChoose(game)
 	case entities.WriteDefinitionsGameState:
 		setupWordOption(game, selectedWord)
+	case entities.ShowDefinitions:
+		moveDefinitionsToDisplay(game)
 	default:
 		fmt.Println("Not supported state:" + game.CurrentGameState)
 	}
@@ -38,4 +41,22 @@ func setupWordOption(game *entities.Game, word string) {
 
 	// Set selected card
 	game.CurrentCard = selectedWord
+}
+
+func moveDefinitionsToDisplay(game *entities.Game) {
+	realDefinition := entities.Definition{
+		ID:         getUuidv4(),
+		Player:     "Real",
+		Definition: game.CurrentCard.Definition,
+		IsReal:     true,
+	}
+
+	allDefinitions := append(game.FakeDefinitions, realDefinition)
+
+	// Clear fake definitions
+	game.FakeDefinitions = nil
+
+	// Good Old Shuffle
+	rand.Shuffle(len(allDefinitions), func(i, j int) { allDefinitions[i], allDefinitions[j] = allDefinitions[j], allDefinitions[i] })
+	game.AllDefinitions = allDefinitions
 }

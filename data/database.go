@@ -34,9 +34,8 @@ func SetDbConnection() {
 
 func createSchema(db *pg.DB) error {
 	for _, model := range []interface{}{
-		(*entities.PersistedFakeDefinition)(nil),
 		(*entities.PersistedDefinition)(nil),
-		(*entities.PersistedGame)(nil)} {
+	} {
 		err := db.CreateTable(model, &orm.CreateTableOptions{
 			Temp:          false,
 			IfNotExists:   true,

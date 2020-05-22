@@ -3,8 +3,6 @@ package service
 import (
 	"errors"
 
-	"github.com/gofrs/uuid"
-
 	"bitbucket.org/marcoboschetti/bleff/entities"
 )
 
@@ -14,10 +12,9 @@ func CreateNewGame(playerName string) entities.Game {
 	player := createNewPlayer(playerName)
 
 	newGame := entities.Game{
-		ID:          entities.GetRandomWordJoin(3),
-		Status:      "pending",
-		Players:     []entities.Player{player},
-		PlayedCards: nil,
+		ID:      entities.GetRandomWordJoin(3),
+		Status:  "pending",
+		Players: []entities.Player{player},
 	}
 
 	gamesMap.Lock()
@@ -81,6 +78,41 @@ func SetupSelectedWord(word, gameID, playerName string) (*entities.Game, error) 
 	return game, nil
 }
 
+func SetPlayerDefinition(gameID, playerName, definition string) (*entities.Game, error) {
+	gamesMap.Lock()
+	game, ok := gamesMap.internal[gameID]
+	defer gamesMap.Unlock()
+
+	if !ok {
+		return nil, errors.New("game not found: " + gameID)
+	}
+
+	// Check if player already submitted a definition
+	for _, def := range game.FakeDefinitions {
+		if def.Player == playerName {
+			// No op
+			return game, nil
+		}
+	}
+
+	// Add new definition
+	newPlayerDefinition := entities.Definition{
+		ID:         getUuidv4(),
+		Player:     playerName,
+		Definition: definition,
+	}
+	game.FakeDefinitions = append(game.FakeDefinitions, newPlayerDefinition)
+
+	// Check if fake definition is ready
+	if len(game.FakeDefinitions) == len(game.Players)-1 {
+		// All definitions are completed
+		game.CurrentGameState = entities.GetNextState(game.CurrentGameState)
+		changeGameForCurrentState(game, "")
+	}
+
+	return game, nil
+}
+
 func GetGame(gameID string) (*entities.Game, error) {
 	gamesMap.Lock()
 	game, ok := gamesMap.internal[gameID]
@@ -93,9 +125,8 @@ func GetGame(gameID string) (*entities.Game, error) {
 }
 
 func createNewPlayer(playerName string) entities.Player {
-	playerID, _ := uuid.NewV4()
 	return entities.Player{
-		ID:     playerID.String(),
+		ID:     getUuidv4(),
 		Name:   playerName,
 		Points: 0,
 	}

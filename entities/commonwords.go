@@ -471,13 +471,20 @@ var mostCommonWords = []string{
 	"ZONA",
 }
 
+var tmpWords = []string{
+	"A",
+	"B",
+	"C",
+}
+
 func GetRandomWordJoin(count int) string {
 	ans := ""
 	for i := 0; i < count; i++ {
 		if i > 0 {
 			ans += "."
 		}
-		ans += mostCommonWords[rand.Intn(len(mostCommonWords))]
+		// ans += mostCommonWords[rand.Intn(len(mostCommonWords))]
+		ans += tmpWords[rand.Intn(len(tmpWords))]
 	}
 
 	return ans
