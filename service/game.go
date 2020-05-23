@@ -57,7 +57,7 @@ func StartGame(gameID string) (*entities.Game, error) {
 	game.Status = "started"
 	game.CurrentGameState = entities.DealerChooseCardGameState
 
-	changeGameForCurrentState(game, "")
+	changeGameForCurrentState(game, "", nil)
 	return game, nil
 }
 
@@ -74,7 +74,7 @@ func SetupSelectedWord(word, gameID, playerName string) (*entities.Game, error) 
 	}
 
 	game.CurrentGameState = entities.GetNextState(game.CurrentGameState)
-	changeGameForCurrentState(game, word)
+	changeGameForCurrentState(game, word, nil)
 	return game, nil
 }
 
@@ -107,9 +107,90 @@ func SetPlayerDefinition(gameID, playerName, definition string) (*entities.Game,
 	if len(game.FakeDefinitions) == len(game.Players)-1 {
 		// All definitions are completed
 		game.CurrentGameState = entities.GetNextState(game.CurrentGameState)
-		changeGameForCurrentState(game, "")
+		changeGameForCurrentState(game, "", nil)
 	}
 
+	return game, nil
+}
+
+func PostCorrectDefinitions(gameID, playerName string, correctDefinitionIDs []string) (*entities.Game, error) {
+	gamesMap.Lock()
+	game, ok := gamesMap.internal[gameID]
+	defer gamesMap.Unlock()
+
+	if !ok {
+		return nil, errors.New("game not found: " + gameID)
+	}
+	if game.Players[game.CurrentDealerIdx].Name != playerName {
+		return nil, errors.New("not current dealer of game: " + gameID)
+	}
+
+	game.CurrentGameState = entities.GetNextState(game.CurrentGameState)
+	changeGameForCurrentState(game, "", correctDefinitionIDs)
+
+	return game, nil
+}
+
+func PostChosenDefinition(gameID, playerName, chosenDefinitionID string) (*entities.Game, error) {
+	gamesMap.Lock()
+	game, ok := gamesMap.internal[gameID]
+	defer gamesMap.Unlock()
+
+	if !ok {
+		return nil, errors.New("game not found: " + gameID)
+	}
+
+	// Check if player already submitted a definition
+	for _, def := range game.ChosenDefinitions {
+		if def.Player == playerName {
+			// No op
+			return game, nil
+		}
+	}
+
+	// Add new definition
+	newChosenDefinition := entities.ChosenDefinition{
+		Player:       playerName,
+		DefinitionID: chosenDefinitionID,
+	}
+	game.ChosenDefinitions = append(game.ChosenDefinitions, newChosenDefinition)
+
+	// Check if fake definition is ready
+	if len(game.ChosenDefinitions) == len(game.Players)-1 {
+		// All definitions are completed
+		game.CurrentGameState = entities.GetNextState(game.CurrentGameState)
+		changeGameForCurrentState(game, "", nil)
+	}
+
+	return game, nil
+}
+
+func PostEndRound(gameID, playerName string) (*entities.Game, error) {
+	gamesMap.Lock()
+	game, ok := gamesMap.internal[gameID]
+	defer gamesMap.Unlock()
+
+	if !ok {
+		return nil, errors.New("game not found: " + gameID)
+	}
+
+	// Check if player already submitted a definition
+	if game.Players[game.CurrentDealerIdx].Name != playerName {
+		return nil, errors.New("not current dealer of game: " + gameID)
+	}
+
+	game.AllDefinitions = nil
+	game.ChosenDefinitions = nil
+	game.CurrentCard = entities.PersistedDefinition{}
+	game.FakeDefinitions = nil
+	game.DefinitionOptions = nil
+
+	game.CurrentGameState = entities.GetNextState(game.CurrentGameState)
+
+	nextDealer := int(game.CurrentDealerIdx+1) % len(game.Players)
+	game.CurrentDealerIdx = uint64(nextDealer)
+
+	changeGameForCurrentState(game, "", nil)
 	return game, nil
 }
 

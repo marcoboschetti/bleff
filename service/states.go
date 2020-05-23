@@ -7,7 +7,7 @@ import (
 	"bitbucket.org/marcoboschetti/bleff/entities"
 )
 
-func changeGameForCurrentState(game *entities.Game, selectedWord string) {
+func changeGameForCurrentState(game *entities.Game, selectedWord string, correctDefinitionIDs []string) {
 	switch game.CurrentGameState {
 	case entities.DealerChooseCardGameState:
 		setCardsForDealerToChoose(game)
@@ -15,6 +15,10 @@ func changeGameForCurrentState(game *entities.Game, selectedWord string) {
 		setupWordOption(game, selectedWord)
 	case entities.ShowDefinitions:
 		moveDefinitionsToDisplay(game)
+	case entities.ChooseDefinitions:
+		filterCorrectDefinitions(game, correctDefinitionIDs)
+	case entities.ShowDefinitionsAndScores:
+		givePointsForDefinitions(game)
 	default:
 		fmt.Println("Not supported state:" + game.CurrentGameState)
 	}
@@ -59,4 +63,48 @@ func moveDefinitionsToDisplay(game *entities.Game) {
 	// Good Old Shuffle
 	rand.Shuffle(len(allDefinitions), func(i, j int) { allDefinitions[i], allDefinitions[j] = allDefinitions[j], allDefinitions[i] })
 	game.AllDefinitions = allDefinitions
+}
+
+func filterCorrectDefinitions(game *entities.Game, correctDefinitionIDs []string) {
+
+	// Assign points based on correct definitions
+	if len(correctDefinitionIDs) == 0 {
+		// No real definitions, points for dealer
+		game.Players[game.CurrentDealerIdx].Points += entities.PointsForDealerNoCorrectDefinitions
+	}
+
+	for _, defID := range correctDefinitionIDs {
+		playerIdx := findPlayerWithDefinitionID(defID, game)
+		game.Players[playerIdx].Points += entities.PointsForPlayerCorrectDefinitions
+	}
+
+	// Check if player already submitted a definition
+	filteredDefinitions := make([]entities.Definition, len(game.AllDefinitions)-len(correctDefinitionIDs))
+	idx := 0
+
+	for _, def := range game.AllDefinitions {
+		if !containsString(correctDefinitionIDs, def.ID) {
+			filteredDefinitions[idx] = def
+			idx++
+		}
+	}
+
+	// Add new definition
+	game.AllDefinitions = filteredDefinitions
+}
+
+func givePointsForDefinitions(game *entities.Game) {
+
+	for _, def := range game.ChosenDefinitions {
+		selectedDefIdx := findDefinitionByID(def.DefinitionID, game)
+		if game.AllDefinitions[selectedDefIdx].IsReal {
+			playerIdx := findPlayerWithName(def.Player, game.Players)
+			game.Players[playerIdx].Points += entities.PointsForPlayerChoosingCorrectDefinition
+		} else {
+			playerIdx := findPlayerWithName(game.AllDefinitions[selectedDefIdx].Player, game.Players)
+			if game.Players[playerIdx].Name != def.Player {
+				game.Players[playerIdx].Points += entities.PointsForHavingDefinitionChosen
+			}
+		}
+	}
 }

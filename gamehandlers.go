@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"net/http"
 
 	"bitbucket.org/marcoboschetti/bleff/entities"
@@ -21,6 +20,8 @@ func SetupGameHandlers(r *gin.Engine) {
 	gameGroup.POST("/:game_id/setup_option/:selected_word", setupSelectedWord)
 	gameGroup.POST("/:game_id/player_definition", postPlayerDefinition)
 	gameGroup.POST("/:game_id/correct_definitions", postCorrectDefinitions)
+	gameGroup.POST("/:game_id/choose_definition/:definition_id", postChooseDefinition)
+	gameGroup.POST("/:game_id/end_round", postEndRound)
 }
 
 func createNewGame(c *gin.Context) {
@@ -100,14 +101,40 @@ func postCorrectDefinitions(c *gin.Context) {
 		return
 	}
 
-	fmt.Println(definitions.CorrectDefinitions, gameID, playerName)
-	// _, err := service.SetPlayerDefinition(gameID, playerName, definition.Definition)
-	// if err != nil {
-	// 	c.JSON(400, err.Error())
-	// 	return
-	// }
+	_, err := service.PostCorrectDefinitions(gameID, playerName, definitions.CorrectDefinitions)
+	if err != nil {
+		c.JSON(400, err.Error())
+		return
+	}
 
-	// c.Status(200)
+	c.Status(200)
+}
+
+func postChooseDefinition(c *gin.Context) {
+	gameID := c.Params.ByName("game_id")
+	definitionID := c.Params.ByName("definition_id")
+	playerName := c.Query("player_name")
+
+	_, err := service.PostChosenDefinition(gameID, playerName, definitionID)
+	if err != nil {
+		c.JSON(400, err.Error())
+		return
+	}
+
+	c.Status(200)
+}
+
+func postEndRound(c *gin.Context) {
+	gameID := c.Params.ByName("game_id")
+	playerName := c.Query("player_name")
+
+	_, err := service.PostEndRound(gameID, playerName)
+	if err != nil {
+		c.JSON(400, err.Error())
+		return
+	}
+
+	c.Status(200)
 }
 
 func getGame(c *gin.Context) {
@@ -119,9 +146,6 @@ func getGame(c *gin.Context) {
 		c.JSON(400, err.Error())
 		return
 	}
-
-	// gameDTO := entities.Game{}
-	// copier.Copy(&gameDTO, game)
 
 	gameDTO := clearGameInfo(playerName, *game)
 
@@ -136,7 +160,9 @@ func clearGameInfo(playerName string, game entities.Game) entities.Game {
 	}
 
 	game.DefinitionOptions = nil
-	game.CurrentCard.Definition = "pika pika"
+	if game.CurrentGameState != entities.ShowDefinitionsAndScores {
+		game.CurrentCard.Definition = "pika pika"
+	}
 
 	// Only leave player in fake definitions
 	fakeDefinitions := make([]entities.Definition, len(game.FakeDefinitions))
@@ -153,11 +179,24 @@ func clearGameInfo(playerName string, game entities.Game) entities.Game {
 	// Remove names and is real. leave ID and definition
 	allDefinitions := make([]entities.Definition, len(game.AllDefinitions))
 	for idx, def := range game.AllDefinitions {
+		definition, id := "Articuno", "Ditto"
+
+		if game.CurrentGameState == entities.ChooseDefinitions || game.CurrentGameState == entities.ShowDefinitionsAndScores {
+			definition, id = def.Definition, def.ID
+		}
+
+		player := "Torchic"
+		isReal := false
+		if game.CurrentGameState == entities.ShowDefinitionsAndScores {
+			player = def.Player
+			isReal = def.IsReal
+		}
+
 		allDefinitions[idx] = entities.Definition{
-			Definition: def.Definition,
-			ID:         def.ID,
-			IsReal:     false,
-			Player:     "Torchic",
+			Definition: definition,
+			ID:         id,
+			IsReal:     isReal,
+			Player:     player,
 		}
 	}
 	game.AllDefinitions = allDefinitions

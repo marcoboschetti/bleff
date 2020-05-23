@@ -17,12 +17,14 @@ type (
 		FakeDefinitions []Definition `json:"fake_definitions"`
 		// State 3, players and real. To choose from
 		AllDefinitions []Definition `json:"all_definitions"`
+		// State 4, each player chooses one definition
+		ChosenDefinitions []ChosenDefinition `json:"chosen_definitions"`
 	}
 
 	Player struct {
 		ID     string `json:"id,omitempty"`
 		Name   string `json:"name,omitempty"`
-		Points uint64 `json:"points,omitempty"`
+		Points uint64 `json:"points"`
 	}
 
 	Definition struct {
@@ -30,6 +32,11 @@ type (
 		Player     string `json:"player,omitempty"`
 		Definition string `json:"definition,omitempty"`
 		IsReal     bool   `json:"is_real,omitempty"`
+	}
+
+	ChosenDefinition struct {
+		DefinitionID string `json:"id,omitempty"`
+		Player       string `json:"player,omitempty"`
 	}
 
 	PersistedDefinition struct {

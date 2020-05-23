@@ -17,9 +17,6 @@ const (
 
 	// + Se muestran jugadores y puntos
 	ShowDefinitionsAndScores GameState = "show_definitions_and_scores"
-
-	// + Fin de la ronda
-	EndRound GameState = "end_round"
 )
 
 var statesMap = map[GameState]GameState{
@@ -27,8 +24,7 @@ var statesMap = map[GameState]GameState{
 	WriteDefinitionsGameState: ShowDefinitions,
 	ShowDefinitions:           ChooseDefinitions,
 	ChooseDefinitions:         ShowDefinitionsAndScores,
-	ShowDefinitionsAndScores:  EndRound,
-	EndRound:                  DealerChooseCardGameState,
+	ShowDefinitionsAndScores:  DealerChooseCardGameState,
 }
 
 func GetNextState(currentState GameState) GameState {

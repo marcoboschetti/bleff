@@ -31,7 +31,7 @@ function refreshGame() {
 function drawGameState(game) {
     var dealerName = game.players[game.dealer_index].name;
     var isDealer = dealerName == playerName;
-
+    console.log(game);
     switch (game.game_state) {
         case "dealer_choose_card":
             if (isDealer) {
@@ -51,10 +51,28 @@ function drawGameState(game) {
             break;
         case "show_definitions":
             if (isDealer) {
-                selectCorrectDefinitionsHTML = drawSelectCorrectCards(game);
-                setupMainCard("Selecciona las definiciones correctas:", "Selecciona las tarjetas que consideres correctas, considerando la definición real de la palabra:",selectCorrectDefinitionsHTML);
+                selectCorrectDefinitionsHTML = drawAdminAllCards(game, true, isDealer);
+                setupMainCard("Selecciona las definiciones correctas:", "Selecciona las tarjetas que consideres correctas, considerando la definición real de la palabra:", selectCorrectDefinitionsHTML);
             } else {
-                setupMainCard("<strong>" + dealerName + "</strong> está eligiendo las definiciones acertadas","Para evitar tarjetas repetidas y repartir los puntos correspondientes.");
+                setupMainCard("<strong>" + dealerName + "</strong> está eligiendo las definiciones acertadas", "Para evitar tarjetas repetidas y repartir los puntos correspondientes.");
+            }
+            break;
+        case "choose_definitions":
+            if (isDealer) {
+                selectCorrectDefinitionsHTML = drawAdminAllCards(game, false, isDealer);
+                setupMainCard("Los jugadores están votando...", "", selectCorrectDefinitionsHTML);
+            } else {
+                selectCorrectDefinitionsHTML = drawAdminAllCards(game, true, isDealer);
+                setupMainCard("Elegí la definición que creas correcta", "Selecciona la definición que creas más acertada!", selectCorrectDefinitionsHTML);
+            }
+            break;
+        case "show_definitions_and_scores":
+            if (isDealer) {
+                endGameHTML = drawEndGameHTML(game, true)
+                setupMainCard("Fin de la partida", "Cuando quieras, terminá la partida...", endGameHTML);
+            } else {
+                endGameHTML = drawEndGameHTML(game, false)
+                setupMainCard("Fin de la partida", "Esperando que <strong>" + dealerName + "</strong> comience la siguiente ronda", endGameHTML);
             }
             break;
         default:
@@ -80,6 +98,9 @@ function isSameGame(game) {
 // ***************************************************
 
 function drawDefinitionOptions(definition_options) {
+    if (!definition_options){
+        return;
+    }
     var html = `<div class="row">`;
     definition_options.forEach(function (definition, index) {
         html += drawWordDefinitionCard(definition.word, definition.definition);
@@ -116,9 +137,10 @@ function drawDefinitionInput(word) {
     `
 }
 
-function drawSelectCorrectCards(game) {
-    console.log("X:",game)
-    html = `
+function drawAdminAllCards(game, isSelectable, isDealer) {
+    html = "";
+    if (isDealer) {
+        html = `
     <div class="row">
         <!-- Real definition -->
         <h5>Definición correcta:</h5>
@@ -135,36 +157,138 @@ function drawSelectCorrectCards(game) {
         <h5>Definiciones de jugadores:</h5>
         <div class="row">
     `
+    } else {
+        html = `
+    <div class="row">
+        <h5>Definiciones:</h5>
+        <div class="row">
+    `
+    }
 
     game.all_definitions.forEach(function (definition, index) {
-        if(!definition.is_real){
-            html +=`
+        if (!definition.is_real) {
+            html += `
             <div class="col m4">
                 <div class="card blue lighten-1">
                 <div class="card-content white-text">
                     <span class="card-title">`+ game.current_card.word + `</span>
                     <p>`+ definition.definition + `</p>
                 </div>
+                `
+            if (isSelectable && isDealer) {
+                html += `
                 <div class="card-action">
                     <div class="switch">
-                    <label class="white-text">Incorrecta<input type="checkbox" value="`+definition.id+`" class="isCorrectDefinition">
+                    <label class="white-text">Incorrecta<input type="checkbox" value="`+ definition.id + `" class="isCorrectDefinition">
                     <span class="lever"></span>Correcta</label>
                     </div>
+                </div>
+                `
+            }
+
+            if (isSelectable && !isDealer) {
+                html += `
+                    <div class="card-action">
+                        <button onclick="selectCorrectDefinition(\``+ definition.id + `\`)" class="btn waves-effect waves-light orange" type="submit" name="action">Elegir
+                        <i class="material-icons right">send</i>
+                        </button>
+                    </div>
+                    `
+            }
+
+            html += `
+                </div>
+            </div>
+        `
+        }
+    });
+    html += `</div>`
+
+    if (isSelectable && isDealer) {
+        html += `
+        <button onclick="postCorrectDefinitions()" class="btn waves-effect waves-light orange" type="submit" name="action">Listo
+        <i class="material-icons right">send</i>
+        </button>
+        `
+    }
+
+
+    html += `</div>`
+
+    return html;
+}
+
+
+function drawEndGameHTML(game, isDealer) {
+
+    var realDefinition;
+    game.all_definitions.forEach(function (definition, index) {
+        if (definition.is_real) {
+            realDefinition = definition;
+        }
+    });
+
+    html = `
+    <div class="row">
+        <!-- Real definition -->
+        <h5>Definición correcta:</h5>
+        <div class="row">
+        <div class="col m4">
+            <div class="card green">
+            <div class="card-content white-text">
+                <span class="card-title">`+ game.current_card.word + `</span>
+                <p>`+ game.current_card.definition + `</p>
+            </div>
+            <div class="card-content white-text">
+            <p>Votos: `+ getOccurrencesCount(game, realDefinition.id) + `</p><br>
+            </div>
+            </div>
+        </div>
+        </div>
+        <h5>Definiciones de jugadores:</h5>
+        <div class="row">
+    `
+
+    game.all_definitions.forEach(function (definition, index) {
+        if (!definition.is_real) {
+            html += `
+            <div class="col m4">
+                <div class="card blue lighten-1">
+                <div class="card-content white-text">
+                    <span class="card-title">`+ game.current_card.word + `</span>
+                    <p>`+ definition.definition + `</p>
+                </div>
+                <div class="card-content white-text">
+                <p>Autor: `+ definition.player + `</p>
+                <p>Votos: `+ getOccurrencesCount(game, definition.id) + `</p><br>
                 </div>
                 </div>
             </div>
         `
         }
     });
-    html += `</div>
-        <button onclick="postCorrectDefinitions()" class="btn waves-effect waves-light orange" type="submit" name="action">Listo
+    html += `</div></div>`
+
+    if (isDealer) {
+        html += `
+        <button onclick="endCurrentRound()" class="btn waves-effect waves-light orange" type="submit" name="action">Próxima ronda
         <i class="material-icons right">send</i>
         </button>
-    </div>`
+        `
+    }
 
     return html;
 }
 
+function getOccurrencesCount(game, definitionID) {
+    var total = 0;
+    game.chosen_definitions.forEach(function (def) {
+        if (def.id == definitionID) {
+            total++;
+        }
+    })
+    return total;
+}
 // ***************************************************
 // ********** GAME COMPONENT BEHAVIORS ***************
 // ***************************************************
@@ -184,10 +308,10 @@ function uploadDefinition(word) {
     });
 }
 
-function postCorrectDefinitions(){
+function postCorrectDefinitions() {
     var correctDefinitionIDs = [];
-    $(".isCorrectDefinition").each(function() {
-        if($(this).is(":checked")){
+    $(".isCorrectDefinition").each(function () {
+        if ($(this).is(":checked")) {
             correctDefinitionIDs.push($(this).val());
         }
     });
@@ -198,6 +322,22 @@ function postCorrectDefinitions(){
         console.log("OK, now show definitions to everybody else to choose one")
     });
 }
+
+function selectCorrectDefinition(definitionID) {
+    var url = "/api/game/" + gameID + "/choose_definition/" + definitionID + "?player_name=" + playerName;
+    $.post(url).done(function () {
+        setupMainCard("Definicion cargada!", "Estamos esperando que el resto de los jugadores elija definiciones.", "");
+    });
+}
+
+function endCurrentRound(definitionID) {
+    var url = "/api/game/" + gameID + "/end_round?player_name=" + playerName;
+    $.post(url).done(function () {
+        setupMainCard("Definicion cargada!", "Estamos esperando que el resto de los jugadores elija definiciones.", "");
+    });
+}
+
+
 
 // *******************************************
 // ************** DRAW PLAYERS ***************
@@ -212,6 +352,8 @@ function drawPlayers(game) {
             imageClass = "avatar-image-dealer";
         } else if (game.game_state == "write_definitions" && playerIsInArray(player.name, game.fake_definitions)) {
             imageClass = "avatar-image-def-completed";
+        } else if (game.game_state == "choose_definitions" && game.chosen_definitions && playerIsInArray(player.name, game.chosen_definitions)) {
+            imageClass = "avatar-image-def-completed";
         }
         html += `
     <div class="row" style="margin-bottom:0em;">
@@ -219,7 +361,10 @@ function drawPlayers(game) {
         <div class="card">
             <div class="card-image">
             <img class="avatarImg `+ imageClass + `" src="https://robohash.org/` + player.name + `.png">
-            <span class="player-name-card card-title">` + player.name + `</span>
+            <span class="player-name-card card-title">` + player.points + ` pts</span>
+            </div>
+            <div class="card-action">
+            `+ player.name + `
             </div>      
         </div>
         </div>
@@ -245,7 +390,8 @@ function isSameGamePlayers(game) {
         game.dealer_index == lastDrawnPlayersGame.dealer_index &&
         arraysEqual(game.players, lastDrawnPlayersGame.players) &&
         arraysEqual(game.fake_definitions, lastDrawnPlayersGame.fake_definitions) &&
-        arraysEqual(game.all_definitions, lastDrawnPlayersGame.all_definitions);
+        arraysEqual(game.all_definitions, lastDrawnPlayersGame.all_definitions) &&
+        (!game.chosen_definitions || arraysEqual(game.chosen_definitions, lastDrawnGame.chosen_definitions));
 }
 
 // *******************************************
@@ -268,5 +414,5 @@ var getUrlParameter = function getUrlParameter(sParam) {
 
 
 function arraysEqual(a, b) {
-    return JSON.stringify(a)==JSON.stringify(b);
+    return JSON.stringify(a) == JSON.stringify(b);
 }
