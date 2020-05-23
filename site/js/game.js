@@ -17,10 +17,8 @@ var lastDrawnPlayersGame = null;
 function refreshGame() {
     $.get("/api/game/" + gameID + "?player_name=" + playerName, function (game) {
         if (!isSameGame(game)) {
-            lastDrawnGame = game;
             drawGameState(game)
         }
-
         if (!isSameGamePlayers(game)) {
             lastDrawnPlayersGame = game;
             drawPlayers(game)
@@ -31,7 +29,17 @@ function refreshGame() {
 function drawGameState(game) {
     var dealerName = game.players[game.dealer_index].name;
     var isDealer = dealerName == playerName;
-    console.log(game);
+
+    var isCardHidden = false;
+    if(lastDrawnGame != null && lastDrawnGame.game_state != game.game_state){
+        hideMainCard();
+        isCardHidden = true;
+    }
+
+    setTimeout(function(){
+
+    lastDrawnGame = game;
+
     switch (game.game_state) {
         case "dealer_choose_card":
             if (isDealer) {
@@ -79,6 +87,22 @@ function drawGameState(game) {
             console.log("Draw state not supported:", game)
     }
 
+    if(isCardHidden){
+        showMainCard();
+    }
+
+}, 500);
+
+}
+
+function hideMainCard(){
+    $("#mainCard").addClass("scale-out");
+    $("#mainCard").removeClass("scale-in");
+}
+
+function showMainCard(){
+    $("#mainCard").removeClass("scale-out");
+    $("#mainCard").addClass("scale-in");
 }
 
 function setupMainCard(title, text, divHTML) {
