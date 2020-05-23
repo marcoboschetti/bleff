@@ -483,8 +483,8 @@ func GetRandomWordJoin(count int) string {
 		if i > 0 {
 			ans += "."
 		}
-		// ans += mostCommonWords[rand.Intn(len(mostCommonWords))]
-		ans += tmpWords[rand.Intn(len(tmpWords))]
+		ans += mostCommonWords[rand.Intn(len(mostCommonWords))]
+		// ans += tmpWords[rand.Intn(len(tmpWords))]
 	}
 
 	return ans
