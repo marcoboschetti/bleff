@@ -5,6 +5,7 @@ import (
 	"math/rand"
 
 	"bitbucket.org/marcoboschetti/bleff/entities"
+	"bitbucket.org/marcoboschetti/bleff/sheets"
 )
 
 func changeGameForCurrentState(game *entities.Game, selectedWord string, correctDefinitionIDs []string) {
@@ -107,4 +108,28 @@ func givePointsForDefinitions(game *entities.Game) {
 			}
 		}
 	}
+
+	// Post for sheets
+	for _, fakeDef := range game.AllDefinitions {
+		if fakeDef.IsReal {
+			continue
+		}
+
+		totalVotes := countVotesForDefinition(fakeDef.ID, game)
+		err := sheets.PersistNewFakeDefinition(game.CurrentCard.Word, fakeDef.Definition, fakeDef.Player, game.ID, totalVotes)
+		if err != nil {
+			fmt.Println(err.Error())
+		}
+	}
+}
+
+func countVotesForDefinition(definitionID string, game *entities.Game) uint {
+	var total uint
+	for _, vote := range game.ChosenDefinitions {
+		if vote.DefinitionID == definitionID {
+			total++
+		}
+	}
+
+	return total
 }

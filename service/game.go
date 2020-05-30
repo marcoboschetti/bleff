@@ -4,6 +4,7 @@ import (
 	"errors"
 
 	"bitbucket.org/marcoboschetti/bleff/entities"
+	"bitbucket.org/marcoboschetti/bleff/sheets"
 )
 
 var gamesMap = NewGameMap()
@@ -56,6 +57,8 @@ func StartGame(gameID string) (*entities.Game, error) {
 
 	game.Status = "started"
 	game.CurrentGameState = entities.DealerChooseCardGameState
+
+	sheets.PersistGameStarted(gameID, game.Players)
 
 	changeGameForCurrentState(game, "", nil)
 	return game, nil
