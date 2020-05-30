@@ -18,3 +18,10 @@ body {
     color: #666;
     text-align: center;
 }
+
+#toast-container {
+    top: auto !important;
+    right: auto !important;
+    bottom: 5%;
+    left:7%;  
+  }
