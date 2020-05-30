@@ -85,7 +85,7 @@ func PersistNewFakeDefinition(word, definition, playerName, game string, votes u
 	return err
 }
 
-func PersistGameStarted(gameID, players []entities.Player) error {
+func PersistGameStarted(gameID string, players []entities.Player) error {
 	var err error
 	if service == nil {
 		service, err = getService()
