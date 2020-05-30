@@ -30,6 +30,9 @@ func runPlottingServer() {
 	r.GET("/", func(c *gin.Context) {
 		http.ServeFile(c.Writer, c.Request, "./site/index.html")
 	})
+	r.GET("/favicon.ico", func(c *gin.Context) {
+		http.ServeFile(c.Writer, c.Request, "./site/favicon.ico")
+	})
 	r.Static("/site", "./site/")
 
 	// API Endpoints
