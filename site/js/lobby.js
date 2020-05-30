@@ -40,7 +40,7 @@ function refreshGame() {
         var owner = game.players[0];
         if(owner.name == playerName){
             $("#waitingOwnerMsg").remove()
-            if(game.players.length > 1){
+            if(game.players.length > 2){
                 $("#startGame").removeClass('disabled');
             }
         }else{
