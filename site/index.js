@@ -1,5 +1,6 @@
 
 $(document).ready(function () {
+    $("#firstNameInput").val(getRandomName());
 
     // Change avatar when name changes
     $("#firstNameInput").on("input", function (e) {
@@ -29,6 +30,7 @@ $(document).ready(function () {
     $("#joinMatchWord1").on("input", checkIfCodeIsCompleted)
     $("#joinMatchWord2").on("input", checkIfCodeIsCompleted)
     $("#joinMatchWord3").on("input", checkIfCodeIsCompleted)
+
 });
 
 
@@ -67,4 +69,10 @@ function joinMatch() {
         var result = btoa(val);
         window.location.replace("/site/page/lobby.html?m="+result);
     });
+}
+
+
+var names = ["Lucía","María","Martina","Paula","Cami","Joaco","Tito","Lucho","Monti","Fede","Sofía","Daniela","Alba","Julia","Carla","Sara","Valeria","Noa","Emma","Claudia","Carmen","Valentina","Ana","Marta","Irene","Adriana","Laura","Elena","Alejandra","Vega","Alma","Laia","Lola","Vera","Olivia","Inés","Aitana","Jimena","Candela","Ariadna","Carlota","Ainhoa","Nora","Triana","Marina","Chloe","Elsa","Alicia","Clara","Blanca","Leire","Mía","Lara","Rocío","Ainara","Nerea","Hugo","Daniel","Pablo","Martín","Alejandro","Adrián","Álvaro","David","Lucas","Mateo","Mario","Manuel","Antonio","Diego","Leo","Javier","Marcos","Izan","Alex","Sergio","Enzo","Carlos","Marc","Jorge","Miguel","Gonzalo","Juan","Ángel","Oliver","Iker","Dylan","Bruno","Eric","Marco","Iván","Nicolás","José","Héctor","Darío","Samuel","Víctor","Rubén","Gabriel","Adam","Aaron","Thiago","Jesús","Aitor","Alberto","Guillermo"];
+function getRandomName(){
+    return names[Math.floor(Math.random() * names.length)];
 }

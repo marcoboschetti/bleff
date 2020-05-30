@@ -19,3 +19,11 @@ span.player-name-card.card-title {
 	padding: 6px !important;
 	top: 0em !important;
 }
+
+.hiddenBar{
+	width: 0em !important;
+}
+
+.showBar{
+	width: 100% !important;
+}

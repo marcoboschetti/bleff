@@ -4,7 +4,7 @@
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0" />
-    <title>Go Bleff</title>
+    <title>📖 Bleff 📖</title>
 
     <!-- CSS  -->
     <link href="/site/css/style.css" type="text/css" rel="stylesheet" />
@@ -15,7 +15,7 @@
 
 <body>
     <nav class="light-blue lighten-1" role="navigation">
-        <div class="nav-wrapper container"><a id="logo-container" href="/" class="brand-logo">Go Bleff</a>
+        <div class="nav-wrapper container"><a id="logo-container" href="/" class="brand-logo">Bleff - El juego del diccionario</a>
         </div>
     </nav>
     <div class="section no-pad-bot">
@@ -28,6 +28,10 @@
             <div class="col s8">
                 <!-- MAIN GAME CONTAINER -->
                 <div class="card scale-transition" id="mainCard">
+                    <div class="progress orange showBar" id="mainCardLoadingBar">
+                        <div class="indeterminate light-blue lighten-1"></div>
+                    </div>
+                          
                     <div class="card-content">
                         <span class="card-title grey-text text-darken-4" id="mainCardTitle"></span>
                         <p id="mainCardText"></p>

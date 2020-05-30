@@ -39,6 +39,7 @@ function drawGameState(game) {
     setTimeout(function(){
 
     lastDrawnGame = game;
+    $("#mainCardLoadingBar").hide();
 
     switch (game.game_state) {
         case "dealer_choose_card":
@@ -46,12 +47,14 @@ function drawGameState(game) {
                 var definitionOptionsHTML = drawDefinitionOptions(game.definition_options);
                 setupMainCard("Elegí una carta!", "De las opciones, elegí la que más desconocida te parezca, para hacer el juego más divertido.", definitionOptionsHTML);
             } else {
-                setupMainCard("Eligiendo la carta...", "<strong>" + dealerName + "</strong> será dealer esta ronda. Está eligiendo una palabra entre las opciones.", "");
+                $("#mainCardLoadingBar").show();
+                setupMainCard("Eligiendo la carta...", "<strong>" + dealerName + "</strong> será dealer esta ronda. Está eligiendo una palabra entre las opciones.", "");            
             }
             break;
         case "write_definitions":
             if (isDealer) {
-                setupMainCard("Los jugadores están escribiendo definiciones de  <strong>" + game.current_card.word + "</strong>", "Por ahora, tienen todo el tiempo que necesiten.");
+                $("#mainCardLoadingBar").show();
+                setupMainCard("Los jugadores están escribiendo definiciones de  <strong>" + game.current_card.word + "</strong>", "Tienen todo el tiempo que necesiten.");
             } else {
                 var writeDefinition = drawDefinitionInput(game.current_card.word)
                 setupMainCard("Escribí la definición de: <strong>" + game.current_card.word + "</strong>", "Tomate tu tiempo, hacelo verosimil y cuida la ortografía. Te recomendamos empezar con mayúsculas, terminar con puntos y completar las tildes.", writeDefinition);
@@ -62,11 +65,13 @@ function drawGameState(game) {
                 selectCorrectDefinitionsHTML = drawAdminAllCards(game, true, isDealer);
                 setupMainCard("Selecciona las definiciones correctas:", "Selecciona las tarjetas que consideres correctas, considerando la definición real de la palabra:", selectCorrectDefinitionsHTML);
             } else {
+                $("#mainCardLoadingBar").show();
                 setupMainCard("<strong>" + dealerName + "</strong> está eligiendo las definiciones acertadas", "Para evitar tarjetas repetidas y repartir los puntos correspondientes.");
             }
             break;
         case "choose_definitions":
             if (isDealer) {
+                $("#mainCardLoadingBar").show();
                 selectCorrectDefinitionsHTML = drawAdminAllCards(game, false, isDealer);
                 setupMainCard("Los jugadores están votando...", "", selectCorrectDefinitionsHTML);
             } else {
@@ -77,10 +82,11 @@ function drawGameState(game) {
         case "show_definitions_and_scores":
             if (isDealer) {
                 endGameHTML = drawEndGameHTML(game, true)
-                setupMainCard("Fin de la partida", "Cuando quieras, terminá la partida...", endGameHTML);
+                setupMainCard("Fin de la ronda", "Cuando quieras, terminá la ronda...", endGameHTML);
             } else {
+                $("#mainCardLoadingBar").show();
                 endGameHTML = drawEndGameHTML(game, false)
-                setupMainCard("Fin de la partida", "Esperando que <strong>" + dealerName + "</strong> comience la siguiente ronda", endGameHTML);
+                setupMainCard("Fin de la ronda", "Esperando que <strong>" + dealerName + "</strong> comience la siguiente ronda", endGameHTML);
             }
             break;
         default:
@@ -319,6 +325,7 @@ function getOccurrencesCount(game, definitionID) {
 
 function selectDefinitionOption(selectedWord) {
     $.post("/api/game/" + gameID + "/setup_option/" + selectedWord + "?player_name=" + playerName, function () {
+        $("#mainCardLoadingBar").show();
         setupMainCard("", "", "");
     });
 }
@@ -328,6 +335,7 @@ function uploadDefinition(word) {
     var defVal = $("#wordDefinitionInput").val();
     var definition = { definition: defVal };
     $.post(url, JSON.stringify(definition)).done(function () {
+        $("#mainCardLoadingBar").show();
         setupMainCard("Definicion cargada!", "Estamos esperando que el resto de los jugadores complete sus definiciones...<br><br><strong>" + word + "</strong>: " + defVal, "");
     });
 }
@@ -343,13 +351,15 @@ function postCorrectDefinitions() {
     var url = "/api/game/" + gameID + "/correct_definitions?player_name=" + playerName;
     var definition = { correct_definitions: correctDefinitionIDs };
     $.post(url, JSON.stringify(definition)).done(function () {
-        console.log("OK, now show definitions to everybody else to choose one")
+        $("#mainCardLoadingBar").show();
+        setupMainCard("", "", "");
     });
 }
 
 function selectCorrectDefinition(definitionID) {
     var url = "/api/game/" + gameID + "/choose_definition/" + definitionID + "?player_name=" + playerName;
     $.post(url).done(function () {
+        $("#mainCardLoadingBar").show();
         setupMainCard("Definicion cargada!", "Estamos esperando que el resto de los jugadores elija definiciones.", "");
     });
 }
@@ -357,7 +367,8 @@ function selectCorrectDefinition(definitionID) {
 function endCurrentRound(definitionID) {
     var url = "/api/game/" + gameID + "/end_round?player_name=" + playerName;
     $.post(url).done(function () {
-        setupMainCard("Definicion cargada!", "Estamos esperando que el resto de los jugadores elija definiciones.", "");
+        $("#mainCardLoadingBar").show();
+        setupMainCard("Ronda terminada!", "Estamos iniciando la próxima...", "");
     });
 }
 

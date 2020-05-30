@@ -10,3 +10,11 @@ body {
 .avatarImg{
 	width: 100%;
 }
+
+.ef {
+    font-size: 1.25rem;
+    font-weight: 300;
+    margin-bottom: 30px;
+    color: #666;
+    text-align: center;
+}
