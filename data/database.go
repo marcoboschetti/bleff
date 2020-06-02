@@ -18,10 +18,10 @@ var allDefinitions []entities.PersistedDefinition
 // SetDbConnection inits a single DB connection
 func SetDbConnection() {
 	db := pg.Connect(&pg.Options{
-		Addr:      "ec2-52-207-25-133.compute-1.amazonaws.com:5432",
-		Database:  "d575jf50hfmlt6",
-		User:      "hjcmpdfzrixuhp",
-		Password:  "c04ea32da04964925f80932d6686d440762c790bfd0c0a8d62a93a43cc0c50bc",
+		Addr:      "ec2-35-173-94-156.compute-1.amazonaws.com:5432",
+		Database:  "d47o4civ8ddcec",
+		User:      "wmfqvhipkrfgig",
+		Password:  "bf6f554af536f2b7eab7834dd18ba48e1dc118e401e083abcb63d783f3c03420",
 		TLSConfig: &tls.Config{InsecureSkipVerify: true},
 	})
 
