@@ -30,7 +30,7 @@ func SetDbConnection() {
 	pgConnection = db
 }
 
-// psql -h ec2-52-207-25-133.compute-1.amazonaws.com -p 5432 -U hjcmpdfzrixuhp d575jf50hfmlt6
+// psql -h ec2-35-173-94-156.compute-1.amazonaws.com -p 5432 -U wmfqvhipkrfgig d47o4civ8ddcec
 
 func createSchema(db *pg.DB) error {
 	for _, model := range []interface{}{

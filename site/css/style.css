@@ -12,7 +12,7 @@ body {
 }
 
 .ef {
-    font-size: 1.25rem;
+    font-size: 1.1rem;
     font-weight: 300;
     margin-bottom: 30px;
     color: #666;
@@ -24,4 +24,9 @@ body {
     right: auto !important;
     bottom: 5%;
     left:7%;  
+  }
+
+  .flex {
+    display: flex;
+    flex-wrap: wrap;
   }

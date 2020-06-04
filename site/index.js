@@ -1,6 +1,8 @@
 
 $(document).ready(function () {
-    $("#firstNameInput").val(getRandomName());
+    var randomName = getRandomName();
+    $("#firstNameInput").val(randomName);
+    $("#avatarImg").attr("src", "https://robohash.org/" + randomName + ".png");
 
     // Change avatar when name changes
     $("#firstNameInput").on("input", function (e) {
