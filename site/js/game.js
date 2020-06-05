@@ -31,82 +31,88 @@ function drawGameState(game) {
     var isDealer = dealerName == playerName;
 
     var isCardHidden = false;
-    if(lastDrawnGame != null && lastDrawnGame.game_state != game.game_state){
+    if (lastDrawnGame != null && lastDrawnGame.game_state != game.game_state) {
         hideMainCard();
         isCardHidden = true;
     }
 
-    setTimeout(function(){
+    setTimeout(function () {
 
-    lastDrawnGame = game;
-    $("#mainCardLoadingBar").hide();
+        lastDrawnGame = game;
+        $("#mainCardLoadingBar").hide();
 
-    switch (game.game_state) {
-        case "dealer_choose_card":
-            if (isDealer) {
-                var definitionOptionsHTML = drawDefinitionOptions(game.definition_options);
-                setupMainCard("Elegí una carta!", "De las opciones, elegí la que más desconocida te parezca, para hacer el juego más divertido.", definitionOptionsHTML);
-            } else {
-                $("#mainCardLoadingBar").show();
-                setupMainCard("Eligiendo la carta...", "<strong>" + dealerName + "</strong> será dealer esta ronda. Está eligiendo una palabra entre las opciones.", "");            
-            }
-            break;
-        case "write_definitions":
-            if (isDealer) {
-                $("#mainCardLoadingBar").show();
-                setupMainCard("Los jugadores están escribiendo definiciones de  <strong>" + game.current_card.word + "</strong>", "Tienen todo el tiempo que necesiten.");
-            } else {
-                var writeDefinition = drawDefinitionInput(game.current_card.word)
-                setupMainCard("Escribí la definición de: <strong>" + game.current_card.word + "</strong>", "Tomate tu tiempo, hacelo verosimil y cuida la ortografía. Te recomendamos empezar con mayúsculas, terminar con puntos y completar las tildes.", writeDefinition);
-            }
-            break;
-        case "show_definitions":
-            if (isDealer) {
-                selectCorrectDefinitionsHTML = drawAdminAllCards(game, true, isDealer);
-                setupMainCard("Selecciona las definiciones correctas:", "Selecciona las tarjetas que consideres correctas, considerando la definición real de la palabra:", selectCorrectDefinitionsHTML);
-            } else {
-                $("#mainCardLoadingBar").show();
-                setupMainCard("<strong>" + dealerName + "</strong> está eligiendo las definiciones acertadas", "Para evitar tarjetas repetidas y repartir los puntos correspondientes.");
-            }
-            break;
-        case "choose_definitions":
-            if (isDealer) {
-                $("#mainCardLoadingBar").show();
-                selectCorrectDefinitionsHTML = drawAdminAllCards(game, false, isDealer);
-                setupMainCard("Los jugadores están votando...", "", selectCorrectDefinitionsHTML);
-            } else {
-                selectCorrectDefinitionsHTML = drawAdminAllCards(game, true, isDealer);
-                setupMainCard("Elegí la definición que creas correcta", "Selecciona la definición que creas más acertada!", selectCorrectDefinitionsHTML);
-            }
-            break;
-        case "show_definitions_and_scores":
-            if (isDealer) {
-                endGameHTML = drawEndGameHTML(game, true)
-                setupMainCard("Fin de la ronda", "Cuando quieras, terminá la ronda...", endGameHTML);
-            } else {
-                $("#mainCardLoadingBar").show();
-                endGameHTML = drawEndGameHTML(game, false)
-                setupMainCard("Fin de la ronda", "Esperando que <strong>" + dealerName + "</strong> comience la siguiente ronda", endGameHTML);
-            }
-            break;
-        default:
-            console.log("Draw state not supported:", game)
-    }
+        switch (game.game_state) {
+            case "dealer_choose_card":
+                if (isDealer) {
+                    var definitionOptionsHTML = drawDefinitionOptions(game.definition_options);
+                    setupMainCard("Elegí una carta!", "De las opciones, elegí la que más desconocida te parezca, para hacer el juego más divertido.", definitionOptionsHTML);
+                } else {
+                    $("#mainCardLoadingBar").show();
+                    setupMainCard("Eligiendo la carta...", "<strong>" + dealerName + "</strong> será dealer esta ronda. Está eligiendo una palabra entre las opciones.", "");
+                }
+                break;
+            case "write_definitions":
+                if (isDealer) {
+                    $("#mainCardLoadingBar").show();
+                    setupMainCard("Los jugadores están escribiendo definiciones de  <strong>" + game.current_card.word + "</strong>", "Tienen todo el tiempo que necesiten.");
+                } else {
+                    var writeDefinition = drawDefinitionInput(game.current_card.word)
+                    setupMainCard("Escribí la definición de: <strong>" + game.current_card.word + "</strong>", "Tomate tu tiempo, hacelo verosimil y cuida la ortografía. Te recomendamos empezar con mayúsculas, terminar con puntos y completar las tildes.", writeDefinition);
+                }
+                break;
+            case "show_definitions":
+                if (isDealer) {
+                    selectCorrectDefinitionsHTML = drawAdminAllCards(game, true, isDealer);
+                    setupMainCard("Selecciona las definiciones correctas:", "Selecciona las tarjetas que consideres correctas, considerando la definición real de la palabra:", selectCorrectDefinitionsHTML);
+                } else {
+                    $("#mainCardLoadingBar").show();
+                    setupMainCard("<strong>" + dealerName + "</strong> está eligiendo las definiciones acertadas", "Para evitar tarjetas repetidas y repartir los puntos correspondientes.");
+                }
+                break;
+            case "choose_definitions":
+                if (isDealer) {
+                    $("#mainCardLoadingBar").show();
+                    selectCorrectDefinitionsHTML = drawAdminAllCards(game, false, isDealer);
+                    setupMainCard("Los jugadores están votando...", "", selectCorrectDefinitionsHTML);
+                } else {
+                    // Check if player had correct definition 
+                    if (game.correct_definition_players && game.correct_definition_players.indexOf(playerName) > -1) {
+                        $("#mainCardLoadingBar").show();
+                        setupMainCard("Tu definición es correcta!", "<strong>" + dealerName + "</strong> consideró tu definición como acertada. Ya se sumaron los puntos correspondientes.<br> El resto de los jugadores está votando las definiciones restantes...", "");
+                    } else {
+                        selectCorrectDefinitionsHTML = drawAdminAllCards(game, true, isDealer);
+                        setupMainCard("Elegí la definición que creas correcta", "Selecciona la definición que creas más acertada!", selectCorrectDefinitionsHTML);
+                    }
+                }
+                break;
+            case "show_definitions_and_scores":
+                if (isDealer) {
+                    endGameHTML = drawEndGameHTML(game, true)
+                    setupMainCard("Fin de la ronda", "Cuando quieras, terminá la ronda...", endGameHTML);
+                } else {
+                    $("#mainCardLoadingBar").show();
+                    endGameHTML = drawEndGameHTML(game, false)
+                    setupMainCard("Fin de la ronda", "Esperando que <strong>" + dealerName + "</strong> comience la siguiente ronda", endGameHTML);
+                }
+                break;
+            default:
+                console.log("Draw state not supported:", game)
+        }
 
-    if(isCardHidden){
-        showMainCard();
-    }
+        if (isCardHidden) {
+            showMainCard();
+        }
 
-}, 500);
+    }, 500);
 
 }
 
-function hideMainCard(){
+function hideMainCard() {
     $("#mainCard").addClass("scale-out");
     $("#mainCard").removeClass("scale-in");
 }
 
-function showMainCard(){
+function showMainCard() {
     $("#mainCard").removeClass("scale-out");
     $("#mainCard").addClass("scale-in");
 }
@@ -128,7 +134,7 @@ function isSameGame(game) {
 // ***************************************************
 
 function drawDefinitionOptions(definition_options) {
-    if (!definition_options){
+    if (!definition_options) {
         return;
     }
     var html = `<div class="row">`;

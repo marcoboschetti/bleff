@@ -1,5 +1,7 @@
-
 $(document).ready(function () {
+    $('select').formSelect();
+    $(".dropdown-content>li>a").css("color", "#112341");
+
     var randomName = getRandomName();
     $("#firstNameInput").val(randomName);
     $("#avatarImg").attr("src", "https://robohash.org/" + randomName + ".png");
@@ -8,26 +10,21 @@ $(document).ready(function () {
     $("#firstNameInput").on("input", function (e) {
         var input = $(this);
         var val = input.val();
-
         if (input.data("lastval") != val) {
             input.data("lastval", val);
-
             $("#avatarImg").attr("src", "https://robohash.org/" + val + ".png");
         }
-
         if (val.length <= 3) {
             $("#newGameBtn").addClass('disabled');
         } else {
             $("#newGameBtn").removeClass('disabled');
         }
-
         checkIfCodeIsCompleted();
     });
 
 
     $("#newGameBtn").click(createNewMatch);
     $("#joinGameBtn").click(joinMatch);
-    
 
     $("#joinMatchWord1").on("input", checkIfCodeIsCompleted)
     $("#joinMatchWord2").on("input", checkIfCodeIsCompleted)
@@ -52,10 +49,10 @@ function checkIfCodeIsCompleted(e) {
 function createNewMatch() {
     var name = $("#firstNameInput").val();
 
-    $.post("/api/game?player_name="+name, function (data) {
-        var val = data.id+"@|@"+name;
+    $.post("/api/game?player_name=" + name, function (data) {
+        var val = data.id + "@|@" + name;
         var result = btoa(val);
-        window.location.replace("/site/page/lobby.html?m="+result);
+        window.location.replace("/site/page/lobby.html?m=" + result);
     });
 }
 
@@ -66,21 +63,21 @@ function joinMatch() {
     var word2 = $("#joinMatchWord2").val().toUpperCase();
     var word3 = $("#joinMatchWord3").val().toUpperCase();
 
-    $.post("/api/game/"+word1+"."+word2+"."+word3+"/join?player_name="+name)
-    .done(function (data) {
-        var val = data.id+"@|@"+name;
-        var result = btoa(val);
-        window.location.replace("/site/page/lobby.html?m="+result);
-    })
-    .fail(function(err){
-        console.log(err);
-        M.toast({html: 'No encontramos la partida '+word1+"."+word2+"."+word3+" 😕"})
+    $.post("/api/game/" + word1 + "." + word2 + "." + word3 + "/join?player_name=" + name)
+        .done(function (data) {
+            var val = data.id + "@|@" + name;
+            var result = btoa(val);
+            window.location.replace("/site/page/lobby.html?m=" + result);
+        })
+        .fail(function (err) {
+            console.log(err);
+            M.toast({ html: 'No encontramos la partida ' + word1 + "." + word2 + "." + word3 + " 😕" })
 
-    });
+        });
 }
 
 
-var names = ["Lucía","María","Martina","Paula","Cami","Joaco","Tito","Lucho","Monti","Fede","Sofía","Daniela","Alba","Julia","Carla","Sara","Valeria","Noa","Emma","Claudia","Carmen","Valentina","Ana","Marta","Irene","Adriana","Laura","Elena","Alejandra","Vega","Alma","Laia","Lola","Vera","Olivia","Inés","Aitana","Jimena","Candela","Ariadna","Carlota","Ainhoa","Nora","Triana","Marina","Chloe","Elsa","Alicia","Clara","Blanca","Leire","Mía","Lara","Rocío","Ainara","Nerea","Hugo","Daniel","Pablo","Martín","Alejandro","Adrián","Álvaro","David","Lucas","Mateo","Mario","Manuel","Antonio","Diego","Leo","Javier","Marcos","Izan","Alex","Sergio","Enzo","Carlos","Marc","Jorge","Miguel","Gonzalo","Juan","Ángel","Oliver","Iker","Dylan","Bruno","Eric","Marco","Iván","Nicolás","José","Héctor","Darío","Samuel","Víctor","Rubén","Gabriel","Adam","Aaron","Thiago","Jesús","Aitor","Alberto","Guillermo"];
-function getRandomName(){
+var names = ["Lucía", "María", "Martina", "Paula", "Cami", "Joaco", "Tito", "Lucho", "Monti", "Fede", "Sofía", "Daniela", "Alba", "Julia", "Carla", "Sara", "Valeria", "Noa", "Emma", "Claudia", "Carmen", "Valentina", "Ana", "Marta", "Irene", "Adriana", "Laura", "Elena", "Alejandra", "Vega", "Alma", "Laia", "Lola", "Vera", "Olivia", "Inés", "Aitana", "Jimena", "Candela", "Ariadna", "Carlota", "Ainhoa", "Nora", "Triana", "Marina", "Chloe", "Elsa", "Alicia", "Clara", "Blanca", "Leire", "Mía", "Lara", "Rocío", "Ainara", "Nerea", "Hugo", "Daniel", "Pablo", "Martín", "Alejandro", "Adrián", "Álvaro", "David", "Lucas", "Mateo", "Mario", "Manuel", "Antonio", "Diego", "Leo", "Javier", "Marcos", "Izan", "Alex", "Sergio", "Enzo", "Carlos", "Marc", "Jorge", "Miguel", "Gonzalo", "Juan", "Ángel", "Oliver", "Iker", "Dylan", "Bruno", "Eric", "Marco", "Iván", "Nicolás", "José", "Héctor", "Darío", "Samuel", "Víctor", "Rubén", "Gabriel", "Adam", "Aaron", "Thiago", "Jesús", "Aitor", "Alberto", "Guillermo"];
+function getRandomName() {
     return names[Math.floor(Math.random() * names.length)];
 }

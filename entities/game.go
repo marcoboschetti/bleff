@@ -16,7 +16,8 @@ type (
 		// State 2, players upload definitions
 		FakeDefinitions []Definition `json:"fake_definitions"`
 		// State 3, players and real. To choose from
-		AllDefinitions []Definition `json:"all_definitions"`
+		AllDefinitions           []Definition `json:"all_definitions"`
+		CorrectDefinitionPlayers []string     `json:"correct_definition_players"`
 		// State 4, each player chooses one definition
 		ChosenDefinitions []ChosenDefinition `json:"chosen_definitions"`
 	}

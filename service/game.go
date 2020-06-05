@@ -143,9 +143,17 @@ func PostChosenDefinition(gameID, playerName, chosenDefinitionID string) (*entit
 		return nil, errors.New("game not found: " + gameID)
 	}
 
-	// Check if player already submitted a definition
+	// Check if player already chosen a definition
 	for _, def := range game.ChosenDefinitions {
 		if def.Player == playerName {
+			// No op
+			return game, nil
+		}
+	}
+
+	// Check if player already had a correct definition
+	for _, correctDefPlayer := range game.CorrectDefinitionPlayers {
+		if correctDefPlayer == playerName {
 			// No op
 			return game, nil
 		}
@@ -159,7 +167,7 @@ func PostChosenDefinition(gameID, playerName, chosenDefinitionID string) (*entit
 	game.ChosenDefinitions = append(game.ChosenDefinitions, newChosenDefinition)
 
 	// Check if fake definition is ready
-	if len(game.ChosenDefinitions) == len(game.Players)-1 {
+	if len(game.ChosenDefinitions) == len(game.Players)-1-len(game.CorrectDefinitionPlayers) {
 		// All definitions are completed
 		game.CurrentGameState = entities.GetNextState(game.CurrentGameState)
 		changeGameForCurrentState(game, "", nil)
@@ -183,6 +191,7 @@ func PostEndRound(gameID, playerName string) (*entities.Game, error) {
 	}
 
 	game.AllDefinitions = nil
+	game.CorrectDefinitionPlayers = nil
 	game.ChosenDefinitions = nil
 	game.CurrentCard = entities.PersistedDefinition{}
 	game.FakeDefinitions = nil
