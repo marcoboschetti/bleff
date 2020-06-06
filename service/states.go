@@ -67,12 +67,6 @@ func moveDefinitionsToDisplay(game *entities.Game) {
 }
 
 func filterCorrectDefinitions(game *entities.Game, correctDefinitionIDs []string) {
-	// Assign points based on correct definitions
-	if len(correctDefinitionIDs) == 0 {
-		// No real definitions, points for dealer
-		game.Players[game.CurrentDealerIdx].Points += entities.PointsForDealerNoCorrectDefinitions
-	}
-
 	for _, defID := range correctDefinitionIDs {
 		playerIdx := findPlayerWithDefinitionID(defID, game)
 		game.Players[playerIdx].Points += entities.PointsForPlayerCorrectDefinitions
@@ -95,6 +89,9 @@ func filterCorrectDefinitions(game *entities.Game, correctDefinitionIDs []string
 }
 
 func givePointsForDefinitions(game *entities.Game) {
+
+	selectedCorrectDefinition := false
+
 	for _, def := range game.ChosenDefinitions {
 		selectedDefIdx := findDefinitionByID(def.DefinitionID, game)
 
@@ -102,6 +99,7 @@ func givePointsForDefinitions(game *entities.Game) {
 			// Points for voter player, by correct definition
 			playerIdx := findPlayerWithName(def.Player, game.Players)
 			game.Players[playerIdx].Points += entities.PointsForPlayerChoosingCorrectDefinition
+			selectedCorrectDefinition = true
 		} else {
 			// Points for player who wrote definition
 			playerIdx := findPlayerWithName(game.AllDefinitions[selectedDefIdx].Player, game.Players)
@@ -109,6 +107,12 @@ func givePointsForDefinitions(game *entities.Game) {
 				game.Players[playerIdx].Points += entities.PointsForHavingDefinitionChosen
 			}
 		}
+	}
+
+	// Assign points based on correct definitions
+	if !selectedCorrectDefinition {
+		// No real definitions, points for dealer
+		game.Players[game.CurrentDealerIdx].Points += entities.PointsForDealerNoCorrectDefinitions
 	}
 
 	// Post for sheets
