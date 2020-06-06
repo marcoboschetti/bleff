@@ -1,7 +1,7 @@
 package entities
 
 const (
-	CardsToChooseFrom = 3
+	CardsToChooseFrom = 5
 
 	PointsForDealerNoCorrectDefinitions      = 3
 	PointsForPlayerCorrectDefinitions        = 3
