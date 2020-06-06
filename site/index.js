@@ -5,9 +5,6 @@ $(document).ready(function () {
     var randomName = getRandomName();
     $("#firstNameInput").val(randomName);
     $("#avatarImg").attr("src", "https://robohash.org/" + randomName + ".png");
-    $("#avatarImg2").attr("src", "https://robohash.org/" + randomName + ".png?set=set2");
-    $("#avatarImg3").attr("src", "https://robohash.org/" + randomName + ".png?set=set3");
-    $("#avatarImg4").attr("src", "https://robohash.org/" + randomName + ".png?set=set4");
 
     // Change avatar when name changes
     $("#firstNameInput").on("input", function (e) {
@@ -16,10 +13,6 @@ $(document).ready(function () {
         if (input.data("lastval") != val) {
             input.data("lastval", val);
             $("#avatarImg").attr("src", "https://robohash.org/" + val + ".png");
-            $("#avatarImg2").attr("src", "https://robohash.org/" + val + ".png?set=set2");
-            $("#avatarImg3").attr("src", "https://robohash.org/" + val + ".png?set=set3");
-            $("#avatarImg4").attr("src", "https://robohash.org/" + val + ".png?set=set4");
-        
         }
         if (val.length <= 3) {
             $("#newGameBtn").addClass('disabled');
