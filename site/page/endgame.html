@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0" />
+    <title>El Juego del Diccionario</title>
+
+    <!-- CSS  -->
+    <link href="/site/css/style.css" type="text/css" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link href="/site/css/materialize.min.css" type="text/css" rel="stylesheet" media="screen,projection" />
+</head>
+
+<body>
+    <nav class="light-blue lighten-1" role="navigation">
+        <div class="nav-wrapper container"><a id="logo-container" href="/" class="brand-logo">El juego del
+                diccionario</a>
+        </div>
+    </nav>
+    <div class="section no-pad-bot">
+        <div class="container">
+            <h2 class="header center orange-text">Fin de la partida!</h2>
+            <div class="row center">
+                <h4 class="header center">Código de la partida: <span style="font-weight: bold;" id="gameID"></span>
+                </h4>
+            </div>
+        </div>
+
+        <!-- BEGIN: RANKING -->
+        <div class="container">
+            <div class="row" id="rankingContainer">
+                
+            </div>
+         
+        </div>
+        <!-- END: RANKING -->
+
+        <div class="row center-align">
+            <a class="waves-light btn orange" href="/">Volver al inicio</a>
+            <p class="ef">Gracias por jugar!</p>
+        </div>
+    </div>
+
+
+    <footer class="page-footer orange">
+        <div class="footer-copyright">
+            <div class="container">
+                Made with love by Marco
+            </div>
+        </div>
+    </footer>
+
+    <!--  Scripts-->
+    <script src="https://code.jquery.com/jquery-2.2.4.min.js"></script>
+    <script src="/site/js/materialize.min.js"></script>
+    <script src="/site/js/endgame.js"></script>
+    <link href="/site/css/endgame.css" type="text/css" rel="stylesheet" />
+
+</body>
+
+</html>

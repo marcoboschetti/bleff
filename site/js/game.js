@@ -1,8 +1,10 @@
 var gameID;
 var playerName;
+var m;
 
 $(document).ready(function () {
-    var result = atob(getUrlParameter("m")).split("@|@");
+    m = getUrlParameter("m")
+    var result = atob(m).split("@|@");
     gameID = result[0];
     playerName = result[1];
 
@@ -16,6 +18,11 @@ var lastDrawnGame = null;
 var lastDrawnPlayersGame = null;
 function refreshGame() {
     $.get("/api/game/" + gameID + "?player_name=" + playerName, function (game) {
+        if(game.status == "finished"){
+            window.location.replace("/site/page/endgame.html?m="+m);
+            return 
+        }
+
         if (!isSameGame(game)) {
             drawGameState(game)
         }
@@ -402,7 +409,7 @@ function drawPlayers(game) {
         <div class="card">
             <div class="card-image">
             <img class="avatarImg `+ imageClass + `" src="https://robohash.org/` + player.name + `.png">
-            <span class="player-name-card card-title">` + player.points + ` pts</span>
+            <span class="player-name-card card-title">` + player.points+"/"+game.target_points + ` pts</span>
             </div>
             <div class="card-action">
             `+ player.name + `
@@ -417,6 +424,10 @@ function drawPlayers(game) {
 }
 
 function playerIsInArray(nameKey, definitions) {
+    if(!definitions){
+        return false;
+    }
+
     var playerFound = false;
     definitions.forEach(function (definition) {
         if (definition.player == nameKey) {

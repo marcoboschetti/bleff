@@ -1,0 +1,63 @@
+$first: #2ecc71
+$fdarker: #27ae60
+$second: #f1c40f
+$sdarker: #f39c12
+$third: #e74c3c
+$tdarker: #c0392b
+$bg: #ecf0f1
+$write: #2c3e50
+
+body
+	margin-top: 5em
+	background-color: $bg
+	text-align: center
+	font-family: Open Sans
+
+.title
+	color: $write
+	text-transform: uppercase
+
+.first-place
+	background-color: $first
+	height: 100px
+	width: 100px
+	margin: 0 auto
+	line-height: 100px
+	font-size: 50px
+	font-weight: 800
+	color: $fdarker
+
+.second-place
+	background-color: $second
+	height: 100px
+	width: 100px
+	margin: 0 auto
+	line-height: 100px
+	font-size: 50px
+	font-weight: 800
+	color: $sdarker
+	display: inline-block
+
+.third-place
+	background-color: $third
+	height: 100px
+	width: 100px
+	margin: 0 auto
+	margin-left: -4px
+	line-height: 100px
+	font-size: 50px
+	font-weight: 800
+	color: $tdarker
+	display: inline-block
+
+.first-place:hover
+	transform: translate(0px,-20px)
+	transition: ease-in-out 0.1s
+
+.second-place:hover
+	transform: translate(-20px,20px)
+	transition: ease-in-out 0.1s
+
+.third-place:hover
+	transform: translate(20px,20px)
+	transition: ease-in-out 0.1s

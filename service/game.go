@@ -9,13 +9,14 @@ import (
 
 var gamesMap = NewGameMap()
 
-func CreateNewGame(playerName string) entities.Game {
+func CreateNewGame(playerName string, targetPoints uint64) entities.Game {
 	player := createNewPlayer(playerName)
 
 	newGame := entities.Game{
-		ID:      entities.GetRandomWordJoin(3),
-		Status:  "pending",
-		Players: []entities.Player{player},
+		ID:           entities.GetRandomWordJoin(3),
+		Status:       "pending",
+		Players:      []entities.Player{player},
+		TargetPoints: targetPoints,
 	}
 
 	gamesMap.Lock()
@@ -197,12 +198,23 @@ func PostEndRound(gameID, playerName string) (*entities.Game, error) {
 	game.FakeDefinitions = nil
 	game.DefinitionOptions = nil
 
-	game.CurrentGameState = entities.GetNextState(game.CurrentGameState)
+	// Check winners
+	gameEnded := false
+	for _, player := range game.Players {
+		if player.Points >= game.TargetPoints {
+			game.Status = "finished"
+			gameEnded = true
+		}
+	}
 
-	nextDealer := int(game.CurrentDealerIdx+1) % len(game.Players)
-	game.CurrentDealerIdx = uint64(nextDealer)
+	if !gameEnded {
+		game.CurrentGameState = entities.GetNextState(game.CurrentGameState)
 
-	changeGameForCurrentState(game, "", nil)
+		nextDealer := int(game.CurrentDealerIdx+1) % len(game.Players)
+		game.CurrentDealerIdx = uint64(nextDealer)
+		changeGameForCurrentState(game, "", nil)
+	}
+
 	return game, nil
 }
 

@@ -49,7 +49,11 @@ function checkIfCodeIsCompleted(e) {
 function createNewMatch() {
     var name = $("#firstNameInput").val();
 
-    $.post("/api/game?player_name=" + name, function (data) {
+    var payload = {
+        target_points: parseInt($("#newGameTargetPoints").val())
+    }
+
+    $.post("/api/game?player_name=" + name, JSON.stringify(payload), function (data) {
         var val = data.id + "@|@" + name;
         var result = btoa(val);
         window.location.replace("/site/page/lobby.html?m=" + result);

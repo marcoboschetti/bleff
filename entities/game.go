@@ -5,9 +5,10 @@ type (
 		ID               string    `json:"id,omitempty"`
 		Status           string    `json:"status,omitempty"`
 		Players          []Player  `json:"players,omitempty"`
+		TargetPoints     uint64    `json:"target_points,omitempty"`
 		CurrentDealerIdx uint64    `json:"dealer_index"`
 		CurrentGameState GameState `json:"game_state,omitempty"`
-		PlayedWords      []string  `json:"-,omitempty"`
+		//		PlayedWords      []string  `json:"-,omitempty"`
 
 		// State 0, dealer choose card
 		DefinitionOptions []PersistedDefinition `json:"definition_options,omitempty"`

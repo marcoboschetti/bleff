@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"net/http"
 
 	"bitbucket.org/marcoboschetti/bleff/entities"
@@ -26,7 +27,19 @@ func SetupGameHandlers(r *gin.Engine) {
 
 func createNewGame(c *gin.Context) {
 	playerName := c.Query("player_name")
-	newGame := service.CreateNewGame(playerName)
+
+	definition := struct {
+		TargetPoints uint64 `json:"target_points"`
+	}{}
+
+	if err := c.ShouldBindJSON(&definition); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
+	fmt.Println(definition.TargetPoints)
+
+	newGame := service.CreateNewGame(playerName, definition.TargetPoints)
 	c.JSON(200, newGame)
 }
 
@@ -179,13 +192,13 @@ func clearGameInfo(playerName string, game entities.Game) entities.Game {
 	// Remove names and is real. leave ID and definition
 	allDefinitions := make([]entities.Definition, len(game.AllDefinitions))
 	for idx, def := range game.AllDefinitions {
-		definition, id := "Articuno", "Ditto"
+		definition, id := "Carrera de Mente", "Uno"
 
 		if game.CurrentGameState == entities.ChooseDefinitions || game.CurrentGameState == entities.ShowDefinitionsAndScores {
 			definition, id = def.Definition, def.ID
 		}
 
-		player := "Torchic"
+		player := "Pictonary"
 		isReal := false
 		if game.CurrentGameState == entities.ShowDefinitionsAndScores {
 			player = def.Player
