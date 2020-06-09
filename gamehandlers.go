@@ -189,6 +189,20 @@ func clearGameInfo(playerName string, game entities.Game) entities.Game {
 	}
 	game.FakeDefinitions = fakeDefinitions
 
+	// Remove definitions from correct ones
+
+	if game.CurrentGameState != entities.ShowDefinitionsAndScores {
+		correctDefinitions := make([]entities.Definition, len(game.CorrectDefinitions))
+		for idx, def := range game.CorrectDefinitions {
+			correctDefinitions[idx] = entities.Definition{
+				ID:     def.ID,
+				Player: def.Player,
+				IsReal: def.IsReal,
+			}
+		}
+		game.CorrectDefinitions = correctDefinitions
+	}
+
 	// Remove names and is real. leave ID and definition
 	allDefinitions := make([]entities.Definition, len(game.AllDefinitions))
 	for idx, def := range game.AllDefinitions {

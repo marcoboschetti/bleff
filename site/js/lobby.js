@@ -14,6 +14,8 @@ $(document).ready(function () {
     setInterval(refreshGame, 3000);
 
     $("#startGame").click(function(e){
+        $("#startGame").addClass("disabled");
+        $("#startGame").html("Iniciando partida...");
         $.post("/api/game/"+gameID+"/start", function (data) {
             window.location.replace("/site/page/game.html?m="+m);
         });

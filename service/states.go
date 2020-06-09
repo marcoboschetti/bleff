@@ -70,17 +70,16 @@ func filterCorrectDefinitions(game *entities.Game, correctDefinitionIDs []string
 	for _, defID := range correctDefinitionIDs {
 		playerIdx := findPlayerWithDefinitionID(defID, game)
 		game.Players[playerIdx].Points += entities.PointsForPlayerCorrectDefinitions
-		game.CorrectDefinitionPlayers = append(game.CorrectDefinitionPlayers, game.Players[playerIdx].Name)
 	}
 
 	// Check if player already submitted a definition
-	filteredDefinitions := make([]entities.Definition, len(game.AllDefinitions)-len(correctDefinitionIDs))
-	idx := 0
+	filteredDefinitions := []entities.Definition{}
 
 	for _, def := range game.AllDefinitions {
 		if !containsString(correctDefinitionIDs, def.ID) {
-			filteredDefinitions[idx] = def
-			idx++
+			filteredDefinitions = append(filteredDefinitions, def)
+		} else {
+			game.CorrectDefinitions = append(game.CorrectDefinitions, def)
 		}
 	}
 

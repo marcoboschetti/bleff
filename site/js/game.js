@@ -18,9 +18,9 @@ var lastDrawnGame = null;
 var lastDrawnPlayersGame = null;
 function refreshGame() {
     $.get("/api/game/" + gameID + "?player_name=" + playerName, function (game) {
-        if(game.status == "finished"){
-            window.location.replace("/site/page/endgame.html?m="+m);
-            return 
+        if (game.status == "finished") {
+            window.location.replace("/site/page/endgame.html?m=" + m);
+            return
         }
 
         if (!isSameGame(game)) {
@@ -83,7 +83,7 @@ function drawGameState(game) {
                     setupMainCard("Los jugadores están votando...", "", selectCorrectDefinitionsHTML);
                 } else {
                     // Check if player had correct definition 
-                    if (game.correct_definition_players && game.correct_definition_players.indexOf(playerName) > -1) {
+                    if (game.correct_definitions && game.correct_definitions.some(function (e) { return e.player == playerName; })) {
                         $("#mainCardLoadingBar").show();
                         setupMainCard("Tu definición es correcta!", "<strong>" + dealerName + "</strong> consideró tu definición como acertada. Ya se sumaron los puntos correspondientes.<br> El resto de los jugadores está votando las definiciones restantes...", "");
                     } else {
@@ -147,6 +147,9 @@ function drawDefinitionOptions(definition_options) {
     var html = `<div class="row">`;
     definition_options.forEach(function (definition, index) {
         html += drawWordDefinitionCard(definition.word, definition.definition);
+        if ((index + 1) % 3 == 0) {
+            html += `</div><div class="row">`;
+        }
     });
     html += `</div>`;
     return html;
@@ -175,7 +178,7 @@ function drawDefinitionInput(word) {
           <input id="wordDefinitionInput" type="text" class="validate">
           <label for="wordDefinitionInput">Definición</label>
         </div>
-        <a class="waves-effect waves-light orange btn" onclick="uploadDefinition(\``+ word + `\`)">Subir definición</a>
+        <a class="waves-effect waves-light red btn" onclick="uploadDefinition(\``+ word + `\`)">Subir definición</a>
     </div>
     `
 }
@@ -271,6 +274,12 @@ function drawEndGameHTML(game, isDealer) {
         }
     });
 
+    var correctTotalVotes = getOccurrencesCount(game, realDefinition.id);
+    var correctVotersList = "";
+    if (correctTotalVotes > 0) {
+        correctVotersList = " (" + getVotersNames(game, realDefinition.id) + ")";
+    }
+
     html = `
     <div class="row">
         <!-- Real definition -->
@@ -283,9 +292,39 @@ function drawEndGameHTML(game, isDealer) {
                 <p>`+ game.current_card.definition + `</p>
             </div>
             <div class="card-content white-text">
-            <p>Votos: `+ getOccurrencesCount(game, realDefinition.id) + `</p><br>
+                <p>Votos: `+ correctTotalVotes + correctVotersList + `</p><br>
             </div>
             </div>
+        </div>
+        `;
+
+    game.correct_definitions.forEach(function (definition, index) {
+        if (!definition.is_real) {
+            var totalVotes = getOccurrencesCount(game, definition.id);
+            var votersList = "";
+            if (totalVotes > 0) {
+                votersList = " (" + getVotersNames(game, definition.id) + ")";
+            }
+            html += `
+                <div class="col m4">
+                    <div class="card blue lighten-1">
+                    <div class="card-content white-text">
+                        <span class="card-title">`+ game.current_card.word + `</span>
+                        <p>`+ definition.definition + `</p>
+                    </div>
+                    <div class="card-content white-text">
+                    <p>Autor: `+ definition.player + `</p>
+                    <p>
+                    Votos: `+ totalVotes + votersList + `
+                    </p>
+                    </div>
+                    </div>
+                </div>
+            `
+        }
+    });
+
+    html += `
         </div>
         </div>
         <h5>Definiciones de jugadores:</h5>
@@ -294,6 +333,11 @@ function drawEndGameHTML(game, isDealer) {
 
     game.all_definitions.forEach(function (definition, index) {
         if (!definition.is_real) {
+            var totalVotes = getOccurrencesCount(game, definition.id);
+            var votersList = "";
+            if (totalVotes > 0) {
+                votersList = " (" + getVotersNames(game, definition.id) + ")";
+            }
             html += `
             <div class="col m4">
                 <div class="card blue lighten-1">
@@ -303,7 +347,9 @@ function drawEndGameHTML(game, isDealer) {
                 </div>
                 <div class="card-content white-text">
                 <p>Autor: `+ definition.player + `</p>
-                <p>Votos: `+ getOccurrencesCount(game, definition.id) + `</p><br>
+                <p>
+                Votos: `+ totalVotes + votersList + `
+                </p>
                 </div>
                 </div>
             </div>
@@ -325,12 +371,28 @@ function drawEndGameHTML(game, isDealer) {
 
 function getOccurrencesCount(game, definitionID) {
     var total = 0;
+    if (!game.chosen_definitions) {
+        return total;
+    }
     game.chosen_definitions.forEach(function (def) {
         if (def.id == definitionID) {
             total++;
         }
     })
     return total;
+}
+
+function getVotersNames(game, definitionID) {
+    var list = "";
+    game.chosen_definitions.forEach(function (def) {
+        if (def.id == definitionID) {
+            if (list.length > 0) {
+                list += ", "
+            }
+            list += def.player;
+        }
+    })
+    return list;
 }
 // ***************************************************
 // ********** GAME COMPONENT BEHAVIORS ***************
@@ -409,7 +471,7 @@ function drawPlayers(game) {
         <div class="card">
             <div class="card-image">
             <img class="avatarImg `+ imageClass + `" src="https://robohash.org/` + player.name + `.png">
-            <span class="player-name-card card-title">` + player.points+"/"+game.target_points + ` pts</span>
+            <span class="player-name-card card-title">` + player.points + "/" + game.target_points + ` pts</span>
             </div>
             <div class="card-action">
             `+ player.name + `
@@ -424,7 +486,7 @@ function drawPlayers(game) {
 }
 
 function playerIsInArray(nameKey, definitions) {
-    if(!definitions){
+    if (!definitions) {
         return false;
     }
 
