@@ -1,4 +1,6 @@
 $(document).ready(function () {
+
+    // Random logo
     var rand  = Math.random();
     if(rand < 0.33){
         return;
