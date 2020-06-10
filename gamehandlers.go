@@ -174,15 +174,15 @@ func clearGameInfo(playerName string, game entities.Game) entities.Game {
 
 	game.DefinitionOptions = nil
 	if game.CurrentGameState != entities.ShowDefinitionsAndScores {
-		game.CurrentCard.Definition = "pika pika"
+		game.CurrentCard.Definition = "Crucigrama"
 	}
 
 	// Only leave player in fake definitions
 	fakeDefinitions := make([]entities.Definition, len(game.FakeDefinitions))
 	for idx, def := range game.FakeDefinitions {
 		fakeDefinitions[idx] = entities.Definition{
-			Definition: "Lapras",
-			ID:         "Blastois",
+			Definition: "Pictionary",
+			ID:         "Scrabble",
 			IsReal:     false,
 			Player:     def.Player,
 		}
@@ -195,9 +195,10 @@ func clearGameInfo(playerName string, game entities.Game) entities.Game {
 		correctDefinitions := make([]entities.Definition, len(game.CorrectDefinitions))
 		for idx, def := range game.CorrectDefinitions {
 			correctDefinitions[idx] = entities.Definition{
-				ID:     def.ID,
-				Player: def.Player,
-				IsReal: def.IsReal,
+				ID:         def.ID,
+				Player:     def.Player,
+				IsReal:     def.IsReal,
+				Definition: "Rapigrama",
 			}
 		}
 		game.CorrectDefinitions = correctDefinitions
@@ -211,7 +212,6 @@ func clearGameInfo(playerName string, game entities.Game) entities.Game {
 		if game.CurrentGameState == entities.ChooseDefinitions || game.CurrentGameState == entities.ShowDefinitionsAndScores {
 			definition, id = def.Definition, def.ID
 		}
-
 		player := "Pictonary"
 		isReal := false
 		if game.CurrentGameState == entities.ShowDefinitionsAndScores {

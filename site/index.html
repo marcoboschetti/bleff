@@ -13,50 +13,39 @@
 </head>
 
 <body>
-    <nav class="grey darken-2" role="navigation">
-        <div class="nav-wrapper container"><a id="logo-container" href="#" class="brand-logo">El juego del
-                diccionario</a>
-            <!--
-      <ul class="right hide-on-med-and-down">
-        <li><a href="#">Navbar Link</a></li>
-      </ul>
-      <ul id="nav-mobile" class="sidenav">
-        <li><a href="#">Navbar Link</a></li>
-      </ul>
-      <a href="#" data-target="nav-mobile" class="sidenav-trigger"><i class="material-icons">menu</i></a>
-      -->
+    <nav class="bleff-dominant" role="navigation">
+        <div class="nav-wrapper container"><a id="logo-container" href="/" class="brand-logo">
+                <img id="topLogo" src="/site/img/top-logo.png">
+            </a>
         </div>
     </nav>
 
+    <!--
     <div class="section no-pad-bot">
         <div class="container">
-            <h1 class="header center red-text">Bleff - El Juego del Diccionario</h1>
-            <div class="row center">
-            </div>
+            <h1 class="header center red-text">
+            </h1>
         </div>
     </div>
-
+-->
 
     <div class="container">
-        <div class="row flex">
+        <div class="row full-height">
             <!-- BEGIN: DESCRIPTION -->
             <div class="col s12 m7">
-                <div class="card-panel grey darken-3">
-                    <span class="white-text"> En <strong>El Juego del Diccionario</strong> los jugadores tratarán de
-                        adivinar la definición de palabras poco comunes.
-                        <br>
-                        En cada ronda, un jugador elegirá una palabra y el resto deberá redactar su definición. Luego
-                        cada jugador votará la definición que cree que es la correcta.<br><br>
-                        Cada jugador ganará puntos al elegir la definición correcta y cuando sus definiciones sean
-                        votadas por otros jugadores.
-                    </span>
+                <div class="card-panel bleff-dominant center">
+                    <img id="mainLogo" src="/site/img/logo.png" class="bleff-tonic-alt" />
+                    <div class="bleff-tonic-alt-text landing-text"> El famoso juego del diccionario en una versión
+                        online. <br> Bleff es el juego en el que podés ganar siendo un gran conocedor de palabras o un
+                        buen mentiroso.
+                    </div>
                 </div>
             </div>
             <!-- END: DESCRIPTION -->
 
             <!-- BEGIN: USER NAME -->
             <div class="col s12 m5">
-                <div class="card-panel">
+                <div class="card-panel bleff-tonic-alt">
                     <div class="row">
                         <div class="input-field col s9 m6">
                             <div class="row">
@@ -86,7 +75,7 @@
         <div class="row">
             <!-- BEGIN: JOIN GAME -->
             <div class="col s12 m6">
-                <div class="card-panel">
+                <div class="card-panel bleff-tonic-alt">
                     <h5 class="center">Unirte a una partida</h5>
                     <p class="light">Si un amigo ya creó una partida, pedíle el código para entrar!</p>
 
@@ -102,7 +91,7 @@
                         </div>
                     </div>
                     <div class="row center-align">
-                        <a id="joinGameBtn" class="disabled center waves-light btn red">Unirse a la partida</a>
+                        <a id="joinGameBtn" class="disabled center waves-light btn bleff-red">Unirse a la partida</a>
                     </div>
                 </div>
             </div>
@@ -110,9 +99,9 @@
 
             <!-- BEGIN: CREATE GAME -->
             <div class="col s12 m6">
-                <div class="card-panel grey darken-3">
-                    <h5 class="center white-text">Nueva partida privada</h5>
-                    <p class="light white-text">Crea una partida para jugar con tus amigos!</p>
+                <div class="card-panel bleff-dominant">
+                    <h5 class="center bleff-tonic-alt-text">Nueva partida privada</h5>
+                    <p class="light bleff-tonic-alt-text">Crea una partida para jugar con tus amigos!</p>
                     <div class="row">
 
                         <div class="col s12 m6">
@@ -122,12 +111,12 @@
                                     <option value="20" selected>20 puntos</option>
                                     <option value="30">30 puntos</option>
                                 </select>
-                                <label class="white-text">Puntaje máximo</label>
+                                <label class="bleff-tonic-alt-text">Puntaje máximo</label>
                             </div>
                         </div>
                         <div class="col s12 m6">
                             <div class="center-align">
-                                <a id="newGameBtn" class="center waves-light btn red">Crear partida</a>
+                                <a id="newGameBtn" class="center waves-light btn bleff-red">Crear partida</a>
                             </div>
                         </div>
 
@@ -140,11 +129,14 @@
 
     </div>
 
-    <footer class="page-footer grey darken-3">
+    <footer class="page-footer bleff-dominant">
         <div class="footer-copyright">
-            <div class="container">
-                Made with love by Marco
+            <div class="container center">
+                © "Bleff Online" es una versión digital del juego Bleff propiedad de RUIBAL SRL, todos los derechos
+                reservados.<br>
+                Programación, Diseño Web y Adaptación: Marco Boschetti. / Arte y Diseño original: Silvina Halabi
             </div>
+            <!-- <img src="/site/img/iso-ruibal.png" class="footer-logo"/> -->
         </div>
     </footer>
 
@@ -153,6 +145,7 @@
     <script src="https://code.jquery.com/jquery-2.2.4.min.js"></script>
     <script src="/site/js/materialize.min.js"></script>
     <script src="/site/index.js"></script>
+    <script src="/site/js/logo.js"></script>
 </body>
 
 </html>

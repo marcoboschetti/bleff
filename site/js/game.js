@@ -85,7 +85,7 @@ function drawGameState(game) {
                     // Check if player had correct definition 
                     if (game.correct_definitions && game.correct_definitions.some(function (e) { return e.player == playerName; })) {
                         $("#mainCardLoadingBar").show();
-                        setupMainCard("Tu definición es correcta!", "<strong>" + dealerName + "</strong> consideró tu definición como acertada. Ya se sumaron los puntos correspondientes.<br> El resto de los jugadores está votando las definiciones restantes...", "");
+                        setupMainCard("Tu definición es correcta!", "<strong>" + dealerName + "</strong> consideró tu definición acertada. Ya se sumaron los puntos correspondientes.<br> El resto de los jugadores está votando las definiciones restantes...", "");
                     } else {
                         selectCorrectDefinitionsHTML = drawAdminAllCards(game, true, isDealer);
                         setupMainCard("Elegí la definición que creas correcta", "Selecciona la definición que creas más acertada!", selectCorrectDefinitionsHTML);
@@ -158,13 +158,13 @@ function drawDefinitionOptions(definition_options) {
 function drawWordDefinitionCard(word, definition) {
     return `
     <div class="col m4">
-      <div class="card blue-grey darken-1">
+      <div class="card bleff-subdominant-alt">
         <div class="card-content white-text">
           <span class="card-title">`+ word + `</span>
           <p>`+ definition + `</p>
         </div>
         <div class="card-action">
-        <a class="waves-effect waves-light orange btn" onclick="selectDefinitionOption(\``+ word + `\`)">Elegir</a>
+        <a class="waves-effect waves-light bleff-red bleff-tonic-alt-text btn" onclick="selectDefinitionOption(\``+ word + `\`)">Elegir</a>
         </div>
         </div>
     </div>
@@ -178,7 +178,7 @@ function drawDefinitionInput(word) {
           <input id="wordDefinitionInput" type="text" class="validate">
           <label for="wordDefinitionInput">Definición</label>
         </div>
-        <a class="waves-effect waves-light red btn" onclick="uploadDefinition(\``+ word + `\`)">Subir definición</a>
+        <a class="waves-effect waves-light bleff-red btn" onclick="uploadDefinition(\``+ word + `\`)">Subir definición</a>
     </div>
     `
 }
@@ -192,7 +192,7 @@ function drawAdminAllCards(game, isSelectable, isDealer) {
         <h5>Definición correcta:</h5>
         <div class="row">
         <div class="col m4">
-            <div class="card green">
+            <div class="card bleff-red">
             <div class="card-content white-text">
                 <span class="card-title">`+ game.current_card.word + `</span>
                 <p>`+ game.current_card.definition + `</p>
@@ -215,7 +215,7 @@ function drawAdminAllCards(game, isSelectable, isDealer) {
         if (!definition.is_real) {
             html += `
             <div class="col m4">
-                <div class="card blue lighten-1">
+                <div class="card bleff-subdominant-alt">
                 <div class="card-content white-text">
                     <span class="card-title">`+ game.current_card.word + `</span>
                     <p>`+ definition.definition + `</p>
@@ -235,7 +235,7 @@ function drawAdminAllCards(game, isSelectable, isDealer) {
             if (isSelectable && !isDealer) {
                 html += `
                     <div class="card-action">
-                        <button onclick="selectCorrectDefinition(\``+ definition.id + `\`)" class="btn waves-effect waves-light orange" type="submit" name="action">Elegir
+                        <button onclick="selectCorrectDefinition(\``+ definition.id + `\`)" class="btn waves-effect waves-light bleff-red" type="submit" name="action">Elegir
                         <i class="material-icons right">send</i>
                         </button>
                     </div>
@@ -252,7 +252,7 @@ function drawAdminAllCards(game, isSelectable, isDealer) {
 
     if (isSelectable && isDealer) {
         html += `
-        <button onclick="postCorrectDefinitions()" class="btn waves-effect waves-light orange" type="submit" name="action">Listo
+        <button onclick="postCorrectDefinitions()" class="btn waves-effect waves-light bleff-red" type="submit" name="action">Listo
         <i class="material-icons right">send</i>
         </button>
         `
@@ -286,7 +286,7 @@ function drawEndGameHTML(game, isDealer) {
         <h5>Definición correcta:</h5>
         <div class="row">
         <div class="col m4">
-            <div class="card green">
+            <div class="card bleff-red">
             <div class="card-content white-text">
                 <span class="card-title">`+ game.current_card.word + `</span>
                 <p>`+ game.current_card.definition + `</p>
@@ -298,16 +298,17 @@ function drawEndGameHTML(game, isDealer) {
         </div>
         `;
 
-    game.correct_definitions.forEach(function (definition, index) {
-        if (!definition.is_real) {
-            var totalVotes = getOccurrencesCount(game, definition.id);
-            var votersList = "";
-            if (totalVotes > 0) {
-                votersList = " (" + getVotersNames(game, definition.id) + ")";
-            }
-            html += `
+    if (game.correct_definitions) {
+        game.correct_definitions.forEach(function (definition, index) {
+            if (!definition.is_real) {
+                var totalVotes = getOccurrencesCount(game, definition.id);
+                var votersList = "";
+                if (totalVotes > 0) {
+                    votersList = " (" + getVotersNames(game, definition.id) + ")";
+                }
+                html += `
                 <div class="col m4">
-                    <div class="card blue lighten-1">
+                    <div class="card bleff-subdominant-alt">
                     <div class="card-content white-text">
                         <span class="card-title">`+ game.current_card.word + `</span>
                         <p>`+ definition.definition + `</p>
@@ -321,8 +322,9 @@ function drawEndGameHTML(game, isDealer) {
                     </div>
                 </div>
             `
-        }
-    });
+            }
+        });
+    }
 
     html += `
         </div>
@@ -331,16 +333,17 @@ function drawEndGameHTML(game, isDealer) {
         <div class="row">
     `
 
-    game.all_definitions.forEach(function (definition, index) {
-        if (!definition.is_real) {
-            var totalVotes = getOccurrencesCount(game, definition.id);
-            var votersList = "";
-            if (totalVotes > 0) {
-                votersList = " (" + getVotersNames(game, definition.id) + ")";
-            }
-            html += `
+    if (game.all_definitions) {
+        game.all_definitions.forEach(function (definition, index) {
+            if (!definition.is_real) {
+                var totalVotes = getOccurrencesCount(game, definition.id);
+                var votersList = "";
+                if (totalVotes > 0) {
+                    votersList = " (" + getVotersNames(game, definition.id) + ")";
+                }
+                html += `
             <div class="col m4">
-                <div class="card blue lighten-1">
+                <div class="card bleff-subdominant-alt">
                 <div class="card-content white-text">
                     <span class="card-title">`+ game.current_card.word + `</span>
                     <p>`+ definition.definition + `</p>
@@ -354,13 +357,14 @@ function drawEndGameHTML(game, isDealer) {
                 </div>
             </div>
         `
-        }
-    });
+            }
+        });
+    }
     html += `</div></div>`
 
     if (isDealer) {
         html += `
-        <button onclick="endCurrentRound()" class="btn waves-effect waves-light orange" type="submit" name="action">Próxima ronda
+        <button onclick="endCurrentRound()" class="btn waves-effect waves-light bleff-red bleff-tonic-alt-text" type="submit" name="action">Próxima ronda
         <i class="material-icons right">send</i>
         </button>
         `

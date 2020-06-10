@@ -13,16 +13,16 @@ $(document).ready(function () {
 
         game.players.forEach((player, idx) => {
 
-            var classes = "";
+            var classes = "bleff-dominant-text bleff-subdominant";
             switch (idx) {
                 case 0:
-                    classes = "green white-text";
+                    classes = "bleff-tonic-alt-text bleff-red";
                     break;
                 case 1:
-                    classes = "light-blue white-text";
+                    classes = "bleff-tonic-alt-text bleff-dominant";
                     break;
                 case 2:
-                    classes = "orange white-text";
+                    classes = "bleff-tonic-alt-text bleff-subdominant-alt";
                     break;
             }
 

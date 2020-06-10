@@ -14,24 +14,16 @@
 
 
 <body>
-    <nav class="grey darken-2" role="navigation">
-        <div class="nav-wrapper container"><a id="logo-container" href="/" class="brand-logo">El juego del
-                diccionario</a>
-            <!--
-      <ul class="right hide-on-med-and-down">
-        <li><a href="#">Navbar Link</a></li>
-      </ul>
-      <ul id="nav-mobile" class="sidenav">
-        <li><a href="#">Navbar Link</a></li>
-      </ul>
-      <a href="#" data-target="nav-mobile" class="sidenav-trigger"><i class="material-icons">menu</i></a>
-      -->
+    <nav class="bleff-dominant" role="navigation">
+        <div class="nav-wrapper container"><a id="logo-container" href="/" class="brand-logo">
+            <img id="topLogo" src="/site/img/top-logo.png">
+            </a>
         </div>
     </nav>
 
     <div class="section no-pad-bot">
         <div class="container">
-            <h2 class="header center red-text">Fin de la partida!</h2>
+            <h2 class="header center bleff-dominant-alt-text">Fin de la partida!</h2>
             <div class="row center">
                 <h4 class="header center">Código de la partida: <span style="font-weight: bold;" id="gameID"></span>
                 </h4>
@@ -48,16 +40,18 @@
         <!-- END: RANKING -->
 
         <div class="row center-align">
-            <a class="waves-light btn orange" href="/">Volver al inicio</a>
-            <p class="ef">Gracias por jugar!</p>
+            <a class="waves-light btn bleff-red" href="/">Volver al inicio</a>
+            <p class="ef">¡Gracias por jugar!</p>
         </div>
     </div>
 
-    <footer class="page-footer grey darken-3">
+    <footer class="page-footer bleff-dominant">
         <div class="footer-copyright">
-            <div class="container">
-                Made with love by Marco
+            <div class="container center">
+                © "Bleff Online" es una versión digital del juego Bleff propiedad de RUIBAL SRL, todos los derechos reservados.<br>
+                Programación, Diseño Web y Adaptación: Marco Boschetti. / Arte y Diseño original: Silvina Halabi
             </div>
+            <!-- <img src="/site/img/iso-ruibal.png" class="footer-logo"/> -->
         </div>
     </footer>
 
@@ -66,7 +60,7 @@
     <script src="/site/js/materialize.min.js"></script>
     <script src="/site/js/endgame.js"></script>
     <link href="/site/css/endgame.css" type="text/css" rel="stylesheet" />
-
+    <script src="/site/js/logo.js"></script>
 </body>
 
 </html>

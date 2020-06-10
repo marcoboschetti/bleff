@@ -1,22 +1,15 @@
 html {
   width: 100%
 }
-
 body {
   width: 100%
 }
-
-
 .avatarImg{
   width: 100%;
 }
 
-.ef {
-  font-size: 1.1rem;
-  font-weight: 300;
-  margin-bottom: 30px;
-  color: #666;
-  text-align: center;
+.full-height{
+  min-height: 100% !important; /* use "vh" instead of % */
 }
 
 #toast-container {
@@ -25,12 +18,6 @@ body {
   bottom: 5%;
   left:7%;  
 }
-
-.flex {
-  display: flex;
-  flex-wrap: wrap;
-}
-
 ul.dropdown-content.select-dropdown li span {
   color: #ffffff;
   background-color: #039be5;
@@ -39,3 +26,53 @@ ul.dropdown-content.select-dropdown li span {
   input.select-dropdown.dropdown-trigger {
     color: white;
 }
+
+.landing-text{
+  font-size:1.25em;
+}
+
+.footer-logo{
+  padding-right: 3em;
+}
+
+.bleff-spinner-layer {
+  border-color: #862520;
+}
+
+#mainLogo{
+  width: 90%;
+}
+
+.navbar-material .nav-wrapper .brand-logo img {
+  height: 64px;
+}
+#topLogo{
+  height: 2.4em;
+}
+
+body {background-color:  #E7DCCE;}
+
+.bleff-tonic{background-color: #E7DCCE !important;}
+.bleff-tonic-alt{background-color: #FCF9F4 !important;}
+.bleff-subdominant{background-color: #CEC0B1 !important;}
+.bleff-subdominant-alt{background-color: #8B837C !important;}
+.bleff-dominant-alt{background-color: #382f2d !important;}
+.bleff-dominant{background-color: #564B49 !important;}
+.bleff-red{background-color: #862520 !important;}
+
+.bleff-tonic-text{color: #E7DCCE  !important;}
+.bleff-tonic-alt-text{color: #FCF9F4  !important;}
+.bleff-subdominant-text{color: #CEC0B1  !important;}
+.bleff-subdominant-alt-text{color: #8B837C  !important;}
+.bleff-dominant-alt-text{color: #382f2d  !important;}
+.bleff-dominant-text{color: #564B49  !important;}
+.bleff-red-text{color: #862520 !important;}
+
+/*
+#FCF9F4
+#E7DCCE
+#CEC0B1
+#292221
+#564B49
+#8B837C
+*/

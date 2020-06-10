@@ -59,7 +59,7 @@ function drawPlayers(game) {
     game.players.forEach(function (player, index) {
         html += `
         <div class="col m3">
-          <div class="card">
+          <div class="card bleff-dominant-text bleff-tonic-alt">
             <div class="card-image">
               <img class="avatarImg" src="https://robohash.org/` + player.name + `.png">
             </div>
@@ -73,15 +73,15 @@ function drawPlayers(game) {
 
     // Loader
     html += `
-    <div class="col m3 valign-wrapper">
+    <div class="col m3">
         <div class="preloader-wrapper big active">
-        <div class="spinner-layer spinner-orange-only">
+        <div class="spinner-layer bleff-spinner-layer">
         <div class="circle-clipper left">
             <div class="circle"></div>
-        </div><div class="gap-patch">
+        </div><div class="gap-patch bleff-dominant-alt">
             <div class="circle"></div>
         </div><div class="circle-clipper right">
-            <div class="circle"></div>
+            <div class="circle bleff-subdominant-alt"></div>
         </div>
         </div>
         </div>
