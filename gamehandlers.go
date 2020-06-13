@@ -1,8 +1,8 @@
 package main
 
 import (
-	"fmt"
 	"net/http"
+	"time"
 
 	"bitbucket.org/marcoboschetti/bleff/entities"
 	"bitbucket.org/marcoboschetti/bleff/service"
@@ -30,6 +30,7 @@ func createNewGame(c *gin.Context) {
 
 	definition := struct {
 		TargetPoints uint64 `json:"target_points"`
+		SecsPerState uint64 `json:"secs_per_state"`
 	}{}
 
 	if err := c.ShouldBindJSON(&definition); err != nil {
@@ -37,9 +38,7 @@ func createNewGame(c *gin.Context) {
 		return
 	}
 
-	fmt.Println(definition.TargetPoints)
-
-	newGame := service.CreateNewGame(playerName, definition.TargetPoints)
+	newGame := service.CreateNewGame(playerName, definition.TargetPoints, definition.SecsPerState)
 	c.JSON(200, newGame)
 }
 
@@ -167,6 +166,14 @@ func getGame(c *gin.Context) {
 
 // if player is not current turn dealer, clear private info
 func clearGameInfo(playerName string, game entities.Game) entities.Game {
+
+	// Update current state remaining secs, for display only, if the state requires it
+
+	if (game.CurrentGameState == entities.WriteDefinitionsGameState || game.CurrentGameState == entities.ChooseDefinitions) &&
+		game.SecsPerState > 0 && game.CurrentStateStartTime != nil {
+		game.CurrentStateRemainingSecs = int(game.SecsPerState) - int(time.Now().Sub(*game.CurrentStateStartTime).Seconds())
+	}
+
 	if playerName == game.Players[game.CurrentDealerIdx].Name {
 		// Full info
 		return game

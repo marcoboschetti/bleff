@@ -85,7 +85,7 @@ func PersistNewFakeDefinition(word, definition, playerName, game string, votes u
 	return err
 }
 
-func PersistGameStarted(gameID string, players []entities.Player) error {
+func PersistGameStarted(game entities.Game) error {
 	var err error
 	if service == nil {
 		service, err = getService()
@@ -95,15 +95,15 @@ func PersistGameStarted(gameID string, players []entities.Player) error {
 	}
 
 	var playersNames []string
-	for _, p := range players {
+	for _, p := range game.Players {
 		playersNames = append(playersNames, p.Name)
 	}
 
 	spreadsheetID := "1fhaW5cApXYAnwJLuk2jnhwl82V5MILAjZf6-wnZkfkc"
-	writeRange := "Games!A:D"
+	writeRange := "Games!A:F"
 	var vr sheets.ValueRange
 
-	vals := []interface{}{gameID, len(playersNames), strings.Join(playersNames, ", "), time.Now()}
+	vals := []interface{}{game.ID, len(playersNames), strings.Join(playersNames, ", "), time.Now(), game.TargetPoints, game.SecsPerState}
 	vr.Values = append(vr.Values, vals)
 
 	_, err = service.Spreadsheets.Values.Append(spreadsheetID, writeRange, &vr).ValueInputOption("RAW").Do()

@@ -3,12 +3,16 @@ package service
 import (
 	"fmt"
 	"math/rand"
+	"time"
 
 	"bitbucket.org/marcoboschetti/bleff/entities"
 	"bitbucket.org/marcoboschetti/bleff/sheets"
 )
 
 func changeGameForCurrentState(game *entities.Game, selectedWord string, correctDefinitionIDs []string) {
+	now := time.Now()
+	game.CurrentStateStartTime = &now
+
 	switch game.CurrentGameState {
 	case entities.DealerChooseCardGameState:
 		setCardsForDealerToChoose(game)

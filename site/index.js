@@ -50,7 +50,8 @@ function createNewMatch() {
     var name = $("#firstNameInput").val();
 
     var payload = {
-        target_points: parseInt($("#newGameTargetPoints").val())
+        target_points: parseInt($("#newGameTargetPoints").val()),
+        secs_per_state: parseInt($("#newGameSecsPerState").val())
     }
 
     $.post("/api/game?player_name=" + name, JSON.stringify(payload), function (data) {

@@ -15,7 +15,7 @@ span.player-name-card.card-title{
 }
 
 span.player-name-card.card-title {
-    max-width: 100% !important;
+	max-width: 100% !important;
 	padding: 6px !important;
 	top: 0em !important;
 }
@@ -26,4 +26,9 @@ span.player-name-card.card-title {
 
 .showBar{
 	width: 100% !important;
+}
+
+.text-timer{
+	height: 1.5em;
+	display: block;
 }

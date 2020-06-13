@@ -2,6 +2,8 @@ package service
 
 import (
 	"errors"
+	"fmt"
+	"time"
 
 	"bitbucket.org/marcoboschetti/bleff/entities"
 	"bitbucket.org/marcoboschetti/bleff/sheets"
@@ -9,14 +11,15 @@ import (
 
 var gamesMap = NewGameMap()
 
-func CreateNewGame(playerName string, targetPoints uint64) entities.Game {
+func CreateNewGame(playerName string, targetPoints, secsPerState uint64) entities.Game {
 	player := createNewPlayer(playerName)
-
+	fmt.Println(secsPerState)
 	newGame := entities.Game{
 		ID:           entities.GetRandomWordJoin(3),
 		Status:       "pending",
 		Players:      []entities.Player{player},
 		TargetPoints: targetPoints,
+		SecsPerState: secsPerState,
 	}
 
 	gamesMap.Lock()
@@ -52,14 +55,14 @@ func StartGame(gameID string) (*entities.Game, error) {
 	game, ok := gamesMap.internal[gameID]
 	defer gamesMap.Unlock()
 
-	if !ok {
+	if !ok || game == nil {
 		return nil, errors.New("game not found: " + gameID)
 	}
 
 	game.Status = "started"
 	game.CurrentGameState = entities.DealerChooseCardGameState
 
-	sheets.PersistGameStarted(gameID, game.Players)
+	sheets.PersistGameStarted(*game)
 
 	changeGameForCurrentState(game, "", nil)
 	return game, nil
@@ -230,10 +233,48 @@ func GetGame(gameID string) (*entities.Game, error) {
 	game, ok := gamesMap.internal[gameID]
 	defer gamesMap.Unlock()
 
-	if !ok {
+	if !ok || game == nil {
 		return nil, errors.New("game not found: " + gameID)
 	}
+
+	// Check if the current round already timed out
+	if game.Status == "started" && game.SecsPerState > 0 && uint64(time.Now().Sub(*game.CurrentStateStartTime).Seconds()) >= game.SecsPerState {
+		fmt.Println("overtime: ", game.Status)
+		executeOverTimeActions(game)
+	}
+
 	return game, nil
+}
+
+func executeOverTimeActions(game *entities.Game) {
+
+	if game.CurrentGameState == entities.WriteDefinitionsGameState {
+		// Fill definitions and go to next
+		for idx, player := range game.Players {
+			playerHasDefinition := false
+			for _, def := range game.FakeDefinitions {
+				if def.Player == player.Name {
+					playerHasDefinition = true
+				}
+			}
+			// If player has not fake definition, invent one
+			if !playerHasDefinition && uint64(idx) != game.CurrentDealerIdx {
+				newPlayerDefinition := entities.Definition{
+					ID:         getUuidv4(),
+					Player:     player.Name,
+					Definition: "* El jugador no llegó a completar una definición a tiempo *",
+				}
+				game.FakeDefinitions = append(game.FakeDefinitions, newPlayerDefinition)
+			}
+		}
+		game.CurrentGameState = entities.GetNextState(game.CurrentGameState)
+		changeGameForCurrentState(game, "", nil)
+
+	} else if game.CurrentGameState == entities.ChooseDefinitions {
+		// Missing definitions to upload. Bad luck...
+		game.CurrentGameState = entities.GetNextState(game.CurrentGameState)
+		changeGameForCurrentState(game, "", nil)
+	}
 }
 
 func createNewPlayer(playerName string) entities.Player {

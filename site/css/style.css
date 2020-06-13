@@ -15,12 +15,12 @@ body {
   left:7%;  
 }
 ul.dropdown-content.select-dropdown li span {
-  color: #ffffff;
-  background-color: #039be5;
-  }
+  color: #382f2d;
+  background-color: #FCF9F4;
+}
 
-  input.select-dropdown.dropdown-trigger {
-    color: white;
+input.select-dropdown.dropdown-trigger {
+  color: #FCF9F4;
 }
 
 .landing-text{

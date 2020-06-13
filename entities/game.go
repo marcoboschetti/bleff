@@ -1,5 +1,7 @@
 package entities
 
+import "time"
+
 type (
 	Game struct {
 		ID               string    `json:"id,omitempty"`
@@ -8,19 +10,23 @@ type (
 		TargetPoints     uint64    `json:"target_points,omitempty"`
 		CurrentDealerIdx uint64    `json:"dealer_index"`
 		CurrentGameState GameState `json:"game_state,omitempty"`
-		//		PlayedWords      []string  `json:"-,omitempty"`
+
+		// Time management
+		SecsPerState              uint64     `json:"secs_per_state,omitempty"`
+		CurrentStateStartTime     *time.Time `json:"-"`
+		CurrentStateRemainingSecs int        `json:"current_state_remaining_secs"`
 
 		// State 0, dealer choose card
 		DefinitionOptions []PersistedDefinition `json:"definition_options,omitempty"`
 		// State 1, card selected
 		CurrentCard PersistedDefinition `json:"current_card,omitempty"`
 		// State 2, players upload definitions
-		FakeDefinitions []Definition `json:"fake_definitions"`
+		FakeDefinitions []Definition `json:"fake_definitions,omitempty"`
 		// State 3, players and real. To choose from
-		AllDefinitions     []Definition `json:"all_definitions"`
-		CorrectDefinitions []Definition `json:"correct_definitions"`
+		AllDefinitions     []Definition `json:"all_definitions,omitempty"`
+		CorrectDefinitions []Definition `json:"correct_definitions,omitempty"`
 		// State 4, each player chooses one definition
-		ChosenDefinitions []ChosenDefinition `json:"chosen_definitions"`
+		ChosenDefinitions []ChosenDefinition `json:"chosen_definitions,omitempty"`
 	}
 
 	Player struct {
