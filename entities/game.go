@@ -10,6 +10,7 @@ type (
 		TargetPoints     uint64    `json:"target_points,omitempty"`
 		CurrentDealerIdx uint64    `json:"dealer_index"`
 		CurrentGameState GameState `json:"game_state,omitempty"`
+		LastRequestTime  time.Time `json:"-"`
 
 		// Time management
 		SecsPerState              uint64     `json:"secs_per_state,omitempty"`

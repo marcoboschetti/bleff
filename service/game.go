@@ -2,7 +2,6 @@ package service
 
 import (
 	"errors"
-	"fmt"
 	"time"
 
 	"bitbucket.org/marcoboschetti/bleff/entities"
@@ -13,13 +12,14 @@ var gamesMap = NewGameMap()
 
 func CreateNewGame(playerName string, targetPoints, secsPerState uint64) entities.Game {
 	player := createNewPlayer(playerName)
-	fmt.Println(secsPerState)
+
 	newGame := entities.Game{
-		ID:           entities.GetRandomWordJoin(3),
-		Status:       "pending",
-		Players:      []entities.Player{player},
-		TargetPoints: targetPoints,
-		SecsPerState: secsPerState,
+		ID:              entities.GetRandomWordJoin(3),
+		Status:          "pending",
+		Players:         []entities.Player{player},
+		TargetPoints:    targetPoints,
+		SecsPerState:    secsPerState,
+		LastRequestTime: time.Now(),
 	}
 
 	gamesMap.Lock()
@@ -237,9 +237,10 @@ func GetGame(gameID string) (*entities.Game, error) {
 		return nil, errors.New("game not found: " + gameID)
 	}
 
+	game.LastRequestTime = time.Now()
+
 	// Check if the current round already timed out
 	if game.Status == "started" && game.SecsPerState > 0 && uint64(time.Now().Sub(*game.CurrentStateStartTime).Seconds()) >= game.SecsPerState {
-		fmt.Println("overtime: ", game.Status)
 		executeOverTimeActions(game)
 	}
 

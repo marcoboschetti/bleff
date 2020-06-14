@@ -23,6 +23,8 @@ func SetupGameHandlers(r *gin.Engine) {
 	gameGroup.POST("/:game_id/correct_definitions", postCorrectDefinitions)
 	gameGroup.POST("/:game_id/choose_definition/:definition_id", postChooseDefinition)
 	gameGroup.POST("/:game_id/end_round", postEndRound)
+
+	service.StartGarbageCollector()
 }
 
 func createNewGame(c *gin.Context) {
