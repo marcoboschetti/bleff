@@ -91,10 +91,10 @@ function drawGameState(game) {
             break;
             case "write_definitions":
             if (isDealer) {
-                setupMainCard("Los jugadores están escribiendo definiciones de  <strong>" + game.current_card.word + "</strong>", "Tienen todo el tiempo que necesiten.");
+                setupMainCard("Los jugadores están escribiendo definiciones de  <strong>" + game.current_card.word + "</strong>", "","");
             } else {
                 var writeDefinition = drawDefinitionInput(game.current_card.word)
-                setupMainCard("Escribí la definición de: <strong>" + game.current_card.word + "</strong>", "Tomate tu tiempo, hacelo verosimil y cuida la ortografía. Te recomendamos empezar con mayúsculas, terminar con puntos y completar las tildes.", writeDefinition);
+                setupMainCard("Escribí la definición de: <strong>" + game.current_card.word + "</strong>", "Hacelo verosimil y cuida la ortografía. Te recomendamos empezar con mayúsculas, terminar con puntos y completar las tildes.", writeDefinition);
             }
             break;
             case "show_definitions":
