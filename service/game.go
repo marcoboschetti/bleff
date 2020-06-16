@@ -16,6 +16,7 @@ func CreateNewGame(playerName string, targetPoints, secsPerState uint64) entitie
 	newGame := entities.Game{
 		ID:              entities.GetRandomWordJoin(3),
 		Status:          "pending",
+		IsPrivate:       true,
 		Players:         []entities.Player{player},
 		TargetPoints:    targetPoints,
 		SecsPerState:    secsPerState,
@@ -29,13 +30,56 @@ func CreateNewGame(playerName string, targetPoints, secsPerState uint64) entitie
 	return newGame
 }
 
+func JoinPublicGame(playerName string) (*entities.Game, error) {
+	gamesMap.Lock()
+	defer gamesMap.Unlock()
+
+	// Find a public game
+	var game *entities.Game
+	for _, g := range gamesMap.internal {
+		if !g.IsPrivate && g.Status == "pending" {
+			game = g
+			break
+		}
+	}
+
+	if game == nil {
+		// If not existing game, create one
+		game = &entities.Game{
+			ID:              entities.GetRandomWordJoin(3),
+			Status:          "pending",
+			IsPrivate:       false,
+			Players:         []entities.Player{createNewPlayer(playerName)},
+			TargetPoints:    entities.DefaultPoints,
+			SecsPerState:    entities.DefaultTimeSecs,
+			LastRequestTime: time.Now(),
+		}
+		gamesMap.internal[game.ID] = game
+	}
+
+	// Check if player already exists. Idempotency
+	for _, player := range game.Players {
+		if player.Name == playerName {
+			return game, nil
+		}
+	}
+
+	newPlayer := createNewPlayer(playerName)
+	game.Players = append(game.Players, newPlayer)
+	return game, nil
+}
+
 func JoinGame(playerName, gameID string) (*entities.Game, error) {
 	gamesMap.Lock()
 	game, ok := gamesMap.internal[gameID]
 	defer gamesMap.Unlock()
 
-	if !ok {
+	if !ok || game == nil {
 		return nil, errors.New("game not found: " + gameID)
+	}
+
+	if !game.IsPrivate && game.Status != "pending" {
+		return nil, errors.New("cannot join public game already started: " + gameID)
 	}
 
 	// Check if player already exists. Idempotency
@@ -55,7 +99,7 @@ func StartGame(gameID string) (*entities.Game, error) {
 	game, ok := gamesMap.internal[gameID]
 	defer gamesMap.Unlock()
 
-	if !ok || game == nil {
+	if !ok || game == nil || !game.IsPrivate {
 		return nil, errors.New("game not found: " + gameID)
 	}
 
@@ -239,6 +283,14 @@ func GetGame(gameID string) (*entities.Game, error) {
 
 	game.LastRequestTime = time.Now()
 
+	// Check if public game should be started
+	if !game.IsPrivate && game.Status == "pending" && len(game.Players) >= entities.MinPlayersToStartPublic {
+		game.Status = "started"
+		game.CurrentGameState = entities.DealerChooseCardGameState
+		sheets.PersistGameStarted(*game)
+		changeGameForCurrentState(game, "", nil)
+	}
+
 	// Check if the current round already timed out
 	if game.Status == "started" && game.SecsPerState > 0 && uint64(time.Now().Sub(*game.CurrentStateStartTime).Seconds()) >= game.SecsPerState {
 		executeOverTimeActions(game)
@@ -248,7 +300,6 @@ func GetGame(gameID string) (*entities.Game, error) {
 }
 
 func executeOverTimeActions(game *entities.Game) {
-
 	if game.CurrentGameState == entities.WriteDefinitionsGameState {
 		// Fill definitions and go to next
 		for idx, player := range game.Players {

@@ -16,6 +16,7 @@ func SetupGameHandlers(r *gin.Engine) {
 	gameGroup.GET("/:game_id", getGame)
 
 	gameGroup.POST("/", createNewGame)
+	gameGroup.POST("/:game_id/join_public", joinPublicGame)
 	gameGroup.POST("/:game_id/join", joinGame)
 	gameGroup.POST("/:game_id/start", startGame)
 	gameGroup.POST("/:game_id/setup_option/:selected_word", setupSelectedWord)
@@ -41,6 +42,17 @@ func createNewGame(c *gin.Context) {
 	}
 
 	newGame := service.CreateNewGame(playerName, definition.TargetPoints, definition.SecsPerState)
+	c.JSON(200, newGame)
+}
+
+func joinPublicGame(c *gin.Context) {
+	playerName := c.Query("player_name")
+
+	newGame, err := service.JoinPublicGame(playerName)
+	if err != nil {
+		c.JSON(400, err.Error())
+		return
+	}
 	c.JSON(200, newGame)
 }
 

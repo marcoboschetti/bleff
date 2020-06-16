@@ -30,6 +30,9 @@ $(document).ready(function () {
     $("#joinMatchWord2").on("input", checkIfCodeIsCompleted)
     $("#joinMatchWord3").on("input", checkIfCodeIsCompleted)
 
+    $("#ee1").click(ee1);
+    $("#ee2").click(ee2);
+    $("#ee3").click(ee3);
 });
 
 
@@ -85,4 +88,30 @@ function joinMatch() {
 var names = ["Lucía", "María", "Martina", "Paula", "Cami", "Joaco", "Tito", "Lucho", "Monti", "Fede", "Sofía", "Daniela", "Alba", "Julia", "Carla", "Sara", "Valeria", "Noa", "Emma", "Claudia", "Carmen", "Valentina", "Ana", "Marta", "Irene", "Adriana", "Laura", "Elena", "Alejandra", "Vega", "Alma", "Laia", "Lola", "Vera", "Olivia", "Inés", "Aitana", "Jimena", "Candela", "Ariadna", "Carlota", "Ainhoa", "Nora", "Triana", "Marina", "Chloe", "Elsa", "Alicia", "Clara", "Blanca", "Leire", "Mía", "Lara", "Rocío", "Ainara", "Nerea", "Hugo", "Daniel", "Pablo", "Martín", "Alejandro", "Adrián", "Álvaro", "David", "Lucas", "Mateo", "Mario", "Manuel", "Antonio", "Diego", "Leo", "Javier", "Marcos", "Izan", "Alex", "Sergio", "Enzo", "Carlos", "Marc", "Jorge", "Miguel", "Gonzalo", "Juan", "Ángel", "Oliver", "Iker", "Dylan", "Bruno", "Eric", "Marco", "Iván", "Nicolás", "José", "Héctor", "Darío", "Samuel", "Víctor", "Rubén", "Gabriel", "Adam", "Aaron", "Thiago", "Jesús", "Aitor", "Alberto", "Guillermo"];
 function getRandomName() {
     return names[Math.floor(Math.random() * names.length)];
+}
+
+var v = 0;
+function ee1() { ee(1); }
+function ee2() { ee(2); }
+function ee3() { ee(3); }
+
+function ee(x) {
+    if (x != v + 1) {
+        v = 0; return;
+    }
+    v = x;
+    if (v == 3) {
+        var name = $("#firstNameInput").val();
+        $.post("/api/game/required/join_public?player_name=" + name)
+            .done(function (data) {
+                var val = data.id + "@|@" + name;
+                var result = btoa(val);
+                window.location.replace("/site/page/lobby.html?m=" + result);
+            })
+            .fail(function (err) {
+                console.log(err);
+                M.toast({ html: "Ups, no pudimos encontrar una partida publica 😕" })
+
+            });
+    }
 }

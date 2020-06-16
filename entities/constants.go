@@ -1,6 +1,10 @@
 package entities
 
 const (
+	MinPlayersToStartPublic = 4
+	DefaultTimeSecs         = 120
+	DefaultPoints           = 20
+
 	CardsToChooseFrom = 5
 
 	PointsForDealerNoCorrectDefinitions      = 3

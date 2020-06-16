@@ -6,6 +6,7 @@ type (
 	Game struct {
 		ID               string    `json:"id,omitempty"`
 		Status           string    `json:"status,omitempty"`
+		IsPrivate        bool      `json:"is_private"`
 		Players          []Player  `json:"players,omitempty"`
 		TargetPoints     uint64    `json:"target_points,omitempty"`
 		CurrentDealerIdx uint64    `json:"dealer_index"`
