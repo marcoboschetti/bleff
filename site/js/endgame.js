@@ -1,3 +1,4 @@
+var baseURL = "http://bleff.herokuapp.com";
 
 $(document).ready(function () {
     m = getUrlParameter("m")
@@ -6,7 +7,7 @@ $(document).ready(function () {
     playerName = result[1];
 
     $("#gameID").text(gameID);
-    $.get("/api/game/" + gameID + "?player_name=" + playerName, function (game) {
+    $.get(baseURL+"/api/game/" + gameID + "?player_name=" + playerName, function (game) {
         game.players.sort(sortByName);
 
         var html = "";

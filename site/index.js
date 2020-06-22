@@ -1,3 +1,5 @@
+var baseURL = "http://bleff.herokuapp.com";
+
 $(document).ready(function () {
     $('select').formSelect();
     $(".dropdown-content>li>a").css("color", "#112341");
@@ -57,7 +59,7 @@ function createNewMatch() {
         secs_per_state: parseInt($("#newGameSecsPerState").val())
     }
 
-    $.post("/api/game?player_name=" + name, JSON.stringify(payload), function (data) {
+    $.post(baseURL+"/api/game?player_name=" + name, JSON.stringify(payload), function (data) {
         var val = data.id + "@|@" + name;
         var result = btoa(val);
         window.location.replace("/site/page/lobby.html?m=" + result);
@@ -71,7 +73,7 @@ function joinMatch() {
     var word2 = $("#joinMatchWord2").val().toUpperCase();
     var word3 = $("#joinMatchWord3").val().toUpperCase();
 
-    $.post("/api/game/" + word1 + "." + word2 + "." + word3 + "/join?player_name=" + name)
+    $.post(baseURL+"/api/game/" + word1 + "." + word2 + "." + word3 + "/join?player_name=" + name)
         .done(function (data) {
             var val = data.id + "@|@" + name;
             var result = btoa(val);

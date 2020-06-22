@@ -1,6 +1,7 @@
 var gameID;
 var playerName;
 var m;
+var baseURL = "http://bleff.herokuapp.com";
 
 $(document).ready(function () {
     m = getUrlParameter("m")
@@ -21,7 +22,7 @@ $(document).ready(function () {
 var lastDrawnGame = null;
 var lastDrawnPlayersGame = null;
 function refreshGame() {
-    $.get("/api/game/" + gameID + "?player_name=" + playerName, function (game) {
+    $.get(baseURL+"/api/game/" + gameID + "?player_name=" + playerName, function (game) {
         if (game.status == "finished") {
             window.location.replace("/site/page/endgame.html?m=" + m);
             return
@@ -433,13 +434,13 @@ function getVotersNames(game, definitionID) {
 // ***************************************************
 
 function selectDefinitionOption(selectedWord) {
-    $.post("/api/game/" + gameID + "/setup_option/" + selectedWord + "?player_name=" + playerName, function () {
+    $.post(baseURL+"/api/game/" + gameID + "/setup_option/" + selectedWord + "?player_name=" + playerName, function () {
         setupMainCard("", "", "");
     });
 }
 
 function uploadDefinition(word) {
-    var url = "/api/game/" + gameID + "/player_definition?player_name=" + playerName;
+    var url = baseURL+"/api/game/" + gameID + "/player_definition?player_name=" + playerName;
     var defVal = $("#wordDefinitionInput").val();
     var definition = { definition: defVal };
     $.post(url, JSON.stringify(definition)).done(function () {
@@ -454,8 +455,13 @@ function postCorrectDefinitions() {
             correctDefinitionIDs.push($(this).val());
         }
     });
+<<<<<<< Updated upstream
     
     var url = "/api/game/" + gameID + "/correct_definitions?player_name=" + playerName;
+=======
+
+    var url = baseURL+"/api/game/" + gameID + "/correct_definitions?player_name=" + playerName;
+>>>>>>> Stashed changes
     var definition = { correct_definitions: correctDefinitionIDs };
     $.post(url, JSON.stringify(definition)).done(function () {
         setupMainCard("", "", "");
@@ -463,14 +469,14 @@ function postCorrectDefinitions() {
 }
 
 function selectCorrectDefinition(definitionID) {
-    var url = "/api/game/" + gameID + "/choose_definition/" + definitionID + "?player_name=" + playerName;
+    var url = baseURL+"/api/game/" + gameID + "/choose_definition/" + definitionID + "?player_name=" + playerName;
     $.post(url).done(function () {
         setupMainCard("Definicion cargada!", "Estamos esperando que el resto de los jugadores elija definiciones.", "");
     });
 }
 
 function endCurrentRound(definitionID) {
-    var url = "/api/game/" + gameID + "/end_round?player_name=" + playerName;
+    var url = baseURL+"/api/game/" + gameID + "/end_round?player_name=" + playerName;
     $.post(url).done(function () {
         setupMainCard("Ronda terminada!", "Estamos iniciando la próxima...", "");
     });

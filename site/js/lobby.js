@@ -1,6 +1,7 @@
 var gameID;
 var playerName;
 var m;
+var baseURL = "http://bleff.herokuapp.com";
 
 $(document).ready(function () {
     m = getUrlParameter("m");
@@ -16,7 +17,7 @@ $(document).ready(function () {
     $("#startGame").click(function(e){
         $("#startGame").addClass("disabled");
         $("#startGame").html("Iniciando partida...");
-        $.post("/api/game/"+gameID+"/start", function (data) {
+        $.post(baseURL+"/api/game/"+gameID+"/start", function (data) {
             window.location.replace("/site/page/game.html?m="+m);
         });
     });
@@ -25,7 +26,7 @@ $(document).ready(function () {
 
 var lastDrawnGame;
 function refreshGame() {
-    $.get("/api/game/" + gameID, function (game) {
+    $.get(baseURL+"/api/game/" + gameID, function (game) {
         if (lastDrawnGame != null && lastDrawnGame.players.length == game.players.length && lastDrawnGame.status == game.status) {
             return;
         }
