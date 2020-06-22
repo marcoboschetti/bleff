@@ -25,7 +25,7 @@ func SetDbConnection() {
 	db := pg.Connect(&pg.Options{
 		Addr:      "ec2-35-173-94-156.compute-1.amazonaws.com:5432",
 		Database:  "d47o4civ8ddcec",
-		User:      "wmfqvhipkrfgig",
+		User:      "uqlfxmuqvtrsrn",
 		Password:  password,
 		TLSConfig: &tls.Config{InsecureSkipVerify: true},
 	})
