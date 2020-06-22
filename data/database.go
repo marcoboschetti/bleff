@@ -3,6 +3,8 @@ package data
 import (
 	"crypto/tls"
 	"math/rand"
+	"os"
+	"strings"
 	"time"
 
 	"github.com/go-pg/pg"
@@ -17,11 +19,14 @@ var allDefinitions []entities.PersistedDefinition
 
 // SetDbConnection inits a single DB connection
 func SetDbConnection() {
+	databaseURL := os.Getenv("DATABASE_URL")
+	password := strings.Split(strings.Split(databaseURL, ":")[2], "@")[0]
+
 	db := pg.Connect(&pg.Options{
 		Addr:      "ec2-35-173-94-156.compute-1.amazonaws.com:5432",
 		Database:  "d47o4civ8ddcec",
 		User:      "wmfqvhipkrfgig",
-		Password:  "bf6f554af536f2b7eab7834dd18ba48e1dc118e401e083abcb63d783f3c03420",
+		Password:  password,
 		TLSConfig: &tls.Config{InsecureSkipVerify: true},
 	})
 
