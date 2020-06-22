@@ -455,13 +455,8 @@ function postCorrectDefinitions() {
             correctDefinitionIDs.push($(this).val());
         }
     });
-<<<<<<< Updated upstream
-    
-    var url = "/api/game/" + gameID + "/correct_definitions?player_name=" + playerName;
-=======
 
     var url = baseURL+"/api/game/" + gameID + "/correct_definitions?player_name=" + playerName;
->>>>>>> Stashed changes
     var definition = { correct_definitions: correctDefinitionIDs };
     $.post(url, JSON.stringify(definition)).done(function () {
         setupMainCard("", "", "");
