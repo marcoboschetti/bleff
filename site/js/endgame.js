@@ -1,4 +1,4 @@
-var baseURL = "http://bleff.herokuapp.com";
+var baseURL = "https://bleff.herokuapp.com";
 
 $(document).ready(function () {
     m = getUrlParameter("m")
