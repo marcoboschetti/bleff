@@ -1,6 +1,10 @@
 var baseURL = "https://bleff.herokuapp.com";
 
 $(document).ready(function () {
+    if(window.location.origin.indexOf("bleff.ml") >= 0){
+        baseURL="";
+    }
+    
     m = getUrlParameter("m")
     var result = atob(m).split("@|@");
     gameID = result[0];

@@ -1,6 +1,10 @@
 var baseURL = "https://bleff.herokuapp.com";
 
 $(document).ready(function () {
+    if(window.location.origin.indexOf("bleff.ml") >= 0){
+        baseURL="";
+    }
+
     $('select').formSelect();
     $(".dropdown-content>li>a").css("color", "#112341");
 
