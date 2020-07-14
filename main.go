@@ -28,6 +28,8 @@ func runPlottingServer() {
 
 	// Static
 	r := gin.Default()
+	r.Use(cors.Default())
+
 	r.GET("/", func(c *gin.Context) {
 		http.ServeFile(c.Writer, c.Request, "./site/index.html")
 	})
@@ -35,12 +37,6 @@ func runPlottingServer() {
 		http.ServeFile(c.Writer, c.Request, "./site/favicon.ico")
 	})
 	r.Static("/site", "./site/")
-
-	// CORS
-	//config.AllowOrigins = []string{"https://ruibalgames.com", "http://ruibalgames.com"}
-	// config.AllowOrigins == []string{"http://google.com", "http://facebook.com"}
-
-	r.Use(cors.Default())
 
 	// API Endpoints
 	SetupGameHandlers(r)
