@@ -12,5 +12,5 @@ const (
 	PointsForPlayerChoosingCorrectDefinition = 2
 	PointsForHavingDefinitionChosen          = 1
 
-	GarbageCollectorLastUpdateSeconds = 2 * 60
+	GarbageCollectorLastUpdateSeconds = 30 * 60
 )
