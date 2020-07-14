@@ -3,6 +3,7 @@ module bitbucket.org/marcoboschetti/bleff
 go 1.13
 
 require (
+	github.com/gin-contrib/cors v1.3.1
 	github.com/gin-gonic/gin v1.5.0
 	github.com/go-pg/pg v8.0.6+incompatible
 	github.com/go-playground/universal-translator v0.17.0 // indirect

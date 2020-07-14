@@ -8,6 +8,7 @@ import (
 	"time"
 
 	"bitbucket.org/marcoboschetti/bleff/data"
+	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 )
 
@@ -34,6 +35,13 @@ func runPlottingServer() {
 		http.ServeFile(c.Writer, c.Request, "./site/favicon.ico")
 	})
 	r.Static("/site", "./site/")
+
+	// CORS
+	config := cors.DefaultConfig()
+	config.AllowOrigins = []string{"https://ruibalgames.com", "http://ruibalgames.com"}
+	// config.AllowOrigins == []string{"http://google.com", "http://facebook.com"}
+
+	r.Use(cors.New(config))
 
 	// API Endpoints
 	SetupGameHandlers(r)
