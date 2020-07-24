@@ -5,7 +5,7 @@ const (
 	DefaultTimeSecs         = 120
 	DefaultPoints           = 20
 
-	CardsToChooseFrom = 5
+	CardsToChooseFrom = 4
 
 	PointsForDealerNoCorrectDefinitions      = 3
 	PointsForPlayerCorrectDefinitions        = 3
