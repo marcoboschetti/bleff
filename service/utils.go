@@ -1,6 +1,7 @@
 package service
 
 import (
+	"bytes"
 	"fmt"
 	"math/rand"
 	"strings"
@@ -15,7 +16,18 @@ func sanitizeDefintion(definition string) string {
 	if definition[len(definition)-1] != '.' {
 		definition = fmt.Sprintf("%s.", definition)
 	}
-	return strings.Title(definition)
+	return makeFirstLowerCase(definition)
+}
+
+func makeFirstLowerCase(s string) string {
+	if len(s) < 2 {
+		return s
+	}
+
+	bts := []byte(s)
+	lc := bytes.ToUpper([]byte{bts[0]})
+	rest := bts[1:]
+	return string(bytes.Join([][]byte{lc, rest}, nil))
 }
 
 func getRandomPersistedDefinition() entities.PersistedDefinition {
