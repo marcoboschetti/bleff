@@ -1,12 +1,22 @@
 package service
 
 import (
+	"fmt"
 	"math/rand"
+	"strings"
 
 	"bitbucket.org/marcoboschetti/bleff/data"
 	"bitbucket.org/marcoboschetti/bleff/entities"
 	"github.com/gofrs/uuid"
 )
+
+func sanitizeDefintion(definition string) string {
+	definition = strings.TrimSpace(definition)
+	if definition[len(definition)-1] != '.' {
+		definition = fmt.Sprintf("%s.", definition)
+	}
+	return strings.Title(definition)
+}
 
 func getRandomPersistedDefinition() entities.PersistedDefinition {
 	definitions, _ := data.GetAllDefinitions()

@@ -146,6 +146,8 @@ func SetPlayerDefinition(gameID, playerName, definition string) (*entities.Game,
 		}
 	}
 
+	definition = sanitizeDefintion(definition)
+
 	// Add new definition
 	newPlayerDefinition := entities.Definition{
 		ID:         getUuidv4(),
