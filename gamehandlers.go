@@ -24,6 +24,7 @@ func SetupGameHandlers(r *gin.Engine) {
 	gameGroup.POST("/:game_id/correct_definitions", postCorrectDefinitions)
 	gameGroup.POST("/:game_id/choose_definition/:definition_id", postChooseDefinition)
 	gameGroup.POST("/:game_id/end_round", postEndRound)
+	gameGroup.POST("/:game_id/remove_player/:player_id", removePlayer)
 
 	service.StartGarbageCollector()
 }
@@ -155,6 +156,20 @@ func postEndRound(c *gin.Context) {
 	playerName := c.Query("player_name")
 
 	_, err := service.PostEndRound(gameID, playerName)
+	if err != nil {
+		c.JSON(400, err.Error())
+		return
+	}
+
+	c.Status(200)
+}
+
+func removePlayer(c *gin.Context) {
+	gameID := c.Params.ByName("game_id")
+	playerName := c.Query("player_name")
+	playerIDToRemove := c.Params.ByName("player_id")
+
+	_, err := service.RemovePlayer(gameID, playerName, playerIDToRemove)
 	if err != nil {
 		c.JSON(400, err.Error())
 		return

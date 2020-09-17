@@ -15,9 +15,8 @@ $(document).ready(function () {
     
     $("#gameID").text(gameID);
     
-    $(document).ready(function(){
-        $('.tooltipped').tooltip();
-      });
+    $('.tooltipped').tooltip();
+    $('.modal').modal();
 
     refreshGame();
     setInterval(refreshGame, 3000);
@@ -499,6 +498,17 @@ function drawPlayers(game) {
         } else if (game.game_state == "choose_definitions" && game.chosen_definitions && playerIsInArray(player.name, game.chosen_definitions)) {
             imageClass = "avatar-image-def-completed";
         }
+
+        var removePlayerBtn = "";
+        if(index > 0 && game.dealer_index == 0){
+            removePlayerBtn = `
+            <a class="btn-floating waves-effect waves-light black right-align" onclick="openRemovePlayerModal(`+index+`)">
+            <i class="material-icons">
+                close
+            </i>
+            </a>`;
+        }
+
         html += `
         <div class="row" style="margin-bottom:0em;">
         <div class="col s12 m7">
@@ -508,7 +518,7 @@ function drawPlayers(game) {
         <span class="player-name-card card-title">` + player.points + "/" + game.target_points + ` pts</span>
         </div>
         <div class="card-action">
-        `+ player.name + `
+        `+ player.name + removePlayerBtn +`
         </div>      
             </div>      
         </div>      
@@ -571,4 +581,8 @@ function secondsTimeSpanToHMS(s) {
     var m = Math.floor(s/60); //Get remaining minutes
     s -= m*60;
     return (m < 10 ? '0'+m : m)+":"+(s < 10 ? '0'+s : s); //zero padding on minutes and seconds
+}
+
+function openRemovePlayerModal(playerIdx){
+    $('#removePlayerModal').modal('open');
 }

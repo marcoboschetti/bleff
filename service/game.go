@@ -274,6 +274,37 @@ func PostEndRound(gameID, playerName string) (*entities.Game, error) {
 	return game, nil
 }
 
+func RemovePlayer(gameID, playerName, playerIdToRemove string) (*entities.Game, error) {
+	gamesMap.Lock()
+	game, ok := gamesMap.internal[gameID]
+	defer gamesMap.Unlock()
+
+	if !ok {
+		return nil, errors.New("game not found: " + gameID)
+	}
+
+	// Check if player already submitted a definition
+	if game.Players[0].Name != playerName {
+		return nil, errors.New("not current owner of game: " + gameID)
+	}
+
+	// Find player idx from the id
+	playerToRemoveIdx := -1
+	for idx, player := range game.Players {
+		if player.ID == playerIdToRemove {
+			playerToRemoveIdx = idx
+		}
+	}
+	if playerToRemoveIdx < 1 {
+		return game, nil
+	}
+
+	// Remove the player from the game
+	game.Players = append(game.Players[:playerToRemoveIdx], game.Players[playerToRemoveIdx+1:]...)
+
+	return game, nil
+}
+
 func GetGame(gameID string) (*entities.Game, error) {
 	gamesMap.Lock()
 	game, ok := gamesMap.internal[gameID]

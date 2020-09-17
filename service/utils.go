@@ -23,7 +23,6 @@ func makeFirstLowerCase(s string) string {
 	if len(s) < 2 {
 		return s
 	}
-
 	bts := []byte(s)
 	lc := bytes.ToUpper([]byte{bts[0]})
 	rest := bts[1:]
