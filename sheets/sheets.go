@@ -101,10 +101,10 @@ func PersistGameStarted(game entities.Game) error {
 	}
 
 	spreadsheetID := "1fhaW5cApXYAnwJLuk2jnhwl82V5MILAjZf6-wnZkfkc"
-	writeRange := "Games!A:F"
+	writeRange := "Games!A:G"
 	var vr sheets.ValueRange
 
-	vals := []interface{}{game.ID, len(playersNames), strings.Join(playersNames, ", "), time.Now(), game.TargetPoints, game.SecsPerState}
+	vals := []interface{}{game.ID, len(playersNames), strings.Join(playersNames, ", "), time.Now(), game.TargetPoints, game.SecsPerState, game.Bots}
 	vr.Values = append(vr.Values, vals)
 
 	_, err = service.Spreadsheets.Values.Append(spreadsheetID, writeRange, &vr).ValueInputOption("RAW").Do()
