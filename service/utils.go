@@ -30,16 +30,21 @@ func makeFirstLowerCase(s string) string {
 	return string(bytes.Join([][]byte{lc, rest}, nil))
 }
 
-func getRandomPersistedDefinition(hasBots bool) entities.PersistedDefinition {
+func getRandomPersistedDefinition(bots uint64) entities.PersistedDefinition {
 	definitions, _ := data.GetAllDefinitions()
 	chosenDefinition := definitions[rand.Intn(len(definitions))]
 
-	if hasBots {
+	if bots > 0 {
 		botsDefMaps, _ := sheets.GetUsableBotsDefinitions()
-		for i := 0; i < 100; i++ {
-			if _, ok := botsDefMaps[chosenDefinition.Word]; ok {
-				return chosenDefinition
+		for i := 0; i < 300; i++ {
+
+			for defsCount, defsMap := range botsDefMaps {
+				if _, ok := defsMap[chosenDefinition.Word]; ok && uint64(defsCount) >= bots {
+					fmt.Println("OK ", chosenDefinition)
+					return chosenDefinition
+				}
 			}
+
 			chosenDefinition = definitions[rand.Intn(len(definitions))]
 		}
 	}

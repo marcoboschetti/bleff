@@ -1,7 +1,7 @@
 var gameID;
 var playerName;
 var m;
-var baseURL = "";//"https://bleff.herokuapp.com";
+var baseURL = "https://bleff.herokuapp.com";
 
 $(document).ready(function () {
     if(window.location.origin.indexOf("bleff.ml") >= 0){
@@ -47,7 +47,7 @@ function refreshGame() {
         var owner = game.players[0];
         if(owner.name == playerName){
             $("#waitingOwnerMsg").remove()
-            if(game.players.length > 2){
+            if(game.players.length - game.bots > 2){
                 $("#startGame").removeClass('disabled');
             }
         }else{

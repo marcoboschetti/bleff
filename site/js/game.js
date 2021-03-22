@@ -1,7 +1,7 @@
 var gameID;
 var playerName;
 var m;
-var baseURL = "";//"https://bleff.herokuapp.com";
+var baseURL = "https://bleff.herokuapp.com";
 
 $(document).ready(function () {
     if(window.location.origin.indexOf("bleff.ml") >= 0){

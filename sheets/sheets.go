@@ -111,9 +111,9 @@ func PersistGameStarted(game entities.Game) error {
 	return err
 }
 
-var botsDefinitions map[string][]string
+var botsDefinitions map[int]map[string][]string
 
-func GetUsableBotsDefinitions() (map[string][]string, error) {
+func GetUsableBotsDefinitions() (map[int]map[string][]string, error) {
 	if botsDefinitions != nil {
 		return botsDefinitions, nil
 	}
@@ -136,15 +136,25 @@ func GetUsableBotsDefinitions() (map[string][]string, error) {
 		return nil, err
 	}
 
-	botsDefinitions := map[string][]string{}
+	botsDefinitions := map[int]map[string][]string{}
+	tmpBotsDefinitions := map[string][]string{}
+
 	for _, v := range resp.Values {
 		word := v[0].(string)
 		definition := v[1].(string)
 
-		if botsDefinitions[word] == nil {
-			botsDefinitions[word] = []string{}
+		if tmpBotsDefinitions[word] == nil {
+			tmpBotsDefinitions[word] = []string{}
 		}
-		botsDefinitions[word] = append(botsDefinitions[word], definition)
+		tmpBotsDefinitions[word] = append(tmpBotsDefinitions[word], definition)
+	}
+
+	// Move to histogram
+	for word, defs := range tmpBotsDefinitions {
+		if botsDefinitions[len(defs)] == nil {
+			botsDefinitions[len(defs)] = map[string][]string{}
+		}
+		botsDefinitions[len(defs)][word] = tmpBotsDefinitions[word]
 	}
 
 	return botsDefinitions, nil
