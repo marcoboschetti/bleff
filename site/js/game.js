@@ -1,7 +1,7 @@
 var gameID;
 var playerName;
 var m;
-var baseURL = "https://bleff.herokuapp.com";
+var baseURL = "";//"https://bleff.herokuapp.com";
 
 $(document).ready(function () {
     if(window.location.origin.indexOf("bleff.ml") >= 0){
@@ -27,13 +27,13 @@ var lastDrawnPlayersGame = null;
 function refreshGame() {
     $.get(baseURL+"/api/game/" + gameID + "?player_name=" + playerName, function (game) {
         if (game.status == "finished") {
-            window.location.replace("/site/page/endgame.html?m=" + m);
+            window.location.replace("endgame.html?m=" + m);
             return
         }
         
         // Always update inner timer, just in case
         if (game && game.secs_per_state) {
-            $("#timerInnerBar").css("width", (game.current_state_remaining_secs / game.secs_per_state * 100) + "%")
+           loopTimer(game.current_state_remaining_secs / game.secs_per_state * 360);
             $(".tooltip-content").html(secondsTimeSpanToHMS(Math.max(0,game.current_state_remaining_secs))+"s")
             $("#timerContainer").attr("data-tooltip",secondsTimeSpanToHMS(Math.max(0,game.current_state_remaining_secs))+"s");
         }
@@ -47,8 +47,6 @@ function refreshGame() {
         }
     });
 }
-
-
 
 function displayLoadingBar(game) {
     console.log(shouldDisplayTimer);
@@ -90,24 +88,24 @@ function drawGameState(game) {
                 var definitionOptionsHTML = drawDefinitionOptions(game.definition_options);
                 setupMainCard("Elegí una carta!", "De las opciones, elegí la que más desconocida te parezca, para hacer el juego más divertido.", definitionOptionsHTML);
             } else {
-                setupMainCard("Eligiendo la carta...", "<strong>" + dealerName + "</strong> será dealer esta ronda. Está eligiendo una palabra entre las opciones.", "");
+                setupMainCard("Eligiendo la carta...", "<strong>" + dealerName + "</strong> será moderador esta ronda. Está eligiendo una palabra entre las opciones.", "");
             }
             break;
             case "write_definitions":
             if (isDealer) {
-                setupMainCard("Los jugadores están escribiendo definiciones de  <strong>" + game.current_card.word + "</strong>", "","");
+                setupMainCard("Jugadores escribiendo definición <strong> " + game.current_card.word + "</strong>", "","");
             } else {
                 var writeDefinition = drawDefinitionInput(game.current_card.word)
-                setupMainCard("Escribí la definición de: <strong>" + game.current_card.word + "</strong>", "Hacelo verosimil y cuida la ortografía. Te recomendamos empezar con mayúsculas, terminar con puntos y completar las tildes.", writeDefinition);
+                setupMainCard("Escribí la definición de <strong>" + game.current_card.word + "</strong>", "Te recomendamos empezar con mayúsculas, terminar con puntos y completar las tildes.", writeDefinition);
             }
             break;
             case "show_definitions":
             if (isDealer) {
                 hideLoadingBars();
                 selectCorrectDefinitionsHTML = drawAdminAllCards(game, true, isDealer);
-                setupMainCard("Selecciona las definiciones correctas:", "Selecciona las tarjetas que consideres correctas, considerando la definición real de la palabra:", selectCorrectDefinitionsHTML);
+                setupMainCard("Definiciones", "Seleccioná las tarjetas que consideres correctas, teniendo en cuenta la definición real de la palabra.", selectCorrectDefinitionsHTML);
             } else {
-                setupMainCard("<strong>" + dealerName + "</strong> está eligiendo las definiciones acertadas", "Para evitar tarjetas repetidas y repartir los puntos correspondientes.","");
+                setupMainCard("<strong>" + dealerName + "</strong> ", "está eligiendo las definiciones acertadas para asignar los puntos a los jugadores.","");
             }
             break;
             case "choose_definitions":
@@ -119,10 +117,10 @@ function drawGameState(game) {
                     // Check if player had correct definition 
                 // Check if player had correct definition 
                 if (game.correct_definitions && game.correct_definitions.some(function (e) { return e.player == playerName; })) {
-                    setupMainCard("Tu definición es correcta!", "<strong>" + dealerName + "</strong> consideró tu definición acertada. Ya se sumaron los puntos correspondientes.<br> El resto de los jugadores está votando las definiciones restantes...", "");
+                    setupMainCard("Tu definición es correcta!", "<strong>" + dealerName + "</strong> consideró tu definición acertada. El resto de los jugadores está votando las definiciones restantes.", "");
                 } else {
                     selectCorrectDefinitionsHTML = drawAdminAllCards(game, true, isDealer);
-                    setupMainCard("Elegí la definición que creas correcta", "Selecciona la definición que creas más acertada!", selectCorrectDefinitionsHTML);
+                    setupMainCard("Elegí la definición que creas correcta", selectCorrectDefinitionsHTML);
                 }
             }
             break;
@@ -181,7 +179,7 @@ function drawDefinitionOptions(definition_options) {
     var html = `<div class="row">`;
     definition_options.forEach(function (definition, index) {
         html += drawWordDefinitionCard(definition.word, definition.definition);
-        if ((index + 1) % 3 == 0) {
+        if ((index + 1) % 4 == 0) {
             html += `</div><div class="row">`;
         }
     });
@@ -191,14 +189,14 @@ function drawDefinitionOptions(definition_options) {
 
 function drawWordDefinitionCard(word, definition) {
     return `
-    <div class="col m4">
+    <div class="col m3">
     <div class="card bleff-subdominant-alt">
     <div class="card-content white-text">
     <span class="card-title">`+ word + `</span>
     <p>`+ definition + `</p>
     </div>
-    <div class="card-action">
-    <a class="waves-effect waves-light bleff-red bleff-tonic-alt-text btn" onclick="selectDefinitionOption(\``+ word + `\`)">Elegir</a>
+    <div class="card-action-1">
+    <a class="waves-effect waves-light bleff-white bleff-tonic-alt-text btn" onclick="selectDefinitionOption(\``+ word + `\`)">Elegir</a>
     </div>
     </div>
     </div>
@@ -223,24 +221,24 @@ function drawAdminAllCards(game, isSelectable, isDealer) {
         html = `
         <div class="row">
         <!-- Real definition -->
-        <h5>Definición correcta:</h5>
+        <h6>Definición correcta</h6>
         <div class="row">
-        <div class="col m4">
+        <div class="col m7">
         <div class="card bleff-red">
         <div class="card-content white-text">
         <span class="card-title">`+ game.current_card.word + `</span>
-        <p>`+ game.current_card.definition + `</p>
+        <div class="def-correcta">`+ game.current_card.definition + `</div>
         </div>
         </div>
         </div>
         </div>
-        <h5>Definiciones de jugadores:</h5>
+        <h7>Definiciones de jugadores</h7>
         <div class="row">
         `
     } else {
         html = `
         <div class="row">
-        <h5>Definiciones:</h5>
+        <h6>Definiciones</h6>
         <div class="row">
         `
     }
@@ -249,9 +247,9 @@ function drawAdminAllCards(game, isSelectable, isDealer) {
         if (!definition.is_real) {
             html += `
             <div class="col m4">
-            <div class="card bleff-subdominant-alt">
-            <div class="card-content white-text">
-            <span class="card-title">`+ game.current_card.word + `</span>
+            <div class="card bleff-tonic-alt">
+            <div class="card-content black-text">
+            <span class="card-title-black">`+ game.current_card.word + `</span>
             <p>`+ definition.definition + `</p>
             </div>
             `
@@ -259,7 +257,7 @@ function drawAdminAllCards(game, isSelectable, isDealer) {
                 html += `
                 <div class="card-action">
                     <div class="switch">
-                    <label class="white-text">Incorrecta<input type="checkbox" value="`+ definition.id + `" class="isCorrectDefinition">
+                    <label class="black-text">Incorrecta<input type="checkbox" value="`+ definition.id + `" class="isCorrectDefinition">
                     <span class="lever"></span>Correcta</label>
                     </div>
                 </div>
@@ -270,7 +268,6 @@ function drawAdminAllCards(game, isSelectable, isDealer) {
                 html += `
                 <div class="card-action">
                 <button onclick="selectCorrectDefinition(\``+ definition.id + `\`)" class="btn waves-effect waves-light bleff-red" type="submit" name="action">Elegir
-                <i class="material-icons right">send</i>
                 </button>
                 </div>
                 `
@@ -287,7 +284,6 @@ function drawAdminAllCards(game, isSelectable, isDealer) {
     if (isSelectable && isDealer) {
         html += `
         <button onclick="postCorrectDefinitions()" class="btn waves-effect waves-light bleff-red" type="submit" name="action">Listo
-        <i class="material-icons right">send</i>
         </button>
         `
     }
@@ -317,14 +313,16 @@ function drawEndGameHTML(game, isDealer) {
     html = `
     <div class="row">
     <!-- Real definition -->
-    <h5>Definición correcta:</h5>
+    <h6>Definición correcta</h6>
     <div class="row">
-    <div class="col m4">
+    <div class="col m3">
     <div class="card bleff-red">
+
     <div class="card-content white-text">
-    <span class="card-title">`+ game.current_card.word + `</span>
-    <p>`+ game.current_card.definition + `</p>
+    <div class="palabra" style="color: white;">`+ game.current_card.word +`</div>
+    <div class="definicion">`+game.current_card.definition+`</div>
     </div>
+
     <div class="card-content white-text">
     <p>Votos: `+ correctTotalVotes + correctVotersList + `</p><br>
     </div>
@@ -341,12 +339,14 @@ function drawEndGameHTML(game, isDealer) {
                     votersList = " (" + getVotersNames(game, definition.id) + ")";
                 }
                 html += `
-                <div class="col m4">
+                <div class="col m3">
                 <div class="card bleff-subdominant-alt">
+
                 <div class="card-content white-text">
-                <span class="card-title">`+ game.current_card.word + `</span>
-                <p>`+ definition.definition + `</p>
+                <div class="palabra" style="color: #f7ff00;">`+ game.current_card.word +`</div>
+                <div class="definicion">`+definition.definition+`</div>
                 </div>
+                
                 <div class="card-content white-text">
                 <p>Autor: `+ definition.player + `</p>
                 <p>
@@ -363,7 +363,7 @@ function drawEndGameHTML(game, isDealer) {
     html += `
     </div>
     </div>
-    <h5>Definiciones de jugadores:</h5>
+    <h7>Definiciones de jugadores</h7>
     <div class="row">
     `
     
@@ -378,10 +378,12 @@ function drawEndGameHTML(game, isDealer) {
                 html += `
                 <div class="col m4">
                 <div class="card bleff-subdominant-alt">
-                <div class="card-content white-text">
-                <span class="card-title">`+ game.current_card.word + `</span>
-                <p>`+ definition.definition + `</p>
+
+                <div class="card-content white-text">               
+                <div class="palabra" style="color: lime;">`+ game.current_card.word +`</div>
+                <div class="definicion">`+definition.definition+`</div>
                 </div>
+                
                 <div class="card-content white-text">
                 <p>Autor: `+ definition.player + `</p>
                 <p>
@@ -398,8 +400,7 @@ function drawEndGameHTML(game, isDealer) {
     
     if (isDealer) {
         html += `
-        <button onclick="endCurrentRound()" class="btn waves-effect waves-light bleff-red bleff-tonic-alt-text" type="submit" name="action">Próxima ronda
-        <i class="material-icons right">send</i>
+        <button onclick="endCurrentRound()" class="btn waves-effect waves-light bleff-red bleff-white-alt-text" type="submit" name="action">Próxima ronda
         </button>
         `
     }
@@ -447,8 +448,9 @@ function uploadDefinition(word) {
     var defVal = $("#wordDefinitionInput").val();
     var definition = { definition: defVal };
     $.post(url, JSON.stringify(definition)).done(function () {
-        setupMainCard("Definicion cargada!", "Estamos esperando que el resto de los jugadores complete sus definiciones...<br><br><strong>" + word + "</strong>: " + defVal, "");
+   setupMainCard("Definicion cargada!", "Estamos esperando que el resto de los jugadores complete sus definiciones.", `<div class="definicion-juegadores"><div class="palabra">`+ word +`</div><div class="definicion">`+defVal+`</div></div>`);
     });
+
 }
 
 function postCorrectDefinitions() {
@@ -487,8 +489,8 @@ function endCurrentRound(definitionID) {
 // *******************************************
 function drawPlayers(game) {
     var html = "";
-    html = `<div class="row">`
     
+    var isInGame = false;
     game.players.forEach(function (player, index) {
         var imageClass = "avatar-image-normal";
         if (player.name == game.players[game.dealer_index].name) {
@@ -499,34 +501,41 @@ function drawPlayers(game) {
             imageClass = "avatar-image-def-completed";
         }
 
+        isInGame = isInGame || (player.name == playerName);
+
         var removePlayerBtn = "";
-        if(index > 0 && game.dealer_index == 0){
+        if(index > 0 && playerName == game.players[0].name){
             removePlayerBtn = `
+            <div class="cruz">
             <a class="btn-floating waves-effect waves-light black right-align" onclick="openRemovePlayerModal(`+index+`)">
             <i class="material-icons">
                 close
             </i>
-            </a>`;
+            </a>
+            </div>`;
         }
 
         html += `
-        <div class="row" style="margin-bottom:0em;">
-        <div class="col s12 m7">
-        <div class="card">
+        <div class="col m3">
+        <div class="card bleff-dominant-text bleff-tonic-alt"> `+ removePlayerBtn +`
         <div class="card-image">
         <img class="avatarImg `+ imageClass + `" src="https://robohash.org/` + player.name + `.png">
-        <span class="player-name-card card-title">` + player.points + "/" + game.target_points + ` pts</span>
         </div>
         <div class="card-action">
-        `+ player.name + removePlayerBtn +`
-        </div>      
+        `+ player.name + `
+        </div>  
+		<div class="player-name-card card-title">` + player.points + "/" + game.target_points + ` pts</div>    
             </div>      
         </div>      
         </div>
         </div>
-        </div>
         `
     });
+    
+    if(!isInGame){
+        window.location.replace("/juegos-online/bleff");
+        return
+    }
     
     $("#gamePlayers").html(html);
 }
@@ -583,6 +592,27 @@ function secondsTimeSpanToHMS(s) {
     return (m < 10 ? '0'+m : m)+":"+(s < 10 ? '0'+s : s); //zero padding on minutes and seconds
 }
 
+
+function loopTimer(i){    
+    i = 360-i;
+    if (i<=180){
+        $("#activeBorder").css('background-image','linear-gradient(' + (90+i) + 'deg, transparent 50%, #FF0000 50%),linear-gradient(90deg, #FF0000 50%, transparent 50%)');
+    }
+    else{
+        $("#activeBorder").css('background-image','linear-gradient(' + (i-90) + 'deg, transparent 50%, #FFFFFF 50%),linear-gradient(90deg, #FF0000 50%, transparent 50%)');
+    }
+}
+
+var playerIdxToRemove = 0;
 function openRemovePlayerModal(playerIdx){
+    playerIdxToRemove = playerIdx;
+    $("#removePlayerNameText").html(lastDrawnPlayersGame.players[playerIdx].name);
     $('#removePlayerModal').modal('open');
+}
+
+function confirmRemovePlayer(){
+    $.post(baseURL+"/api/game/" + gameID + "/remove_player/" + lastDrawnPlayersGame.players[playerIdxToRemove].id + "?player_name=" + playerName, function () {
+        refreshGame();
+        $('#removePlayerModal').modal('close');
+    });
 }

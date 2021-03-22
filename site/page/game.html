@@ -8,43 +8,46 @@
 
     <!-- CSS  -->
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-    <link href="/site/css/materialize.min.css" type="text/css" rel="stylesheet" media="screen,projection" />
-    <link href="/site/css/style.css" type="text/css" rel="stylesheet" />
-    <link href="/site/css/game.css" type="text/css" rel="stylesheet" />
+    <link href="../css/materialize.min.css" type="text/css" rel="stylesheet" media="screen,projection" />
+    <link href="../css/style.css" type="text/css" rel="stylesheet" />
+    <link href="../css/game.css" type="text/css" rel="stylesheet" />
 </head>
 
 
 <body>
     <nav class="bleff-dominant" role="navigation">
-        <div class="nav-wrapper container"><a id="logo-container" href="/" class="brand-logo">
-                <img id="topLogo" src="/site/img/top-logo.png">
+        <div class="nav-wrapper container"><a id="logo-container" href="/juegos-online/bleff" class="brand-logo">
+                <img id="topLogo" src="../img/logo-bleff.png">
             </a>
         </div>
     </nav>
-
+	<div class="container">
     <div class="section no-pad-bot">
         <div class="row">
             <div class="col s1"></div>
-            <div class="col s2">
-                <div id="gamePlayers"></div>
-            </div>
-            <div class="col s8">
+            
+            <div class="col s12">
                 <!-- MAIN GAME CONTAINER -->
-                <div class="card scale-transition bleff-tonic-alt" id="mainCard">
+                <div class="card" id="mainCard">
                    
-                    <div class="progress bleff-subdominant-alt showBar" style="display: none;" id="mainCardLoadingBar">
-                        <div class="indeterminate bleff-red"></div>
+                    <div style="display: none;" id="mainCardLoadingBar">
+                        <i class="material-icons indefinite-loading bleff-red-text">hourglass_empty</i>
                     </div>
-                    <div id="timerContainer" class="timer-text bleff-tonic-text tooltipped" data-position="bottom" data-tooltip=""
-                        style="display: none;  height: 1.5em;">
-                        <div class="progress bleff-subdominant-alt hidden" style="height: 1.5em;">
-                            <div class="determinate bleff-red" id="timerInnerBar" style="width: 0%"></div>
+
+                    <div id="timerContainer" class="timer-text bleff-tonic-text tooltipped center-align" data-position="bottom" data-tooltip=""
+                        style="display: none;">
+                        <div id="activeBorder" class="active-border">
+                            <div class="circle">
+                                <span class="prec" id="prec">
+                                    <i class="material-icons definite-loading bleff-red-text">hourglass_empty</i>
+                                </span>
+                            </div>
                         </div>
                     </div>
               
 
-                <div class="card-content">
-                    <span class="card-title grey-text text-darken-4" id="mainCardTitle"></span>
+                <div class="card-content-1">
+                    <h2 id="mainCardTitle"></h2>
                     <p id="mainCardText"></p>
                     <div id="mainCardDiv"></div>
                 </div>
@@ -53,26 +56,44 @@
             <!-- END MAIN GAME CONTAINER -->
 
         </div>
+        
+        <div class="col s12">
+                <div id="gamePlayers"></div>
+            </div>
+            
         <div class="col s1"></div>
     </div>
+
     </div>
 
+</div>
     <footer class="page-footer bleff-dominant">
         <div class="footer-copyright">
             <div class="container center">
-                © "Bleff Online" es una versión digital del juego Bleff propiedad de RUIBAL SRL, todos los derechos
-                reservados.<br>
-                Programación, Diseño Web y Adaptación: Marco Boschetti. / Arte y Diseño original: Silvina Halabi
+                © "Bleff Online" es una versión digital del juego <span id="ee2">Bleff</span> propiedad de RUIBAL SRL, Todos los Derechos
+                Reservados.<br>
+                <span id="ee1">Programación y Adaptación: Marco  Boschetti.</span>
             </div>
-            <!-- <img src="/site/img/iso-ruibal.png" class="footer-logo"/> -->
+            <!-- <img src="../img/iso-ruibal.png" class="footer-logo"/> -->
         </div>
     </footer>
 
     <!--  Scripts-->
     <script src="https://code.jquery.com/jquery-2.2.4.min.js"></script>
-    <script src="/site/js/materialize.min.js"></script>
-    <script src="/site/js/game.js"></script>
-    <script src="/site/js/logo.js"></script>
+    <script src="../js/materialize.min.js"></script>
+    <script src="../js/game.js"></script>
 </body>
+
+    <!-- Modal Structure -->
+    <div id="removePlayerModal" class="modal">
+        <div class="modal-content">
+        <h4>Quitar jugador</h4>
+        <p>Estás seguro que querés quitar a <strong><span id="removePlayerNameText"></span></strong> de la partida?</p>
+        </div>
+        <div class="modal-footer">
+            <a href="#!" class="modal-close waves-effect waves-red btn-flat">Cancelar</a>
+            <a href="#!" class="waves-effect btn-flat red-text" onclick="confirmRemovePlayer()">Confirmar</a>
+        </div>
+    </div>
 
 </html>

@@ -35,6 +35,7 @@ func createNewGame(c *gin.Context) {
 	definition := struct {
 		TargetPoints uint64 `json:"target_points"`
 		SecsPerState uint64 `json:"secs_per_state"`
+		BotsCount    uint64 `json:"bots_count"`
 	}{}
 
 	if err := c.ShouldBindJSON(&definition); err != nil {
@@ -42,7 +43,7 @@ func createNewGame(c *gin.Context) {
 		return
 	}
 
-	newGame := service.CreateNewGame(playerName, definition.TargetPoints, definition.SecsPerState)
+	newGame := service.CreateNewGame(playerName, definition.TargetPoints, definition.SecsPerState, definition.BotsCount)
 	c.JSON(200, newGame)
 }
 

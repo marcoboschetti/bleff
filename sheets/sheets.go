@@ -2,6 +2,7 @@ package sheets
 
 import (
 	"encoding/json"
+	"fmt"
 	"io/ioutil"
 	"net/http"
 	"os"
@@ -108,4 +109,43 @@ func PersistGameStarted(game entities.Game) error {
 
 	_, err = service.Spreadsheets.Values.Append(spreadsheetID, writeRange, &vr).ValueInputOption("RAW").Do()
 	return err
+}
+
+var botsDefinitions map[string][]string
+
+func GetUsableBotsDefinitions() (map[string][]string, error) {
+	if botsDefinitions != nil {
+		return botsDefinitions, nil
+	}
+
+	var err error
+	if service == nil {
+		service, err = getService()
+		if err != nil {
+			return nil, err
+		}
+	}
+
+	spreadsheetID := "1fhaW5cApXYAnwJLuk2jnhwl82V5MILAjZf6-wnZkfkc"
+	readRange := "'Fake Definitions Configuration'!A:B"
+
+	resp, err := service.Spreadsheets.Values.Get(spreadsheetID, readRange).Do()
+
+	if err != nil {
+		fmt.Println(err)
+		return nil, err
+	}
+
+	botsDefinitions := map[string][]string{}
+	for _, v := range resp.Values {
+		word := v[0].(string)
+		definition := v[1].(string)
+
+		if botsDefinitions[word] == nil {
+			botsDefinitions[word] = []string{}
+		}
+		botsDefinitions[word] = append(botsDefinitions[word], definition)
+	}
+
+	return botsDefinitions, nil
 }

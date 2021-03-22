@@ -9,6 +9,7 @@ type (
 		IsPrivate        bool      `json:"is_private"`
 		Players          []Player  `json:"players,omitempty"`
 		TargetPoints     uint64    `json:"target_points,omitempty"`
+		Bots             uint64    `json:"bots,omitempty"`
 		CurrentDealerIdx uint64    `json:"dealer_index"`
 		CurrentGameState GameState `json:"game_state,omitempty"`
 		LastRequestTime  time.Time `json:"-"`
@@ -35,6 +36,7 @@ type (
 		ID     string `json:"id,omitempty"`
 		Name   string `json:"name,omitempty"`
 		Points uint64 `json:"points"`
+		IsBot  bool   `json:"is_bot"`
 	}
 
 	Definition struct {

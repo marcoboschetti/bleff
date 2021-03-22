@@ -3,15 +3,15 @@ span.player-name-card.card-title{
 }
 
 .avatar-image-normal{
-	background-color: #81776F;
+
 }
 
 .avatar-image-dealer{
-	background-color:  #862520;
+	border: 4px solid #f00;
 }
 
 .avatar-image-def-completed{
-	background-color: #382f2d;
+	background-color: #c6d1d1;
 }
 
 span.player-name-card.card-title {
@@ -31,4 +31,9 @@ span.player-name-card.card-title {
 .text-timer{
 	height: 1.5em;
 	display: block;
+}
+
+
+div#removePlayerModal{
+	overflow: hidden;
 }

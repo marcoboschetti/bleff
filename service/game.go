@@ -2,6 +2,8 @@ package service
 
 import (
 	"errors"
+	"fmt"
+	"math/rand"
 	"time"
 
 	"bitbucket.org/marcoboschetti/bleff/entities"
@@ -10,18 +12,26 @@ import (
 
 var gamesMap = NewGameMap()
 
-func CreateNewGame(playerName string, targetPoints, secsPerState uint64) entities.Game {
+func CreateNewGame(playerName string, targetPoints, secsPerState, botsCount uint64) entities.Game {
 	player := createNewPlayer(playerName)
 
 	newGame := entities.Game{
 		ID:              entities.GetRandomWordJoin(3),
 		Status:          "pending",
+		Bots:            botsCount,
 		IsPrivate:       true,
 		Players:         []entities.Player{player},
 		TargetPoints:    targetPoints,
 		SecsPerState:    secsPerState,
 		LastRequestTime: time.Now(),
 	}
+
+	for i := 0; i < int(botsCount); i++ {
+		newGame.Players = append(newGame.Players, createNewPlayerBot())
+	}
+
+	fmt.Println(botsCount)
+	fmt.Println(newGame.Players)
 
 	gamesMap.Lock()
 	gamesMap.internal[newGame.ID] = &newGame
@@ -224,7 +234,7 @@ func PostChosenDefinition(gameID, playerName, chosenDefinitionID string) (*entit
 	game.ChosenDefinitions = append(game.ChosenDefinitions, newChosenDefinition)
 
 	// Check if fake definition is ready
-	if len(game.ChosenDefinitions) == len(game.Players)-1-len(game.CorrectDefinitions) {
+	if len(game.ChosenDefinitions)+int(game.Bots) == len(game.Players)-1-len(game.CorrectDefinitions) {
 		// All definitions are completed
 		game.CurrentGameState = entities.GetNextState(game.CurrentGameState)
 		changeGameForCurrentState(game, "", nil)
@@ -268,6 +278,12 @@ func PostEndRound(gameID, playerName string) (*entities.Game, error) {
 
 		nextDealer := int(game.CurrentDealerIdx+1) % len(game.Players)
 		game.CurrentDealerIdx = uint64(nextDealer)
+
+		for game.Players[game.CurrentDealerIdx].IsBot {
+			nextDealer = int(game.CurrentDealerIdx+1) % len(game.Players)
+			game.CurrentDealerIdx = uint64(nextDealer)
+		}
+
 		changeGameForCurrentState(game, "", nil)
 	}
 
@@ -367,5 +383,17 @@ func createNewPlayer(playerName string) entities.Player {
 		ID:     getUuidv4(),
 		Name:   playerName,
 		Points: 0,
+		IsBot:  false,
+	}
+}
+
+var botsNames = []string{"Zeus", "Hera", "Poseidón", "Ares", "Hermes", "Hefesto", "Afrodita", "Atenea", "Apolo", "Artemisa", "Hestia", "Deméter", "Dioniso", "Hades", "Perséfone", "Hebe", "Asclepio", "Eros", "Pan", "Heracles"}
+
+func createNewPlayerBot() entities.Player {
+	return entities.Player{
+		ID:     getUuidv4(),
+		Name:   botsNames[rand.Intn(len(botsNames))] + " (bot)",
+		Points: 0,
+		IsBot:  true,
 	}
 }

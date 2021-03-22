@@ -6,8 +6,8 @@ $(document).ready(function () {
         return;
     }
     if(rand < 0.66){
-        $("#topLogo").attr("src", "/site/img/top-logo-1.png");
+        $("#topLogo").attr("src", "img/top-logo-1.png");
         return;
     }
-    $("#topLogo").attr("src", "/site/img/top-logo-2.png");
+    $("#topLogo").attr("src", "img/top-logo-2.png");
 });

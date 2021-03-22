@@ -32,7 +32,7 @@ func changeGameForCurrentState(game *entities.Game, selectedWord string, correct
 func setCardsForDealerToChoose(game *entities.Game) {
 	options := make([]entities.PersistedDefinition, entities.CardsToChooseFrom)
 	for idx := 0; idx < entities.CardsToChooseFrom; idx++ {
-		options[idx] = getRandomPersistedDefinition()
+		options[idx] = getRandomPersistedDefinition(game.Bots > 0)
 	}
 	game.DefinitionOptions = options
 }
@@ -50,6 +50,28 @@ func setupWordOption(game *entities.Game, word string) {
 
 	// Set selected card
 	game.CurrentCard = selectedWord
+
+	// Bots select definitions
+	if game.Bots > 0 {
+		botsDefinitions, _ := sheets.GetUsableBotsDefinitions()
+		possibleDefinitions := botsDefinitions[game.CurrentCard.Word]
+		rand.Shuffle(len(possibleDefinitions), func(i, j int) {
+			possibleDefinitions[i], possibleDefinitions[j] = possibleDefinitions[j], possibleDefinitions[i]
+		})
+
+		for idx, player := range game.Players {
+			if player.IsBot {
+				fmt.Println("BOT ", player.Name, " DID ", possibleDefinitions[idx%len(possibleDefinitions)])
+				newPlayerDefinition := entities.Definition{
+					ID:         getUuidv4(),
+					Player:     player.Name,
+					Definition: possibleDefinitions[idx%len(possibleDefinitions)],
+				}
+
+				game.FakeDefinitions = append(game.FakeDefinitions, newPlayerDefinition)
+			}
+		}
+	}
 }
 
 func moveDefinitionsToDisplay(game *entities.Game) {

@@ -1,4 +1,4 @@
-var baseURL = "https://bleff.herokuapp.com";
+var baseURL = "";//"https://bleff.herokuapp.com";
 
 $(document).ready(function () {
     if(window.location.origin.indexOf("bleff.ml") >= 0){
@@ -21,13 +21,13 @@ $(document).ready(function () {
             var classes = "bleff-dominant-text bleff-subdominant";
             switch (idx) {
                 case 0:
-                    classes = "bleff-tonic-alt-text bleff-red";
+                    classes = "bleff-tonic-alt-text bleff-winner";
                     break;
                 case 1:
-                    classes = "bleff-tonic-alt-text bleff-dominant";
+                    classes = "bleff-dominant-text bleff-tonic-alt";
                     break;
                 case 2:
-                    classes = "bleff-tonic-alt-text bleff-subdominant-alt";
+                    classes = "bleff-dominant-text bleff-tonic-alt";
                     break;
             }
 
@@ -39,8 +39,8 @@ $(document).ready(function () {
                 </div>
                 <div class="card-content">
                   <h3>` + player.name + `</h3>
-                  <h5> Posición: ` + (idx + 1) + `º</h5>
-                  <h5> Puntaje final: ` + (player.points) + `</h5>
+                  <div class="position">Posición<span> ` + (idx + 1) + `º</span></div>
+                  <div class="puntaje">Puntaje final<span> ` + (player.points) + `</span></div>
                 </div>
               </div>
             </div>

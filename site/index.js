@@ -1,10 +1,11 @@
-var baseURL = "https://bleff.herokuapp.com";
+var baseURL = "";//"https://bleff.herokuapp.com";
 
 $(document).ready(function () {
     if(window.location.origin.indexOf("bleff.ml") >= 0){
         baseURL="";
     }
 
+    $('.modal').modal();
     $('select').formSelect();
     $(".dropdown-content>li>a").css("color", "#112341");
 
@@ -20,7 +21,7 @@ $(document).ready(function () {
             input.data("lastval", val);
             $("#avatarImg").attr("src", "https://robohash.org/" + val + ".png");
         }
-        if (val.length <= 3) {
+        if (val.length <= 2) {
             $("#newGameBtn").addClass('disabled');
         } else {
             $("#newGameBtn").removeClass('disabled');
@@ -60,13 +61,14 @@ function createNewMatch() {
 
     var payload = {
         target_points: parseInt($("#newGameTargetPoints").val()),
-        secs_per_state: parseInt($("#newGameSecsPerState").val())
+        secs_per_state: parseInt($("#newGameSecsPerState").val()),
+        bots_count: parseInt($("#newGameBots").val())
     }
 
-    $.post(baseURL+"/api/game?player_name=" + name, JSON.stringify(payload), function (data) {
+    $.post(baseURL+"/api/game/?player_name=" + name, JSON.stringify(payload), function (data) {
         var val = data.id + "@|@" + name;
         var result = btoa(val);
-        window.location.replace("/site/page/lobby.html?m=" + result);
+        window.location.replace("page/lobby.html?m=" + result);
     });
 }
 
@@ -81,7 +83,7 @@ function joinMatch() {
         .done(function (data) {
             var val = data.id + "@|@" + name;
             var result = btoa(val);
-            window.location.replace("/site/page/lobby.html?m=" + result);
+            window.location.replace("page/lobby.html?m=" + result);
         })
         .fail(function (err) {
             console.log(err);
@@ -97,6 +99,7 @@ function getRandomName() {
 }
 
 var v = 0;
+var botsEnabled = false;
 function ee1() { ee(1); }
 function ee2() { ee(2); }
 function ee3() { ee(3); }
@@ -107,17 +110,8 @@ function ee(x) {
     }
     v = x;
     if (v == 3) {
-        var name = $("#firstNameInput").val();
-        $.post("/api/game/required/join_public?player_name=" + name)
-            .done(function (data) {
-                var val = data.id + "@|@" + name;
-                var result = btoa(val);
-                window.location.replace("/site/page/lobby.html?m=" + result);
-            })
-            .fail(function (err) {
-                console.log(err);
-                M.toast({ html: "Ups, no pudimos encontrar una partida publica 😕" })
-
-            });
+        botsEnabled = true;
+        $("#newGameBotsContainer").slideDown();
+        M.toast({ html: "Habilitamos la opción secreta de bots 🤖" })
     }
 }

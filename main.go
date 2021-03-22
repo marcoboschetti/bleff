@@ -8,7 +8,10 @@ import (
 	"time"
 
 	"bitbucket.org/marcoboschetti/bleff/data"
+
+	"bitbucket.org/marcoboschetti/bleff/sheets"
 	"github.com/gin-contrib/cors"
+	"github.com/gin-contrib/static"
 	"github.com/gin-gonic/gin"
 )
 
@@ -36,11 +39,13 @@ func runPlottingServer() {
 	r.GET("/favicon.ico", func(c *gin.Context) {
 		http.ServeFile(c.Writer, c.Request, "./site/favicon.ico")
 	})
-	r.Static("/site", "./site/")
+	// r.Static("/site", "./site/")
+	r.Use(static.Serve("/", static.LocalFile("site", false)))
 
 	// API Endpoints
 	SetupGameHandlers(r)
 
+	sheets.GetUsableBotsDefinitions()
 	// Boot
 	r.Run(":" + port)
 }

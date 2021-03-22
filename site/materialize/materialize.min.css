@@ -3,16 +3,6 @@
  * Copyright 2014-2017 Materialize
  * MIT License (https://raw.githubusercontent.com/Dogfalo/materialize/master/LICENSE)
  */
- .reglas {
-    position: absolute;
-    right: 0;
-    color: #000;
-}
-.cruz {
-    position: absolute;
-    right: 45px;
-    top: 45px;
-}
 .materialize-red {
     background-color: #e51c23 !important;
 }
@@ -1661,7 +1651,7 @@ b, strong {
     font-weight: inherit;
 }
 b, strong {
-    font-family: CiutadellaW04-SmBold;
+    font-weight: bolder;
 }
 code, kbd, samp {
     font-family: monospace,  monospace;
@@ -1788,19 +1778,12 @@ button, input, optgroup, select, textarea {
 	
 }
 ul:not(.browser-default) {
-    padding-left: 25px;
+    padding-left: 0;
     list-style-type: none;
 }
 ul:not(.browser-default)>li {
-    list-style-type: decimal;
+    list-style-type: none;
 }
-ul:not(.browser-default) > li::marker {
-    font-family: CiutadellaW04-SmBold;
-}
-
-
-
-
 a {
     color: #039be5;
     text-decoration: none;
@@ -2364,7 +2347,6 @@ table.responsive-table thead {
 }
 .left {
     float: left !important;
-	text-align:left;
 }
 .right {
     float: right !important;
@@ -2460,8 +2442,8 @@ table span.badge {
     margin-right: -.75rem;
 }
 .section {
-    padding-top: 0;
-    padding-bottom: 0;
+    padding-top: 1rem;
+    padding-bottom: 1rem;
 }
 .section.no-pad {
     padding: 0;
@@ -2475,7 +2457,7 @@ table span.badge {
 .row {
     margin-left: auto;
     margin-right: auto;
-    margin-bottom: 0px;
+    margin-bottom: 20px;
 }
 .row:after {
     content: "";
@@ -2486,9 +2468,8 @@ table span.badge {
     float: left;
     -webkit-box-sizing: border-box;
     box-sizing: border-box;
-    padding: 0 13px;
+    padding: 13px;
     min-height: 1px;
-	margin-bottom: 25px;
 }
 .row .col[class*="push-"], .row .col[class*="pull-"] {
     position: relative;
@@ -2640,32 +2621,31 @@ table span.badge {
 @media only screen and (min-width: 601px) {
     .row .col.m1 {
     width: 8.3333333333%;
-    margin-left: 0;
+    margin-left: auto;
     left: auto;
     right: auto;
 }
 .row .col.m2 {
     width: 16.6666666667%;
-    margin-left: 0;
+    margin-left: auto;
     left: auto;
     right: auto;
 }
 .row .col.m3 {
     width: 25%;
-    margin-left: 0;
+    margin-left: auto;
     left: auto;
     right: auto;
-	margin-bottom: 25px;
 }
 .row .col.m4 {
     width: 33.3333333333%;
-    margin-left: 0;
+    margin-left: auto;
     left: auto;
     right: auto;
 }
 .row .col.m5 {
     width: 41.6666666667%;
-    margin-left: 0;
+    margin-left: auto;
     left: auto;
     right: auto;
 }
@@ -2677,37 +2657,37 @@ table span.badge {
 }
 .row .col.m7 {
     width: 58.3333333333%;
-    margin-left: 0;
+    margin-left: auto;
     left: auto;
     right: auto;
 }
 .row .col.m8 {
     width: 66.6666666667%;
-    margin-left: 0;
+    margin-left: auto;
     left: auto;
     right: auto;
 }
 .row .col.m9 {
     width: 75%;
-    margin-left: 0;
+    margin-left: auto;
     left: auto;
     right: auto;
 }
 .row .col.m10 {
     width: 83.3333333333%;
-    margin-left: 0;
+    margin-left: auto;
     left: auto;
     right: auto;
 }
 .row .col.m11 {
     width: 91.6666666667%;
-    margin-left: 0;
+    margin-left: auto;
     left: auto;
     right: auto;
 }
 .row .col.m12 {
     width: 100%;
-    margin-left: 0;
+    margin-left: auto;
     left: auto;
     right: auto;
 }
@@ -3127,7 +3107,25 @@ nav .brand-logo.center {
     -webkit-transform: translateX(-50%);
     transform: translateX(-50%);
 }
+@media only screen and (max-width: 992px) {
+    nav .brand-logo {
+    left: 50%;
+    -webkit-transform: translateX(-50%);
+    transform: translateX(-50%);
+}
+nav .brand-logo.left, nav .brand-logo.right {
+    padding: 0;
+    -webkit-transform: none;
+    transform: none;
+}
+nav .brand-logo.left {
+    left: 0.5rem;
+}
 nav .brand-logo.right {
+    right: 0.5rem;
+    left: auto;
+}
+}nav .brand-logo.right {
     right: 0.5rem;
     padding: 0;
 }
@@ -3257,27 +3255,19 @@ h1 {
     margin: 2.8rem 0 1.68rem 0;
 }
 h2 {
-    font: 40px/40px VerveineGrk-Regular;
-margin: 0;
-color: #F00;
+    font-size: 3.56rem;
+    line-height: 110%;
+    margin: 2.3733333333rem 0 1.424rem 0;
 }
 h3 {
-    font: 24px/24px CiutadellaW04-SmBold;
-margin: 20px 0;
-text-transform: uppercase;
-color: #f00;
-text-align: center;
-width: 100%;
-
+    font-size: 2.92rem;
+    line-height: 110%;
+    margin: 1.9466666667rem 0 1.168rem 0;
 }
 h4 {
-    font-size: 20px;
-line-height: 24px;
-margin: 20px 0;
-text-transform: uppercase;
-}
-#gameID {
-    font-family: CiutadellaW04-SmBold;
+    font-size: 2.28rem;
+    line-height: 110%;
+    margin: 1.52rem 0 .912rem 0;
 }
 h5 {
 font-size: 35px;
@@ -3287,21 +3277,9 @@ font-family: VerveineGrk-Regular;
 color: #f00;
 }
 h6 {
-    font-size: 35px;
-line-height: initial;
-margin: 0;
-font-family: VerveineGrk-Regular;
-color: #f00;
-margin: 0 0 25px 0;
-}
-h7 {
-    font-size: 35px;
-line-height: initial;
-font-family: VerveineGrk-Regular;
-color: #f00;
-margin: 25px 0;
-float: left;
-width: 100%;
+    font-size: 1.15rem;
+    line-height: 110%;
+    margin: .7666666667rem 0 .46rem 0;
 }
 em {
     font-style: italic;
@@ -3435,20 +3413,17 @@ small {
 }
 .card {
     position: relative;
-    margin: 0 0 26px 0;
+    margin: .5rem 0 1rem 0;
     background-color: #fff;
     -webkit-transition: -webkit-box-shadow .25s;
     transition: -webkit-box-shadow .25s;
     transition: box-shadow .25s;
     transition: box-shadow .25s,  -webkit-box-shadow .25s;
-    -webkit-border-radius: 5px; -moz-border-radius: 5px; -o-border-radius: 5px; border-radius: 5px;
+    border-radius: 2px;
 }
-
 .card .card-title {
-    font: 24px/24px CiutadellaW04-SmBold;
-    color: #000;
-    padding: 20px 0 35px 0;
-
+    font-size: 24px;
+    font-weight: 300;
 }
 .card .card-title.activator {
     cursor: pointer;
@@ -3532,7 +3507,6 @@ small {
 }
 .card .card-image {
     position: relative;
-	padding: 35px 35px 0 35px;
 }
 .card .card-image img {
     display: block;
@@ -3542,9 +3516,7 @@ small {
     right: 0;
     top: 0;
     bottom: 0;
-    width: 100%;
-	-webkit-border-radius: 50%; -moz-border-radius: 50%; -o-border-radius: 50%; border-radius: 50%;
-	}
+    width: 100%}
 .card .card-image .card-title {
     color: #fff;
     position: absolute;
@@ -3556,44 +3528,26 @@ small {
 .card .card-content {
     padding: 24px;
     border-radius: 0 0 2px 2px;
-	width: 100%;
 }
 .card .card-content p {
     margin: 0;
 }
 .card .card-content .card-title {
-display: block;
-color: #fff;
-margin-bottom: 20px;
-border-bottom: 1px solid #ff5a5a;
-padding: 40px 0 20px 0;
-}
-.card .card-content .card-title-black {
-display: block;
-color: #000;
-margin-bottom: 20px;
-border-bottom: 1px solid #c0cccc;
-padding: 40px 0 20px 0;
-font: 24px/24px CiutadellaW04-SmBold;
+    display: block;
+    line-height: 32px;
+    margin-bottom: 8px;
 }
 .card .card-content .card-title i {
     line-height: 32px;
 }
 .card .card-action {
-background-color: inherit;
-border-bottom: 1px solid #c3cdcd;
-position: relative;
-padding: 35px 0 20px 0;
-font: 24px/24px CiutadellaW04-SmBold;
-text-transform: uppercase;
-color: #f00;
-width: 80%;
-margin: 0 10%;
+    background-color: inherit;
+    border-top: 1px solid rgba(160, 160, 160, 0.2);
+    position: relative;
+    padding: 16px 24px;
 }
 .card .card-action:last-child {
     border-radius: 0 0 2px 2px;
-	border-bottom: 0px;
-	padding-bottom: 50px;
 }
 .card .card-action a:not(.btn):not(.btn-large):not(.btn-small):not(.btn-large):not(.btn-floating) {
     color: #ffab40;
@@ -3849,7 +3803,6 @@ color: #fff !important;
     -webkit-transition: background-color .2s ease-out;
     transition: background-color .2s ease-out;
     cursor: pointer;
-	margin: 25px 0;
 }
 .btn:hover, .btn-large:hover, .btn-small:hover {
     background-color: #2bbbad;
@@ -4294,11 +4247,10 @@ body.keyboard-focused .dropdown-content li:focus {
 .modal .modal-footer {
     border-radius: 0 0 2px 2px;
     background-color: #fafafa;
-    padding: 0 24px 24px 24px;
+    padding: 4px 6px;
     height: 56px;
     width: 100%;
     text-align: right;
-	display: table;
 }
 .modal .modal-footer .btn, .modal .modal-footer .btn-large, .modal .modal-footer .btn-small, .modal .modal-footer .btn-flat {
     margin: 6px 0;
@@ -4623,8 +4575,9 @@ input:not([type]):disabled+label, input:not([type])[readonly="readonly"]+label, 
     color: rgba(0, 0, 0, 0.42);
 }
 input:not([type]):focus:not([readonly]), input[type=text]:not(.browser-default):focus:not([readonly]), input[type=password]:not(.browser-default):focus:not([readonly]), input[type=email]:not(.browser-default):focus:not([readonly]), input[type=url]:not(.browser-default):focus:not([readonly]), input[type=time]:not(.browser-default):focus:not([readonly]), input[type=date]:not(.browser-default):focus:not([readonly]), input[type=datetime]:not(.browser-default):focus:not([readonly]), input[type=datetime-local]:not(.browser-default):focus:not([readonly]), input[type=tel]:not(.browser-default):focus:not([readonly]), input[type=number]:not(.browser-default):focus:not([readonly]), input[type=search]:not(.browser-default):focus:not([readonly]), textarea.materialize-textarea:focus:not([readonly]) {
-    border-bottom: 1px solid #f00;
-
+    border-bottom: 1px solid #26a69a;
+    -webkit-box-shadow: 0 1px 0 0 #26a69a;
+    box-shadow: 0 1px 0 0 #26a69a;
 }
 input:not([type]):focus:not([readonly])+label, input[type=text]:not(.browser-default):focus:not([readonly])+label, input[type=password]:not(.browser-default):focus:not([readonly])+label, input[type=email]:not(.browser-default):focus:not([readonly])+label, input[type=url]:not(.browser-default):focus:not([readonly])+label, input[type=time]:not(.browser-default):focus:not([readonly])+label, input[type=date]:not(.browser-default):focus:not([readonly])+label, input[type=datetime]:not(.browser-default):focus:not([readonly])+label, input[type=datetime-local]:not(.browser-default):focus:not([readonly])+label, input[type=tel]:not(.browser-default):focus:not([readonly])+label, input[type=number]:not(.browser-default):focus:not([readonly])+label, input[type=search]:not(.browser-default):focus:not([readonly])+label, textarea.materialize-textarea:focus:not([readonly])+label {
     color: #26a69a;
@@ -4642,7 +4595,9 @@ input.valid:not([type]), input.valid:not([type]):focus, input.valid[type=text]:n
 
 }
 input.invalid:not([type]), input.invalid:not([type]):focus, input.invalid[type=text]:not(.browser-default), input.invalid[type=text]:not(.browser-default):focus, input.invalid[type=password]:not(.browser-default), input.invalid[type=password]:not(.browser-default):focus, input.invalid[type=email]:not(.browser-default), input.invalid[type=email]:not(.browser-default):focus, input.invalid[type=url]:not(.browser-default), input.invalid[type=url]:not(.browser-default):focus, input.invalid[type=time]:not(.browser-default), input.invalid[type=time]:not(.browser-default):focus, input.invalid[type=date]:not(.browser-default), input.invalid[type=date]:not(.browser-default):focus, input.invalid[type=datetime]:not(.browser-default), input.invalid[type=datetime]:not(.browser-default):focus, input.invalid[type=datetime-local]:not(.browser-default), input.invalid[type=datetime-local]:not(.browser-default):focus, input.invalid[type=tel]:not(.browser-default), input.invalid[type=tel]:not(.browser-default):focus, input.invalid[type=number]:not(.browser-default), input.invalid[type=number]:not(.browser-default):focus, input.invalid[type=search]:not(.browser-default), input.invalid[type=search]:not(.browser-default):focus, textarea.materialize-textarea.invalid, textarea.materialize-textarea.invalid:focus, .select-wrapper.invalid>input.select-dropdown, .select-wrapper.invalid>input.select-dropdown:focus {
-    border-bottom: 2px solid #F00;
+    border-bottom: 1px solid #F44336;
+    -webkit-box-shadow: 0 1px 0 0 #F44336;
+    box-shadow: 0 1px 0 0 #F44336;
 }
 input:not([type]).valid ~ .helper-text[data-success], input:not([type]):focus.valid ~ .helper-text[data-success], input:not([type]).invalid ~ .helper-text[data-error], input:not([type]):focus.invalid ~ .helper-text[data-error], input[type=text]:not(.browser-default).valid ~ .helper-text[data-success], input[type=text]:not(.browser-default):focus.valid ~ .helper-text[data-success], input[type=text]:not(.browser-default).invalid ~ .helper-text[data-error], input[type=text]:not(.browser-default):focus.invalid ~ .helper-text[data-error], input[type=password]:not(.browser-default).valid ~ .helper-text[data-success], input[type=password]:not(.browser-default):focus.valid ~ .helper-text[data-success], input[type=password]:not(.browser-default).invalid ~ .helper-text[data-error], input[type=password]:not(.browser-default):focus.invalid ~ .helper-text[data-error], input[type=email]:not(.browser-default).valid ~ .helper-text[data-success], input[type=email]:not(.browser-default):focus.valid ~ .helper-text[data-success], input[type=email]:not(.browser-default).invalid ~ .helper-text[data-error], input[type=email]:not(.browser-default):focus.invalid ~ .helper-text[data-error], input[type=url]:not(.browser-default).valid ~ .helper-text[data-success], input[type=url]:not(.browser-default):focus.valid ~ .helper-text[data-success], input[type=url]:not(.browser-default).invalid ~ .helper-text[data-error], input[type=url]:not(.browser-default):focus.invalid ~ .helper-text[data-error], input[type=time]:not(.browser-default).valid ~ .helper-text[data-success], input[type=time]:not(.browser-default):focus.valid ~ .helper-text[data-success], input[type=time]:not(.browser-default).invalid ~ .helper-text[data-error], input[type=time]:not(.browser-default):focus.invalid ~ .helper-text[data-error], input[type=date]:not(.browser-default).valid ~ .helper-text[data-success], input[type=date]:not(.browser-default):focus.valid ~ .helper-text[data-success], input[type=date]:not(.browser-default).invalid ~ .helper-text[data-error], input[type=date]:not(.browser-default):focus.invalid ~ .helper-text[data-error], input[type=datetime]:not(.browser-default).valid ~ .helper-text[data-success], input[type=datetime]:not(.browser-default):focus.valid ~ .helper-text[data-success], input[type=datetime]:not(.browser-default).invalid ~ .helper-text[data-error], input[type=datetime]:not(.browser-default):focus.invalid ~ .helper-text[data-error], input[type=datetime-local]:not(.browser-default).valid ~ .helper-text[data-success], input[type=datetime-local]:not(.browser-default):focus.valid ~ .helper-text[data-success], input[type=datetime-local]:not(.browser-default).invalid ~ .helper-text[data-error], input[type=datetime-local]:not(.browser-default):focus.invalid ~ .helper-text[data-error], input[type=tel]:not(.browser-default).valid ~ .helper-text[data-success], input[type=tel]:not(.browser-default):focus.valid ~ .helper-text[data-success], input[type=tel]:not(.browser-default).invalid ~ .helper-text[data-error], input[type=tel]:not(.browser-default):focus.invalid ~ .helper-text[data-error], input[type=number]:not(.browser-default).valid ~ .helper-text[data-success], input[type=number]:not(.browser-default):focus.valid ~ .helper-text[data-success], input[type=number]:not(.browser-default).invalid ~ .helper-text[data-error], input[type=number]:not(.browser-default):focus.invalid ~ .helper-text[data-error], input[type=search]:not(.browser-default).valid ~ .helper-text[data-success], input[type=search]:not(.browser-default):focus.valid ~ .helper-text[data-success], input[type=search]:not(.browser-default).invalid ~ .helper-text[data-error], input[type=search]:not(.browser-default):focus.invalid ~ .helper-text[data-error], textarea.materialize-textarea.valid ~ .helper-text[data-success], textarea.materialize-textarea:focus.valid ~ .helper-text[data-success], textarea.materialize-textarea.invalid ~ .helper-text[data-error], textarea.materialize-textarea:focus.invalid ~ .helper-text[data-error], .select-wrapper.valid .helper-text[data-success], .select-wrapper.invalid ~ .helper-text[data-error] {
     color: transparent;
@@ -4658,8 +4613,7 @@ input:not([type]).valid ~ .helper-text:after, input:not([type]):focus.valid ~ .h
 }
 input:not([type]).invalid ~ .helper-text:after, input:not([type]):focus.invalid ~ .helper-text:after, input[type=text]:not(.browser-default).invalid ~ .helper-text:after, input[type=text]:not(.browser-default):focus.invalid ~ .helper-text:after, input[type=password]:not(.browser-default).invalid ~ .helper-text:after, input[type=password]:not(.browser-default):focus.invalid ~ .helper-text:after, input[type=email]:not(.browser-default).invalid ~ .helper-text:after, input[type=email]:not(.browser-default):focus.invalid ~ .helper-text:after, input[type=url]:not(.browser-default).invalid ~ .helper-text:after, input[type=url]:not(.browser-default):focus.invalid ~ .helper-text:after, input[type=time]:not(.browser-default).invalid ~ .helper-text:after, input[type=time]:not(.browser-default):focus.invalid ~ .helper-text:after, input[type=date]:not(.browser-default).invalid ~ .helper-text:after, input[type=date]:not(.browser-default):focus.invalid ~ .helper-text:after, input[type=datetime]:not(.browser-default).invalid ~ .helper-text:after, input[type=datetime]:not(.browser-default):focus.invalid ~ .helper-text:after, input[type=datetime-local]:not(.browser-default).invalid ~ .helper-text:after, input[type=datetime-local]:not(.browser-default):focus.invalid ~ .helper-text:after, input[type=tel]:not(.browser-default).invalid ~ .helper-text:after, input[type=tel]:not(.browser-default):focus.invalid ~ .helper-text:after, input[type=number]:not(.browser-default).invalid ~ .helper-text:after, input[type=number]:not(.browser-default):focus.invalid ~ .helper-text:after, input[type=search]:not(.browser-default).invalid ~ .helper-text:after, input[type=search]:not(.browser-default):focus.invalid ~ .helper-text:after, textarea.materialize-textarea.invalid ~ .helper-text:after, textarea.materialize-textarea:focus.invalid ~ .helper-text:after, .select-wrapper.invalid ~ .helper-text:after {
     content: attr(data-error);
-    color: #F00;
-	width:100%;
+    color: #F44336;
 }
 input:not([type])+label:after, input[type=text]:not(.browser-default)+label:after, input[type=password]:not(.browser-default)+label:after, input[type=email]:not(.browser-default)+label:after, input[type=url]:not(.browser-default)+label:after, input[type=time]:not(.browser-default)+label:after, input[type=date]:not(.browser-default)+label:after, input[type=datetime]:not(.browser-default)+label:after, input[type=datetime-local]:not(.browser-default)+label:after, input[type=tel]:not(.browser-default)+label:after, input[type=number]:not(.browser-default)+label:after, input[type=search]:not(.browser-default)+label:after, textarea.materialize-textarea+label:after, .select-wrapper+label:after {
     display: block;
@@ -4697,7 +4651,7 @@ input:not([type])+label:after, input[type=text]:not(.browser-default)+label:afte
     position: absolute;
     top: 0;
     left: 0;
-    font-size: 18px;
+    font-size: 1rem;
     cursor: text;
     -webkit-transition: color .2s ease-out,  -webkit-transform .2s ease-out;
     transition: color .2s ease-out,  -webkit-transform .2s ease-out;
@@ -4710,7 +4664,6 @@ input:not([type])+label:after, input[type=text]:not(.browser-default)+label:afte
     transform: translateY(12px);
 }
 .input-field>label:not(.label-icon).active {
-	display:none;
     -webkit-transform: translateY(-14px) scale(0.8);
     transform: translateY(-14px) scale(0.8);
     -webkit-transform-origin: 0 0;
@@ -4721,7 +4674,6 @@ input:not([type])+label:after, input[type=text]:not(.browser-default)+label:afte
     transform: translateY(-14px) scale(0.8);
     -webkit-transform-origin: 0 0;
     transform-origin: 0 0;
-	display:block;
 }
 .input-field .helper-text {
     position: relative;
@@ -5183,8 +5135,6 @@ select {
 }
 .select-wrapper {
     position: relative;
-	padding: 0 0 0 20px;
-background: #fff;
 }
 .select-wrapper.valid+label, .select-wrapper.invalid+label {
     width: 100%;
@@ -5211,15 +5161,15 @@ background: #fff;
     z-index: 1;
 }
 .select-wrapper input.select-dropdown:focus {
-    border: 0px solid #f00;
+    border: 1px solid #f00;
 }
 .select-wrapper .caret {
     position: absolute;
-    right: 5px;
+    right: 0;
     top: 0;
     bottom: 0;
     margin: auto 0;
-    z-index: 500;
+    z-index: 0;
     fill: rgba(255, 0, 0);
 }
 .select-wrapper+label {

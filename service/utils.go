@@ -8,6 +8,7 @@ import (
 
 	"bitbucket.org/marcoboschetti/bleff/data"
 	"bitbucket.org/marcoboschetti/bleff/entities"
+	"bitbucket.org/marcoboschetti/bleff/sheets"
 	"github.com/gofrs/uuid"
 )
 
@@ -29,9 +30,21 @@ func makeFirstLowerCase(s string) string {
 	return string(bytes.Join([][]byte{lc, rest}, nil))
 }
 
-func getRandomPersistedDefinition() entities.PersistedDefinition {
+func getRandomPersistedDefinition(hasBots bool) entities.PersistedDefinition {
 	definitions, _ := data.GetAllDefinitions()
-	return definitions[rand.Intn(len(definitions))]
+	chosenDefinition := definitions[rand.Intn(len(definitions))]
+
+	if hasBots {
+		botsDefMaps, _ := sheets.GetUsableBotsDefinitions()
+		for i := 0; i < 100; i++ {
+			if _, ok := botsDefMaps[chosenDefinition.Word]; ok {
+				return chosenDefinition
+			}
+			chosenDefinition = definitions[rand.Intn(len(definitions))]
+		}
+	}
+
+	return chosenDefinition
 }
 
 func getUuidv4() string {

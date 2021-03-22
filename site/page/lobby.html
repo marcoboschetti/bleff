@@ -8,24 +8,24 @@
     
     <!-- CSS  -->
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-    <link href="/site/css/materialize.min.css" type="text/css" rel="stylesheet" media="screen,projection" />
-    <link href="/site/css/style.css" type="text/css" rel="stylesheet" />
+    <link href="../css/materialize.min.css" type="text/css" rel="stylesheet" media="screen,projection" />
+    <link href="../css/style.css" type="text/css" rel="stylesheet" />
 </head>
 
 
 <body>
     <nav class="bleff-dominant" role="navigation">
-        <div class="nav-wrapper container"><a id="logo-container" href="/" class="brand-logo">
-            <img id="topLogo" src="/site/img/top-logo.png">
+        <div class="nav-wrapper container"><a id="logo-container" href="/juegos-online/bleff" class="brand-logo">
+            <img id="topLogo" src="../img/logo-bleff.png">
             </a>
         </div>
     </nav>
 
     <div class="section no-pad-bot">
         <div class="container">
-            <h2 class="header center bleff-dominant-alt-text">Lobby - Esperando jugadores...</h2>
+            <h2 class="header center bleff-dominant-alt-text">Esperando jugadores...</h2>
             <div class="row center">
-                <h4 class="header center bleff-dominant-alt-text">Código de la partida: <span style="font-weight: bold;" id="gameID"></span>
+                <h4 class="header center bleff-dominant-alt-text">Código de la partida: <span id="gameID"></span>
                 </h4>
             </div>
         </div>
@@ -33,7 +33,6 @@
 
     <div class="container">
         <div class="row">
-            <h2 class="center">Jugadores</h2>
             <div class="row" id="gamePlayers">
             </div>
         </div>
@@ -42,25 +41,25 @@
     <div class="container">
     <div class="row center-align">
         <a id="startGame" class="disabled waves-light btn bleff-red">Iniciar partida</a>
-        <h5 id="waitingOwnerMsg" class="header center">Esperando que <span style="font-weight: bold;" id="ownerName"></span> inicie la partida...</h5>
+        <h7 id="waitingOwnerMsg" class="header center">Esperando que <span id="ownerName"></span> inicie la partida...</h7>
     </div>
     </div>
     
     <footer class="page-footer bleff-dominant">
         <div class="footer-copyright">
             <div class="container center">
-                © "Bleff Online" es una versión digital del juego Bleff propiedad de RUIBAL SRL, todos los derechos reservados.<br>
-                Programación, Diseño Web y Adaptación: Marco Boschetti. / Arte y Diseño original: Silvina Halabi
+               © "Bleff Online" es una versión digital del juego <span id="ee2">Bleff</span> propiedad de RUIBAL SRL, Todos los Derechos
+                Reservados.<br>
+                <span id="ee1">Programación y Adaptación: Marco  Boschetti.</span>
             </div>
-            <!-- <img src="/site/img/iso-ruibal.png" class="footer-logo"/> -->
+            <!-- <img src="../img/iso-ruibal.png" class="footer-logo"/> -->
         </div>
     </footer>
 
     <!--  Scripts-->
     <script src="https://code.jquery.com/jquery-2.2.4.min.js"></script>
-    <script src="/site/js/materialize.min.js"></script>
-    <script src="/site/js/lobby.js"></script>
-    <script src="/site/js/logo.js"></script>
+    <script src="../js/materialize.min.js"></script>
+    <script src="../js/lobby.js"></script>
 </body>
 
 </html>

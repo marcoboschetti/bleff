@@ -8,17 +8,19 @@
 
     <!-- CSS  -->
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-    <link href="/site/css/materialize.min.css" type="text/css" rel="stylesheet" media="screen,projection" />
-    <link href="/site/css/style.css" type="text/css" rel="stylesheet" media="screen,projection" />
-    <!--<link href="/site/css/index.css" type="text/css" rel="stylesheet" media="screen,projection" />-->
+    <link href="css/materialize.min.css" type="text/css" rel="stylesheet" media="screen,projection" />
+    <link href="css/style.css" type="text/css" rel="stylesheet" media="screen,projection" />
+    <!--<link href="css/index.css" type="text/css" rel="stylesheet" media="screen,projection" />-->
 </head>
 
 <body>
     <nav class="bleff-dominant" role="navigation">
-        <div class="nav-wrapper container"><a id="logo-container" href="/" class="brand-logo">
-                <img id="topLogo" src="/site/img/top-logo.png">
+        <div class="nav-wrapper container"><a id="logo-container" href="#" class="brand-logo">
+                <img id="topLogo" src="img/logo-bleff.png">
             </a>
+             <a class="btn modal-trigger" href="#rulesModal"><i class="material-icons send"></i>Reglas</a>
         </div>
+        
     </nav>
 
     <!--
@@ -31,146 +33,211 @@
 -->
 
     <div class="container">
-        <div class="row">
-            <!-- BEGIN: DESCRIPTION -->
-            <div class="col s12 m7">
-                <div class="card-panel bleff-dominant center">
-                    <img id="mainLogo" src="/site/img/logo.png" class="bleff-tonic-alt" />
-                    <div class="bleff-tonic-alt-text landing-text"> El famoso juego del diccionario en una versión
-                        online. <br> Bleff es el juego en el que podés ganar siendo un gran conocedor de palabras o un
-                        buen mentiroso.
-                    </div>
+
+        <!-- BEGIN: DESCRIPTION -->
+        <div class="col s12 m7">
+            <div class="bajada">¿Es mejor saber o ser un gran mentiroso?</div>
+        </div>
+        <!-- END: DESCRIPTION -->
+       
+
+
+
+        <!-- Modal Structure -->
+        <div id="rulesModal" class="modal">
+            <div class="modal-content">
+                <h3 class="center">REGLAS DE JUEGO</h3>
+                <div class="left-align">
+                	<br>
+                    <h3 class="left">01. PREPARACIÓN</h3><br>
+                    <strong>Se necesitan como mínimo tres personas para poder jugar.</strong><br>
+                    Para mejorar la experiencia de juego, te recomendamos que armes una llamada grupal con las personas con las que vayas a jugar (Zoom, Skype, Meet).<br>
+					Cambiá el nombre aleatorio que figura debajo de tu avatar robot y poné el tuyo para que tus amigos te puedan identificar.<br><br>
+                    <h4><strong>CREAR UNA NUEVA PARTIDA PRIVADA</strong></h4>
+                    <ul>
+					<li>En la columna izquierda seleccioná el puntaje que deberá obtener un jugador para ganar la partida (este puntaje determina el tiempo de juego). Te recomendamos empezar con partidas cortas 10 puntos.</li>
+					<li>Definí el tiempo límite para las jugadas (turnos). También podes jugar sin tiempo, si jugás con niños te recomendamos jugar sin tiempo.</li>
+					<li>Seleccioná “Crear Partida” y enviale el código de tres palabras a tus amigos para que se sumen.</li>
+                    </ul>
+					<h4><strong>UNIRTE A UNA PARTIDA</strong></h4>
+                    <ul>
+					<li>Si un amigo ya creó una partida pedile que te pase el código de tres palabras.</li>
+					<li>En la columna derecha escribí las tres palabras del código. Tené en cuenta que cada una debe ir en uno de los tres casilleros y en el mismo orden. Por ejemplo: si el código es “CASA.PERRO.CIELO”, tenés que escribir “CASA”-“PERRO”-“CIELO”.</li>
+					<li>Seleccioná “Unirse a la Partida”.</li>
+					</ul><br>
+                    
+                    
+                    
+                    
+                    <h3 class="left">02. DESARROLLO DEL JUEGO</h3><br>
+                    <ul>
+                    <li>En cada ronda el sistema determinará un moderador, que deberá elegir una de las cuatro palabras al azar que se muestra en su pantalla.</li>
+					<li>Una vez que el moderador eligió, la palabra seleccionada aparecerá en la pantalla de los demás jugadores. Estos deberán escribir sus definiciones siguiendo las recomendaciones:<br>
+					• Empezar con mayúsculas<br>
+					• Terminar con un punto<br>
+					• Completar las tildes (evitar errores ortográficos)</li>
+					<li>Al escribir su definición el jugador tiene dos alternativas:<br>
+					• Saber el significado y escribirlo correctamente.<br>
+					• No saberlo y mentir a sus adversarios escribiendo una definición engañosa.<br>
+					• Si no sabés inventá, ¡pero tu respuesta tiene que parecer correcta!</li>
+					<li>El moderador lee todas las definiciones de los jugadores, y decide si una o más son correctas (puede elegir más de una o ningura).<br>
+					• Si el moderador determina que una definición es correcta, esta no se mostrará en la votación, otorgándole automáticamente 3 puntos al jugador que la propuso. 
+					La jugada sigue normalmente (con una definición menos) pero el jugador que escribió la definición correcta no tomará parte en la votación.</li>
+					<li>Una vez que el moderador/a eligió la o las definiciones correctas, cada jugador simultaneamente en su pantalla deberá decidir cuál de las definiciones cree que es la correcta. Puede votar la propia, pero no recibirá puntos.</li>
+					<li>Luego que todos han votado, se revela el significado correcto, las definiciones de cada jugador y se contabilizan los puntos. Si aún no hay un ganador, el moderador dará comienzo a la siguiente ronda.</li>
+				</ul>
+					<strong>Si alguien obtuvo el puntaje máximo, el juego termina inmediatamente y se muestra la tabla de posiciones.</strong><br><br><br>
+
+
+
+
+                    <h3 class="left">03. PUNTUACION</h3><br>
+                    • 1 punto para cada jugador por cada voto que reciba su definición.<br>
+					• 2 puntos para cada jugador que vote por el significado correcto.<br>
+					• 3 puntos para cada jugador cuya definición el moderador consideró que es la correcta.<br>
+					• 3 puntos para el moderador (solo en el caso de que ningún jugador elija el significado correcto).
+
+
+                    
+                    
+                    
+                   
                 </div>
             </div>
-            <!-- END: DESCRIPTION -->
+            <div class="modal-footer center">
+                <a href="#!" class="modal-close left waves-light btn bleff-red">Cerrar</a>
+            </div>
+        </div>
+        <!-- END: Modal Structure -->
 
-            <!-- BEGIN: USER NAME -->
-            <div class="col s12 m5">
-                <div class="card-panel bleff-tonic-alt">
-                    <div class="row">
-                        <div class="input-field col s9 m6">
-                            <div class="row">
-                                <div class="input-field col s12">
-                                    <label for="firstNameInput">Nombre</label>
-                                    <input id="firstNameInput" type="text" class="validate" required="required"
-                                        pattern="[A-Za-z0-9 ]{4,20}">
-                                    <span class="helper-text"
-                                        data-error="El nombre es requerido, debe tener entre 4 y 20 caracteres o más."
-                                        data-success="Bienvenido!">El nombre será usado para identificarte en la
-                                        partida</span>
+
+        <div class="row inicio">
+            <!-- BEGIN: JOIN GAME -->
+                        
+            <div class="col s12 m4 primero">
+                <div class="fondo">
+                    <div class="card-panel bleff-tonic-alt-1">
+                        <h5 class="center">Nueva partida privada</h5>
+                        <p class="light">Crea una partida para jugar con tus amigos!</p>
+                        <div class="row">
+                            <div class="col s12 m6">
+                                <div class="input-field">
+                                    <select id="newGameTargetPoints">
+                                        <option value="10" selected>Puntaje máximo</option>
+                                        <option value="10">10 puntos</option>
+                                        <option value="20">20 puntos</option>
+                                        <option value="30">30 puntos</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col s12 m6">
+                                <div class="input-field">
+                                    <select id="newGameSecsPerState">
+                                        <option value="0" selected>Tiempo por acción</option>
+                                        <option value="0">Sin tiempo</option>
+                                        <option value="60">1 minuto</option>
+                                        <option value="120">2 minutos</option>
+                                        <option value="300">5 minutos</option>
+                                    </select>
                                 </div>
                             </div>
                         </div>
-                        <div class="col s3 m6">
-                            <img id="avatarImg" class="avatarImg" src="">
-                      <!--      https://www.tinygraphs.com/#?name=t6&shape=isogrids&theme=frogideas&numcolors=2#tryitout-->
+                        <div class="row" id="newGameBotsContainer" style="display: none;">
+                            <div class="col s12 m12">
+                                <div class="input-field">
+                                    <select id="newGameBots">
+                                        <option value="0" selected>Jugadores Bots</option>
+                                        <option value="0">Sin bots</option>
+                                        <option value="1">1 bot</option>
+                                        <option value="2">2 bots</option>
+                                        <option value="3">3 bots</option>
+                                    </select>
+                                </div>
+                            </div>
                         </div>
-                    </div>
-                </div>
-            </div>
-            <!-- END: USER NAME -->
 
-        </div>
-
-
-
-        <div class="row">
-            <!-- BEGIN: JOIN GAME -->
-            <div class="col s12 m6">
-                <div class="card-panel bleff-tonic-alt">
-                    <h5 class="center">Unirte a una partida</h5>
-                    <p class="light">Si un amigo ya creó una partida, pedíle el código para entrar!</p>
-
-                    <div class="row">
-                        <div class="col m4">
-                            <input id="joinMatchWord1" placeholder="casa" type="text" class="validate">
+                        <div class="row center-align">
+                            <a id="newGameBtn" class="center waves-light btn bleff-red">Crear partida</a>
                         </div>
-                        <div class="col m4">
-                            <input id="joinMatchWord2" placeholder="perro" type="text" class="validate">
-                        </div>
-                        <div class="col m4">
-                            <input id="joinMatchWord3" placeholder="cielo" type="text" class="validate">
-                        </div>
-                    </div>
-                    <div class="row center-align">
-                        <a id="joinGameBtn" class="disabled center waves-light btn bleff-red">Unirse a la partida</a>
+
+
                     </div>
                 </div>
             </div>
             <!-- END: JOIN GAME -->
 
-            <!-- BEGIN: CREATE GAME -->
-            <div class="col s12 m6">
+            <!-- BEGIN: USER NAME -->
+            <div class="col s12 m4 segundo">
                 <div class="card-panel bleff-dominant">
-                    <h5 class="center bleff-tonic-alt-text">Nueva partida privada</h5>
-                    <p class="light bleff-tonic-alt-text">Crea una partida para jugar con tus amigos!</p>
                     <div class="row">
-                        <div class="col s12 m6">
-                            <div class="input-field">
-                                <select id="newGameTargetPoints">
-                                    <option value="10">10 puntos</option>
-                                    <option value="20" selected>20 puntos</option>
-                                    <option value="30">30 puntos</option>
-                                </select>
-                                <label class="bleff-tonic-alt-text">Puntaje máximo</label>
-                            </div>
+                        <div class="col s12 m12">
+                            <img id="avatarImg" class="avatarImg" src="">
+                            <!--      https://www.tinygraphs.com/#?name=t6&shape=isogrids&theme=frogideas&numcolors=2#tryitout-->
                         </div>
-                        <div class="col s12 m6">
-                            <div class="input-field">
-                                <select id="newGameSecsPerState">
-                                    <option value="0">Sin tiempo</option>
-                                    <option value="60" selected>1 minuto</option>
-                                    <option value="120">2 minutos</option>
-                                    <option value="300">5 minutos</option>
-                                </select>
-                                <label class="bleff-tonic-alt-text">Tiempo máximo por acción</label>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col s12 m12 center">
-                            <div class="center-align">
-                                <a id="newGameBtn" class="center waves-light btn bleff-red">Crear partida</a>
-                            </div>
+
+                        <div class="input-field col s12">
+                            <input id="firstNameInput" type="text" class="validate" required
+                                pattern="[A-Za-z0-9 ]{3,20}">
+                            <span class="helper-text"
+                                data-error="El nombre es requerido, debe tener entre 3 y 20 caracteres o más."
+                                data-success="Bienvenido!">El nombre será usado para identificarte en la
+                                partida</span>
                         </div>
 
                     </div>
+                </div>
+            </div>
+            <!-- END: USER NAME -->
 
+
+
+            <!-- BEGIN: CREATE GAME -->
+            <div class="col s12 m4 tercero">
+                <div class="fondo">
+                    <div class="card-panel bleff-tonic-alt-1">
+                        <h5 class="center">Unirte a una partida</h5>
+                        <p class="light">Si un amigo ya creó una partida, pedíle el código para entrar!</p>
+
+                        <div class="row">
+                            <div class="col m4">
+                                <input id="joinMatchWord1" placeholder="casa" type="text" class="validate">
+                            </div>
+                            <div class="col m4">
+                                <input id="joinMatchWord2" placeholder="perro" type="text" class="validate">
+                            </div>
+                            <div class="col m4">
+                                <input id="joinMatchWord3" placeholder="cielo" type="text" class="validate">
+                            </div>
+                        </div>
+                        <div class="row center-align">
+                            <a id="joinGameBtn" class="disabled center waves-light btn bleff-red">Unirse a la
+                                partida</a>
+                        </div>
+                    </div>
                 </div>
             </div>
             <!-- END: CREATE GAME -->
         </div>
 
-         <!-- Modal Structure -->
-        <div id="removePlayerModal" class="modal">
-            <div class="modal-content">
-            <h4>Modal Header</h4>
-            <p>A bunch of text</p>
-            </div>
-            <div class="modal-footer">
-            <a href="#!" class="modal-close waves-effect waves-green btn-flat">Agree</a>
-            </div>
-        </div>
-        
     </div>
 
     <footer class="page-footer bleff-dominant">
         <div class="footer-copyright">
             <div class="container center">
-                © "Bleff Online" es una versión digital del juego <span id="ee2">Bleff</span> propiedad de RUIBAL SRL, todos los derechos
-                reservados.<br>
-                Programación, Diseño Web y Adaptación: <span id="ee1">Marco</span> Boschetti. / Arte y <span id="ee3">Diseño</span> original: Silvina Halabi
+                © "Bleff Online" es una versión digital del juego <span id="ee2">Bleff</span> propiedad de RUIBAL SRL,
+                Todos los <span id="ee3">Derechos</span>
+                Reservados.<br>
+                <span id="ee1">Programación y Adaptación: Marco Boschetti.</span>
             </div>
-            <!-- <img src="/site/img/iso-ruibal.png" class="footer-logo"/> -->
+            <!-- <img src="img/iso-ruibal.png" class="footer-logo"/> -->
         </div>
     </footer>
 
 
     <!--  Scripts-->
     <script src="https://code.jquery.com/jquery-2.2.4.min.js"></script>
-    <script src="/site/js/materialize.min.js"></script>
-    <script src="/site/index.js"></script>
-    <script src="/site/js/logo.js"></script>
+    <script src="js/materialize.min.js"></script>
+    <script src="index.js"></script>
 </body>
 
 </html>

@@ -1,7 +1,7 @@
 var gameID;
 var playerName;
 var m;
-var baseURL = "https://bleff.herokuapp.com";
+var baseURL = "";//"https://bleff.herokuapp.com";
 
 $(document).ready(function () {
     if(window.location.origin.indexOf("bleff.ml") >= 0){
@@ -22,7 +22,7 @@ $(document).ready(function () {
         $("#startGame").addClass("disabled");
         $("#startGame").html("Iniciando partida...");
         $.post(baseURL+"/api/game/"+gameID+"/start", function (data) {
-            window.location.replace("/site/page/game.html?m="+m);
+            window.location.replace("game.html?m="+m);
         });
     });
 });
@@ -38,7 +38,7 @@ function refreshGame() {
         lastDrawnGame = game;
 
         if(game.status == "started"){
-            window.location.replace("/site/page/game.html?m="+m);
+            window.location.replace("game.html?m="+m);
             return 
         }
 
@@ -78,19 +78,13 @@ function drawPlayers(game) {
 
     // Loader
     html += `
+	<div class="contenedor-loading">
     <div class="col m3">
-        <div class="preloader-wrapper big active">
-        <div class="spinner-layer bleff-spinner-layer">
-        <div class="circle-clipper left">
-            <div class="circle"></div>
-        </div><div class="gap-patch bleff-dominant-alt">
-            <div class="circle"></div>
-        </div><div class="circle-clipper right">
-            <div class="circle bleff-subdominant-alt"></div>
-        </div>
-        </div>
+        <div id="mainCardLoadingBar">
+            <i class="material-icons indefinite-loading bleff-red-text">hourglass_empty</i>
         </div>
     </div>
+	</div>
     `;
 
     html += `</div>`
