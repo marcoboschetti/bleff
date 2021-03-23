@@ -9,7 +9,7 @@ type (
 		IsPrivate        bool      `json:"is_private"`
 		Players          []Player  `json:"players,omitempty"`
 		TargetPoints     uint64    `json:"target_points,omitempty"`
-		Bots             uint64    `json:"bots,omitempty"`
+		Bots             uint64    `json:"bots"`
 		CurrentDealerIdx uint64    `json:"dealer_index"`
 		CurrentGameState GameState `json:"game_state,omitempty"`
 		LastRequestTime  time.Time `json:"-"`
