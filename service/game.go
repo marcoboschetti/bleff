@@ -2,7 +2,6 @@ package service
 
 import (
 	"errors"
-	"fmt"
 	"math/rand"
 	"strings"
 	"time"
@@ -15,9 +14,8 @@ import (
 var gamesMap = NewGameMap()
 
 func CreateNewGame(playerName string, targetPoints, secsPerState, botsCount uint64) entities.Game {
-	fmt.Println("FROM NAME ", playerName)
+
 	playerName = sanitize(playerName)
-	fmt.Println("TO", playerName)
 
 	player := createNewPlayer(playerName)
 
@@ -50,9 +48,7 @@ func JoinPublicGame(playerName string) (*entities.Game, error) {
 	gamesMap.Lock()
 	defer gamesMap.Unlock()
 
-	fmt.Println("FROM NAME ", playerName)
 	playerName = sanitize(playerName)
-	fmt.Println("TO", playerName)
 
 	// Find a public game
 	var game *entities.Game
@@ -94,9 +90,7 @@ func JoinGame(playerName, gameID string) (*entities.Game, error) {
 	game, ok := gamesMap.internal[gameID]
 	defer gamesMap.Unlock()
 
-	fmt.Println("FROM NAME ", playerName)
 	playerName = sanitize(playerName)
-	fmt.Println("TO", playerName)
 
 	if !ok || game == nil {
 		return nil, errors.New("game not found: " + gameID)
