@@ -4,15 +4,21 @@ import (
 	"errors"
 	"fmt"
 	"math/rand"
+	"strings"
 	"time"
 
 	"bitbucket.org/marcoboschetti/bleff/entities"
 	"bitbucket.org/marcoboschetti/bleff/sheets"
+	"github.com/PuerkitoBio/goquery"
 )
 
 var gamesMap = NewGameMap()
 
 func CreateNewGame(playerName string, targetPoints, secsPerState, botsCount uint64) entities.Game {
+	fmt.Println("FROM NAME ", playerName)
+	playerName = sanitize(playerName)
+	fmt.Println("TO", playerName)
+
 	player := createNewPlayer(playerName)
 
 	newGame := entities.Game{
@@ -30,8 +36,8 @@ func CreateNewGame(playerName string, targetPoints, secsPerState, botsCount uint
 		newGame.Players = append(newGame.Players, createNewPlayerBot())
 	}
 
-	fmt.Println(botsCount)
-	fmt.Println(newGame.Players)
+	// fmt.Println(botsCount)
+	// fmt.Println(newGame.Players)
 
 	gamesMap.Lock()
 	gamesMap.internal[newGame.ID] = &newGame
@@ -43,6 +49,10 @@ func CreateNewGame(playerName string, targetPoints, secsPerState, botsCount uint
 func JoinPublicGame(playerName string) (*entities.Game, error) {
 	gamesMap.Lock()
 	defer gamesMap.Unlock()
+
+	fmt.Println("FROM NAME ", playerName)
+	playerName = sanitize(playerName)
+	fmt.Println("TO", playerName)
 
 	// Find a public game
 	var game *entities.Game
@@ -84,6 +94,10 @@ func JoinGame(playerName, gameID string) (*entities.Game, error) {
 	game, ok := gamesMap.internal[gameID]
 	defer gamesMap.Unlock()
 
+	fmt.Println("FROM NAME ", playerName)
+	playerName = sanitize(playerName)
+	fmt.Println("TO", playerName)
+
 	if !ok || game == nil {
 		return nil, errors.New("game not found: " + gameID)
 	}
@@ -94,7 +108,7 @@ func JoinGame(playerName, gameID string) (*entities.Game, error) {
 
 	// Check if player already exists. Idempotency
 	for _, player := range game.Players {
-		if player.Name == playerName {
+		if player.Name == sanitize(playerName) {
 			return game, nil
 		}
 	}
@@ -126,6 +140,7 @@ func SetupSelectedWord(word, gameID, playerName string) (*entities.Game, error) 
 	gamesMap.Lock()
 	game, ok := gamesMap.internal[gameID]
 	defer gamesMap.Unlock()
+	playerName = sanitize(playerName)
 
 	if !ok {
 		return nil, errors.New("game not found: " + gameID)
@@ -143,6 +158,8 @@ func SetPlayerDefinition(gameID, playerName, definition string) (*entities.Game,
 	gamesMap.Lock()
 	game, ok := gamesMap.internal[gameID]
 	defer gamesMap.Unlock()
+	playerName = sanitize(playerName)
+	definition = sanitize(definition)
 
 	if !ok {
 		return nil, errors.New("game not found: " + gameID)
@@ -180,6 +197,7 @@ func PostCorrectDefinitions(gameID, playerName string, correctDefinitionIDs []st
 	gamesMap.Lock()
 	game, ok := gamesMap.internal[gameID]
 	defer gamesMap.Unlock()
+	playerName = sanitize(playerName)
 
 	if !ok {
 		return nil, errors.New("game not found: " + gameID)
@@ -205,6 +223,7 @@ func PostChosenDefinition(gameID, playerName, chosenDefinitionID string) (*entit
 	gamesMap.Lock()
 	game, ok := gamesMap.internal[gameID]
 	defer gamesMap.Unlock()
+	playerName = sanitize(playerName)
 
 	if !ok {
 		return nil, errors.New("game not found: " + gameID)
@@ -212,7 +231,7 @@ func PostChosenDefinition(gameID, playerName, chosenDefinitionID string) (*entit
 
 	// Check if player already chosen a definition
 	for _, def := range game.ChosenDefinitions {
-		if def.Player == playerName {
+		if def.Player == sanitize(playerName) {
 			// No op
 			return game, nil
 		}
@@ -247,6 +266,7 @@ func PostEndRound(gameID, playerName string) (*entities.Game, error) {
 	gamesMap.Lock()
 	game, ok := gamesMap.internal[gameID]
 	defer gamesMap.Unlock()
+	playerName = sanitize(playerName)
 
 	if !ok {
 		return nil, errors.New("game not found: " + gameID)
@@ -294,6 +314,7 @@ func RemovePlayer(gameID, playerName, playerIdToRemove string) (*entities.Game, 
 	gamesMap.Lock()
 	game, ok := gamesMap.internal[gameID]
 	defer gamesMap.Unlock()
+	playerName = sanitize(playerName)
 
 	if !ok {
 		return nil, errors.New("game not found: " + gameID)
@@ -381,7 +402,7 @@ func executeOverTimeActions(game *entities.Game) {
 func createNewPlayer(playerName string) entities.Player {
 	return entities.Player{
 		ID:     getUuidv4(),
-		Name:   playerName,
+		Name:   sanitize(playerName),
 		Points: 0,
 		IsBot:  false,
 	}
@@ -396,4 +417,15 @@ func createNewPlayerBot() entities.Player {
 		Points: 0,
 		IsBot:  true,
 	}
+}
+
+func sanitize(s string) string {
+	p := strings.NewReader(s)
+	doc, _ := goquery.NewDocumentFromReader(p)
+
+	doc.Find("script").Each(func(i int, el *goquery.Selection) {
+		el.Remove()
+	})
+
+	return doc.Text()
 }
