@@ -23,9 +23,9 @@ func SetDbConnection() {
 	password := strings.Split(strings.Split(databaseURL, ":")[2], "@")[0]
 
 	db := pg.Connect(&pg.Options{
-		Addr:      "ec2-35-173-94-156.compute-1.amazonaws.com:5432",
-		Database:  "d47o4civ8ddcec",
-		User:      "uqlfxmuqvtrsrn",
+		Addr:      "ec2-34-195-69-10.compute-1.amazonaws.com:5432",
+		Database:  "dbr7r1fbkh055g",
+		User:      "mncyyycclirjjx",
 		Password:  password,
 		TLSConfig: &tls.Config{InsecureSkipVerify: true},
 	})
@@ -60,7 +60,6 @@ func GetAllDefinitions() ([]entities.PersistedDefinition, error) {
 	}
 
 	err := pgConnection.Model(&allDefinitions).Select()
-
 	rand.Seed(time.Now().UnixNano())
 	rand.Shuffle(len(allDefinitions), func(i, j int) { allDefinitions[i], allDefinitions[j] = allDefinitions[j], allDefinitions[i] })
 
