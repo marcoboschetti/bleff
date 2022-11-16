@@ -8,7 +8,6 @@ import (
 	"time"
 
 	"bitbucket.org/marcoboschetti/bleff/data"
-
 	"bitbucket.org/marcoboschetti/bleff/sheets"
 	"github.com/gin-contrib/cors"
 	"github.com/gin-contrib/static"
@@ -16,8 +15,6 @@ import (
 )
 
 func main() {
-	data.SetDbConnection()
-
 	runPlottingServer()
 }
 
@@ -45,6 +42,7 @@ func runPlottingServer() {
 	// API Endpoints
 	SetupGameHandlers(r)
 
+	data.GetAllDefinitions()
 	sheets.GetUsableBotsDefinitions()
 	// Boot
 	r.Run(":" + port)
